@@ -1,1 +1,1 @@
-# TeaHouse server
+# TeaHouse
