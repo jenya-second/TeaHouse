@@ -1,6 +1,6 @@
 export type SABYAuthHeaders = {
-    SBISAccessToken : string;
-    SBISSessionId : string;
-}
+    SBISAccessToken: string;
+    SBISSessionId: string;
+};
 
 export default SABYAuthHeaders;

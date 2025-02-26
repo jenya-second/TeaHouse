@@ -3,14 +3,14 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Image {
-  constructor(){}
+    constructor() {}
 
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column('text')
-  sabyUrl: string;
+    @Column('text')
+    sabyUrl: string;
 
-  @ManyToOne(type => Product, product => product.images)
-  product: Product
+    @ManyToOne((type) => Product, (product) => product.images)
+    product: Product;
 }

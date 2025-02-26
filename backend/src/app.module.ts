@@ -5,8 +5,8 @@ import { SABYModule } from './SABY/saby.module';
 import { ProductModule } from './product/product.module';
 
 @Module({
-  imports: [SABYModule, ProductModule],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [SABYModule, ProductModule],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

@@ -3,6 +3,5 @@ export type SABYWarehouse = {
     contractor: string;
     id: number;
     name: string;
-}
-
+};
 export default SABYWarehouse;

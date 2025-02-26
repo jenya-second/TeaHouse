@@ -12,6 +12,6 @@ export type SABYProduct = {
     indexNumber?: number;
     nomNumber?: string;
     unit?: string;
-}
+};
 
 export default SABYProduct;

@@ -1,6 +1,6 @@
 export type SABYBalance = {
-    balance: number,
-    nomenclature: number
-}
+    balance: number;
+    nomenclature: number;
+};
 
 export default SABYBalance;

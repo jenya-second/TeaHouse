@@ -5,9 +5,9 @@ import { SABYService } from './saby.service';
 import { SABYController } from './saby.controller';
 
 @Module({
-  imports: [ConfigModule.forRoot(), HttpModule],
-  controllers: [SABYController],
-  providers: [SABYService],
-  exports: [SABYService]
+    imports: [ConfigModule.forRoot(), HttpModule],
+    controllers: [SABYController],
+    providers: [SABYService],
+    exports: [SABYService],
 })
 export class SABYModule {}

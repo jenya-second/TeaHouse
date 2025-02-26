@@ -1,7 +1,7 @@
-import { product_rpository_name } from "src/constants";
-import { Product } from "./product.entity";
-import { Inject, Injectable } from "@nestjs/common";
-import { RemoveOptions, Repository } from "typeorm";
+import { product_rpository_name } from 'src/constants';
+import { Product } from './product.entity';
+import { Inject, Injectable } from '@nestjs/common';
+import { RemoveOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -18,15 +18,15 @@ export class ProductService {
         });
     }
 
-    async saveOne(product: Product) : Promise<Product> {
+    async saveOne(product: Product): Promise<Product> {
         return this.productRepository.save(product);
     }
 
-    async saveMany(products: Product[]) : Promise<Product[]> {
+    async saveMany(products: Product[]): Promise<Product[]> {
         return this.productRepository.save(products);
     }
 
-    async deleteAll() : Promise<any>{
+    async deleteAll(): Promise<any> {
         return this.productRepository.query('delete from public.product');
     }
 }

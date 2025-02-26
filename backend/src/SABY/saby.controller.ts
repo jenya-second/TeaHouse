@@ -4,11 +4,11 @@ import { SABYService } from './saby.service';
 
 @Controller('SABY')
 export class SABYController {
-  constructor(private readonly SABYService: SABYService) {}
+    constructor(private readonly SABYService: SABYService) {}
 
-  @Get()
-  async getSalesPoints(): Promise<SABYProduct[]> {
-    //let prs : SABYPriceList[] = await this.SABYService.GetPriceLists();
-    return this.SABYService.GetProductsFromPriceList('10');
-  }
+    @Get()
+    async getSalesPoints(): Promise<SABYProduct[]> {
+        //let prs : SABYPriceList[] = await this.SABYService.GetPriceLists();
+        return this.SABYService.GetProductsFromPriceList('10');
+    }
 }
