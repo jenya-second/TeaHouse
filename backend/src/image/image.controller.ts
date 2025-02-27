@@ -10,7 +10,7 @@ export default class ImageController {
     @Get(':id')
     getImage(@Param('id') id: number): StreamableFile {
         const file = createReadStream(
-            join(process.cwd(), `dl_image/${id}.jpeg`),
+            join(process.cwd(), `backend/dl_image/${id}.jpeg`),
         );
         return new StreamableFile(file, {
             type: 'image/jpeg',

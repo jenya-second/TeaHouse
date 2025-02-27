@@ -3,9 +3,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SABYModule } from './SABY/saby.module';
 import { ProductModule } from './product/product.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-    imports: [SABYModule, ProductModule],
+    imports: [
+        SABYModule,
+        ProductModule,
+        ConfigModule.forRoot({
+            envFilePath: 'backend/dist/env/.env',
+            isGlobal: true,
+        }),
+    ],
     controllers: [AppController],
     providers: [AppService],
 })
