@@ -1,6 +1,7 @@
 export const db_provider_name = 'DATA_SOURCE';
 export const product_rpository_name = 'PRODUCT_REPOSITORY';
 export const image_rpository_name = 'IMAGE_REPOSITORY';
+export const category_rpository_name = 'CATEGORY_REPOSITORY';
 export const saby_auth_url = 'https://online.sbis.ru/oauth/service/';
 export const saby_sales_points_url = 'https://api.sbis.ru/retail/point/list?';
 export const saby_price_lists_url =

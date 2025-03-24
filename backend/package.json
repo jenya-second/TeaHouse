@@ -1,0 +1,44 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-back": "nest build",
+    "update": "pnpm update -w",
+    "start-back": "nest start",
+    "start-back:dev": "nest start --watch",
+    "start-back:debug": "nest start --debug --watch",
+    "start-back:prod": "node dist/main"
+  },
+  "dependencies": {
+    "@nestjs/axios": "4.0.0",
+    "@nestjs/common": "10.4.15",
+    "@nestjs/config": "4.0.1",
+    "@nestjs/core": "10.4.15",
+    "@nestjs/platform-express": "10.4.15",
+    "axios": "1.8.1",
+    "typeorm": "0.3.21",
+    "typeorm-naming-strategies": "4.1.0"
+  },
+  "devDependencies": {
+    "@tea-house/types": "workspace:*",
+    "@eslint/eslintrc": "3.3.0",
+    "@eslint/js": "9.21.0",
+    "@nestjs/cli": "10.4.9",
+    "@nestjs/schematics": "10.2.3",
+    "@types/node": "20.17.22",
+    "@typescript-eslint/eslint-plugin": "8.26.0",
+    "@typescript-eslint/parser": "8.26.0",
+    "eslint": "8.57.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.2.3",
+    "prettier": "3.5.3",
+    "process": "0.11.10",
+    "typescript": "5.7.3",
+    "globals": "15.15.0"
+  },
+  "author": "jenya-second",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.6.1"
+}

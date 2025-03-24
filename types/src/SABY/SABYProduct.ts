@@ -1,4 +1,7 @@
 export type SABYProduct = {
+    attributes?: {
+        Прессовка: 'Да' | 'Нет';
+    };
     name?: string;
     cost?: number;
     images?: string[];
@@ -11,7 +14,8 @@ export type SABYProduct = {
     id?: number;
     indexNumber?: number;
     nomNumber?: string;
-    unit?: string;
+    unit: string;
+    published: boolean;
 };
 
 export default SABYProduct;

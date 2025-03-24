@@ -8,12 +8,6 @@ import {
 } from 'axios';
 import { Injectable } from '@nestjs/common';
 import { catchError, firstValueFrom } from 'rxjs';
-import SABYAuthHeaders from 'src/types/SABYAuthHeaders';
-import SABYSalesPoint from 'src/types/SABYSalesPoint';
-import SABYPriceList from 'src/types/SABYPriceList';
-import SABYProduct from 'src/types/SABYProduct';
-import SABYWarehouse from 'src/types/SABYWarehouse';
-import SABYBalance from 'src/types/SABYBalance';
 import {
     saby_auth_url,
     saby_nomenclature_balances_url,
@@ -22,6 +16,14 @@ import {
     saby_sales_points_url,
     saby_warehouses_url,
 } from 'src/constants';
+import {
+    SABYAuthHeaders,
+    SABYBalance,
+    SABYProduct,
+    SABYSalesPoint,
+    SABYWarehouse,
+    SABYPriceList,
+} from '@tea-house/types';
 
 @Injectable()
 export class SABYService {

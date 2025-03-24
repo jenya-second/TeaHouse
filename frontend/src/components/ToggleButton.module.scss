@@ -1,0 +1,24 @@
+.toggleButton {
+    width: 50px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+}
+.toggleButton .slider {
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 0.3s;
+}
+.toggleButton.active {
+    background-color: #4caf50;
+}
+.toggleButton.active .slider {
+    left: 25px;
+}

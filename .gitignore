@@ -3,6 +3,11 @@ dist
 node_modules
 build
 dl_image
+.parcel-cache
+
+# React Router
+.react-router/
+build/
 
 # Logs
 logs

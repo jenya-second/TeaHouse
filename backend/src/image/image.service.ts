@@ -3,7 +3,7 @@ import { image_rpository_name, saby_forimg_url } from 'src/constants';
 import { Repository } from 'typeorm';
 import { Image } from 'src/image/image.entity';
 import { SABYService } from 'src/SABY/saby.service';
-import { createWriteStream } from 'fs';
+import { createWriteStream, readdirSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class ImageService {
@@ -16,7 +16,7 @@ export class ImageService {
     async findAll(): Promise<Image[]> {
         return this.imageRepository.find({
             relations: {
-                product: true,
+                product: false,
             },
         });
     }
@@ -42,13 +42,28 @@ export class ImageService {
         });
     }
 
-    async saveAllImages(): Promise<any> {
-        const images: Image[] = await this.findAll();
+    async saveAllImages(images: Image[]): Promise<any> {
         images.forEach((img) => {
             this.dlImage(
                 saby_forimg_url + img.sabyUrl,
                 'dl_image/' + img.id + '.jpeg',
             );
         });
+    }
+
+    async delImagesInFolder() {
+        const dir = './dl_image';
+        for (const file of readdirSync(dir)) {
+            unlinkSync(dir + '/' + file);
+        }
+    }
+
+    async reloadImages(images: Image[] = null): Promise<void> {
+        if (images === null) {
+            images = await this.findAll();
+            console.log(images);
+        }
+        await this.delImagesInFolder();
+        return this.saveAllImages(images);
     }
 }

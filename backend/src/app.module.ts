@@ -10,7 +10,7 @@ import { ConfigModule } from '@nestjs/config';
         SABYModule,
         ProductModule,
         ConfigModule.forRoot({
-            envFilePath: 'backend/dist/env/.env',
+            envFilePath: 'dist/env/.env',
             isGlobal: true,
         }),
     ],
