@@ -1,12 +1,6 @@
 import ProductEntity from './ProductEntity';
-import SABYProduct from 'src/SABY/SABYProduct';
 
-export class CategoryEntity {
-    constructor(category: SABYProduct) {
-        this.name = category?.name;
-        this.description = category?.description;
-        this.descriptionSimple = category?.description_simple;
-    }
+export interface CategoryEntity {
     id: number;
     name: string;
     description: string;

@@ -1,0 +1,23 @@
+$globalGradient: linear-gradient(90deg, rgb(28, 28, 28) 0%, rgba(7,7,7,1) 100%);
+$buttonColor: #FED428;
+$inShadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.25);
+$outShadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.25);
+$primaryBackground: #1D2025;
+$secondaryBackground: #080808;
+$activeButtonColor: #7E78E0;
+
+.inShadow {
+    box-shadow: $inShadow;
+}
+
+.outShadow {
+    box-shadow: $outShadow;
+}
+
+.robotoFont {
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+  }

@@ -1,0 +1,22 @@
+.phrase1 {
+    font-size: 20px;
+    padding: 1vw;
+    text-align: center;
+}
+
+.phrase2 {
+    font-size: 20px;
+    font-style: oblique;
+    padding: 1vw;
+    text-align: center;
+}
+
+.footerWrap {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dragon2 {
+    transform: scaleX(-1);
+}

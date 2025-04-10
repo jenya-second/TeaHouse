@@ -1,0 +1,9 @@
+@use '/src/global';
+
+.item {
+    border-radius: 5vw;
+    background: global.$primaryBackground;
+    margin: 5vw;
+    padding: 5vw;
+    height: 20vw;
+}

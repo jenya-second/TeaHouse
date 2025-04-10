@@ -12,6 +12,7 @@ import {
     saby_auth_url,
     saby_nomenclature_balances_url,
     saby_nomenclature_list_url,
+    saby_orders_url,
     saby_price_lists_url,
     saby_sales_points_url,
     saby_warehouses_url,
@@ -23,6 +24,7 @@ import {
     SABYSalesPoint,
     SABYWarehouse,
     SABYPriceList,
+    SABYOrder,
 } from '@tea-house/types';
 
 @Injectable()
@@ -120,6 +122,27 @@ export class SABYService {
         return this.SABYAuthGet(saby_nomenclature_balances_url, params).then(
             (res) => res.data.balances,
         );
+    }
+
+    async GetOrders(
+        fromDateTime: string,
+        toDateTime: string,
+    ): Promise<SABYOrder[]> {
+        const params = {
+            fromDateTime: fromDateTime,
+            toDateTime: toDateTime,
+            page: 0,
+        };
+        const orders: SABYOrder[] = [];
+        let res;
+        do {
+            res = await this.SABYAuthGet(saby_orders_url, params);
+            if (res.length != 0) {
+                orders.push(...res.data.orders);
+            }
+            params.page += 1;
+        } while (res.data.outcome.hasMore);
+        return orders;
     }
 
     SABYAuthGet(

@@ -1,0 +1,21 @@
+@use '/src/global';
+
+.button {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    border-radius: 25%;
+    background: global.$buttonColor;
+}
+
+.navImg {
+    width: 60%;
+}
+
+.spanText {
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+

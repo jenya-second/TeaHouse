@@ -1,20 +1,8 @@
-import SABYProduct from 'src/SABY/SABYProduct';
 import ImageEntity from './ImageEntity';
 import CategoryEntity from './CategoryEntity';
+import SaleNomenclatureEntity from './SaleNomenclatureEntity';
 
-export class ProductEntity {
-    constructor(product: SABYProduct) {
-        this.name = product?.name;
-        this.cost = product?.cost;
-        this.description = product?.description;
-        this.descriptionSimple = product?.description_simple;
-        this.press = product?.attributes?.Прессовка == 'Да';
-        this.externalId = product?.externalId;
-        this.indexNumber = product?.indexNumber;
-        this.nomNumber = product?.nomNumber;
-        this.unit = product?.unit;
-        this.published = product?.published;
-    }
+export interface ProductEntity {
     id: number;
     name: string;
     cost: number;
@@ -28,6 +16,7 @@ export class ProductEntity {
     published: boolean;
     images: ImageEntity[];
     category: CategoryEntity;
+    saleNomenclatures: SaleNomenclatureEntity[];
 }
 
 export default ProductEntity;

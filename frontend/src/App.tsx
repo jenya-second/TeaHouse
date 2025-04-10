@@ -1,16 +1,22 @@
 import { Route, Routes } from 'react-router';
-import { MainPage } from './pages/MainPage';
+import { WelcomePage } from './pages/WelcomePage';
 import { Navigation } from './components/Navigation';
 import { CatalogPage } from './pages/CatalogPage';
+import { store } from './redux/index';
+import { Provider } from 'react-redux';
+import { BasketPage } from './pages/BasketPage';
 
 function App() {
     return (
-        <Routes>
-            <Route index element={<MainPage />} />
-            <Route path="main" element={<Navigation />}>
-                <Route index element={<CatalogPage />} />
-            </Route>
-        </Routes>
+        <Provider store={store}>
+            <Routes>
+                <Route index element={<WelcomePage />} />
+                <Route path="main" element={<Navigation />}>
+                    <Route index element={<CatalogPage />} />
+                    <Route path="basket" element={<BasketPage />} />
+                </Route>
+            </Routes>
+        </Provider>
     );
 }
 

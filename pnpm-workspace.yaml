@@ -2,3 +2,6 @@ packages:
     - 'backend'
     - 'frontend'
     - 'types'
+syncInjectedDepsAfterScripts:
+- build
+injectWorkspacePackages: true

@@ -14,12 +14,14 @@
     "start-back:prod": "cd ./backend && node dist/main",
     "lint-fix": "eslint . --fix",
     "lint": "eslint .",
-    "build-front": "cd ./frontend && parcel build ./public/index.html --no-cache",
-    "start-front:dev": "cd ./frontend && react-router dev",
-    "start-front": "cd ./frontend && react-router-serve ./build/server/index.js",
-    "typecheck": "cd ./frontend && react-router typegen && tsc"
+    "front-dev": "cd ./frontend && vite",
+    "front-build": "cd ./frontend && tsc -b && vite build",
+    "front-preview": "cd ./frontend && vite preview"
   },
   "dependencies": {
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.0",
+    "@mui/material": "7.0.1",
     "@nestjs/axios": "4.0.0",
     "@nestjs/common": "10.4.15",
     "@nestjs/config": "4.0.1",
@@ -27,13 +29,16 @@
     "@nestjs/platform-express": "10.4.15",
     "@react-router/node": "7.2.0",
     "@react-router/serve": "7.2.0",
+    "@tea-house/types": "workspace:*",
     "axios": "1.8.1",
     "isbot": "5.1.23",
     "pg": "8.13.3",
+    "puppeteer": "24.4.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-redux": "9.2.0",
     "react-router": "7.2.0",
+    "redux": "5.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "7.8.2",
     "typeorm": "0.3.21",
@@ -45,8 +50,8 @@
     "@nestjs/cli": "10.4.9",
     "@nestjs/schematics": "10.2.3",
     "@react-router/dev": "7.2.0",
+    "@reduxjs/toolkit": "2.6.1",
     "@tailwindcss/vite": "4.0.0",
-    "@tea-house/types": "workspace:*",
     "@types/node": "20.17.22",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
@@ -62,19 +67,14 @@
     "prettier": "3.5.3",
     "process": "0.11.10",
     "react-router-devtools": "1.1.6",
+    "sass": "1.86.0",
     "source-map-support": "0.5.21",
     "tailwindcss": "4.0.0",
     "ts-loader": "9.5.2",
     "ts-node": "10.9.2",
     "typescript": "5.7.3",
     "vite": "6.2.0",
-    "vite-tsconfig-paths": "5.1.4",
-    "sass": "1.86.0"
+    "vite-tsconfig-paths": "5.1.4"
   },
-  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3",
-  "workspaces": [
-    "frontend",
-    "backend",
-    "types"
-  ]
+  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3"
 }

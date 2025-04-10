@@ -1,0 +1,14 @@
+@use '/src/global';
+
+.button {
+    z-index: 10;
+    width: 75px;
+    display: flex;
+    position: fixed;
+    top:20px;
+    left:20px;
+    background: global.$primaryBackground;
+    border-radius: 20px;
+    padding: 5px;
+    justify-content: space-around;
+}

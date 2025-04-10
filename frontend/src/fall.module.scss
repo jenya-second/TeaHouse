@@ -1,0 +1,14 @@
+@use 'global';
+
+html {
+    min-height: 100%;
+    width: 100%;
+    background: global.$globalGradient;
+    color: white;
+    font-size: 12px;
+    user-select: none;
+}
+
+body {
+    margin: 0;
+}

@@ -2,6 +2,11 @@ export const db_provider_name = 'DATA_SOURCE';
 export const product_rpository_name = 'PRODUCT_REPOSITORY';
 export const image_rpository_name = 'IMAGE_REPOSITORY';
 export const category_rpository_name = 'CATEGORY_REPOSITORY';
+export const order_rpository_name = 'ORDER_REPOSITORY';
+export const client_rpository_name = 'CLIENT_REPOSITORY';
+export const sale_nomenclatures_rpository_name =
+    'SALE_NOMENCLATURES_REPOSITORY';
+export const scrape_provider_name = 'SCRAPE';
 export const saby_auth_url = 'https://online.sbis.ru/oauth/service/';
 export const saby_sales_points_url = 'https://api.sbis.ru/retail/point/list?';
 export const saby_price_lists_url =
@@ -13,3 +18,4 @@ export const saby_warehouses_url =
 export const saby_nomenclature_balances_url =
     'https://api.sbis.ru/retail/nomenclature/balances?';
 export const saby_forimg_url = 'https://api.sbis.ru/retail';
+export const saby_orders_url = 'https://api.sbis.ru/retail/order/list?';

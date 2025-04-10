@@ -1,5 +1,5 @@
 import { CategoryEntity } from '@tea-house/types';
-import { CatalogItemSmall } from './CatalogItemSmall';
+import { CatalogItemSmall } from './CatalogItemSmall/CatalogItemSmall';
 
 export function SubCategory(props: { category: CategoryEntity }) {
     return (
