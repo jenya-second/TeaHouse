@@ -8,6 +8,7 @@ export interface CategoryEntity {
     products: ProductEntity[];
     subcategories: CategoryEntity[];
     parentCategory: CategoryEntity;
+    indexNumber: number;
 }
 
 export default CategoryEntity;

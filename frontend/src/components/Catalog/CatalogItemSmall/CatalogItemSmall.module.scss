@@ -1,9 +1,35 @@
 @use '/src/global';
+$elemHeigh: 25vw;
 
 .item {
     border-radius: 5vw;
     background: global.$primaryBackground;
     margin: 5vw;
-    padding: 5vw;
-    height: 20vw;
+    height: $elemHeigh;
+    display: flex;
+}
+
+.image {
+    height: $elemHeigh;
+    min-width: $elemHeigh;
+    border-radius: 5vw;
+    background-size: 100%;
+    background-position: center;
+}
+
+.infoWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    font-size: small;
+    width: calc(100% - 10vw);
+}
+
+.bottomWrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }

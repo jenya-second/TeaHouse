@@ -14,6 +14,7 @@ export interface ProductEntity {
     nomNumber: string;
     unit: string;
     published: boolean;
+    balance: number;
     images: ImageEntity[];
     category: CategoryEntity;
     saleNomenclatures: SaleNomenclatureEntity[];

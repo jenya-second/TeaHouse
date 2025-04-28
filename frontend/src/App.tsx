@@ -12,7 +12,10 @@ function App() {
             <Routes>
                 <Route index element={<WelcomePage />} />
                 <Route path="main" element={<Navigation />}>
-                    <Route index element={<CatalogPage />} />
+                    <Route
+                        path=":order/:productId?"
+                        element={<CatalogPage />}
+                    />
                     <Route path="basket" element={<BasketPage />} />
                 </Route>
             </Routes>

@@ -26,6 +26,7 @@
 LICENSE
 README.md
 **/*node_modules
+**/*cert
 .git
 .gitignore
 *.md

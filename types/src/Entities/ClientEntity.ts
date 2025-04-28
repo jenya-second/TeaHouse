@@ -1,4 +1,6 @@
 import { OrderEntity } from './OrderEntity';
+import OrderInProgressEntity from './OrderInProgressEntity';
+import PromotionEntity from './PromotionEntity';
 
 export interface ClientEntity {
     id: number;
@@ -7,6 +9,8 @@ export interface ClientEntity {
     phone: string;
     num: number;
     orders: OrderEntity[];
+    ordersInProgress: OrderInProgressEntity[];
+    // promotion: PromotionEntity;
 }
 
 export default ClientEntity;

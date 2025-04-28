@@ -7,7 +7,6 @@ export function Navigation() {
     return (
         <>
             <Outlet />
-            <div style={{ width: '100%', height: '56px' }} />
             <Paper
                 sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
                 elevation={3}
@@ -31,7 +30,7 @@ export function Navigation() {
                     <BottomNavigationAction
                         component={Link}
                         label="Catalog"
-                        to="/main"
+                        to="/main/o"
                     />
                     <BottomNavigationAction
                         component={Link}

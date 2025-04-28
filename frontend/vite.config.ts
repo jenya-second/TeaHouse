@@ -7,7 +7,11 @@ export default defineConfig({
         port: 1235,
     },
     preview: {
-        port: 80,
+        port: 443,
+        https: {
+            cert: '/letsencrypt/live/oichai.maslo-spb.ru/fullchain.pem',
+            key: '/letsencrypt/live/oichai.maslo-spb.ru/privkey.pem',
+        },
     },
     plugins: [react()],
 });

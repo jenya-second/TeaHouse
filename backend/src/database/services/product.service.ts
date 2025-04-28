@@ -1,8 +1,9 @@
 import { product_rpository_name } from 'src/constants';
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { InsertResult, IsNull, Not, Repository } from 'typeorm';
 import { SABYProduct } from '@tea-house/types';
 import { Category, Product, Image } from '../entities';
+import { CategoryService } from './category.service';
 
 interface MyCategory {
     id: number;
@@ -14,7 +15,8 @@ interface MyCategory {
 export class ProductService {
     constructor(
         @Inject(product_rpository_name)
-        private productRepository: Repository<Product>,
+        private readonly productRepository: Repository<Product>,
+        private readonly categoryService: CategoryService,
     ) {}
 
     async findAll(): Promise<Product[]> {
@@ -39,21 +41,61 @@ export class ProductService {
         });
     }
 
-    async saveOne(product: Product): Promise<Product> {
-        return this.productRepository.save(product);
+    async findByNomNumber(nomNumber: string) {
+        return this.productRepository.findOne({
+            where: {
+                nomNumber: nomNumber,
+            },
+        });
     }
 
-    async saveMany(products: Product[]): Promise<Product[]> {
-        return this.productRepository.save(products);
+    async findById(id: number) {
+        return this.productRepository.findOne({
+            where: {
+                id: id,
+            },
+            relations: {
+                images: true,
+            },
+        });
+    }
+
+    async saveOne(product: Product): Promise<InsertResult> {
+        return this.productRepository.insert(product);
+    }
+
+    async saveMany(products: Product[]): Promise<InsertResult> {
+        return this.productRepository.insert(products);
+    }
+
+    async updateProducts(products: Product[]) {
+        const actualProducts: Product[] = await this.productRepository.find();
+        for (let i = 0; i < actualProducts.length; i++) {
+            const updateProductIndex = products.findIndex((val) => {
+                return val.externalId === actualProducts[i].externalId;
+            });
+            if (updateProductIndex != -1) {
+                products[updateProductIndex].id = actualProducts[i].id;
+                Object.assign(actualProducts[i], products[updateProductIndex]);
+                const category: Category =
+                    await this.categoryService.findOneByIndexNumber(
+                        actualProducts[i].category.indexNumber,
+                    );
+                actualProducts[i].category = category;
+                products.splice(updateProductIndex, 1);
+            } else {
+                actualProducts[i].category = null;
+            }
+        }
+        await this.productRepository.insert(products);
+        return this.productRepository.save(actualProducts);
     }
 
     async deleteAll(): Promise<any> {
         return this.productRepository.query('delete from public.product');
     }
 
-    parceList(
-        SABYproducts: SABYProduct[],
-    ): [images: Image[], products: Product[], categories: Category[]] {
+    parceList(SABYproducts: SABYProduct[]): [Image[], Product[], Category[]] {
         const images: Image[] = [];
         const products: Product[] = [];
         const categories: MyCategory[] = [];

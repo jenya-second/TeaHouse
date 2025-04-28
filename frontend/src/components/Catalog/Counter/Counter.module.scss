@@ -1,0 +1,40 @@
+@use '/src/global';
+$elemHeigh: 8vw;
+
+.counter {
+    display: flex;
+    background-color: global.$secondaryBackground;
+    border-radius: 2vw;
+    width: 30vw;
+    height: $elemHeigh;
+    font-size: medium;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.plus {
+    background-image: url(/plus.svg);
+}
+
+.minus {
+    background-image: url(/minus.svg);
+}
+
+.icon {
+    border-radius: 2vw;
+    width: $elemHeigh;
+    height: 100%;
+    background-size: 55%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: global.$buttonColor;
+}
+
+.hid {
+    background-color: global.$primaryBackground;
+}
+
+.hid .minus {
+    background-color: global.$primaryBackground;
+    background-image: none;
+}

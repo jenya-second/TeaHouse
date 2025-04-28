@@ -15,6 +15,7 @@ export class Category implements CategoryEntity {
         this.name = category.name;
         this.description = category.description;
         this.descriptionSimple = category.description_simple;
+        this.indexNumber = category.indexNumber;
     }
 
     @PrimaryGeneratedColumn()
@@ -28,6 +29,9 @@ export class Category implements CategoryEntity {
 
     @Column('text')
     descriptionSimple: string;
+
+    @Column('int4')
+    indexNumber: number;
 
     @OneToMany(() => Product, (product) => product.category)
     products: Product[];

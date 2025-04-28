@@ -1,4 +1,5 @@
 import { OrderEntity } from './OrderEntity';
+import OrderInProgressEntity from './OrderInProgressEntity';
 import ProductEntity from './ProductEntity';
 
 export interface SaleNomenclatureEntity {
@@ -14,6 +15,7 @@ export interface SaleNomenclatureEntity {
     totalCost: number;
     product: ProductEntity;
     order: OrderEntity;
+    orderInProgress: OrderInProgressEntity;
 }
 
 export default SaleNomenclatureEntity;

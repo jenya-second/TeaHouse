@@ -3,6 +3,7 @@ dist
 node_modules
 build
 dl_image
+cert
 .parcel-cache
 
 # React Router

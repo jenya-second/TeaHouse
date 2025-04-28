@@ -18,7 +18,7 @@ export function MainNav() {
             />
             <div className={combineStyles(styles.navBar, styles.inShadow)}>
                 <ButtonNav
-                    to={'./main'}
+                    to={'./main/o'}
                     signature="Каталог"
                     icon="/catalogLogo.svg"
                 />

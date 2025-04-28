@@ -7,9 +7,15 @@ export class SABYController {
     constructor(private readonly SABYService: SABYService) {}
 
     @Get()
-    async getSalesPoints(): Promise<SABYProduct[]> {
+    async getSalesPoints(): Promise<string> {
         //let prs : SABYPriceList[] = await this.SABYService.GetPriceLists();
         //return this.SABYService.GetPriceLists();
-        return this.SABYService.GetProductsFromPriceList('10');
+        const id = '4daaae22-5db4-4627-a445-cde38c4c0bb0';
+        // return [
+        //     await this.SABYService.GetOrderInfo(id),
+        //     await this.SABYService.GetOrderState(id),
+        //     await this.SABYService.GetPaymentLink(id),
+        // ];
+        return await this.SABYService.GetOrderInfo(id);
     }
 }

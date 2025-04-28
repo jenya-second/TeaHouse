@@ -4,8 +4,6 @@ ARG PNPM_VERSION=10.6.1
 
 # FROM zenika/alpine-chrome AS base
 FROM node:${NODE_VERSION}-alpine AS base
-# USER root
-# RUN apk add nodejs-current
 ENV NODE_ENV=production
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -14,24 +12,27 @@ RUN corepack enable
 FROM base AS build
 COPY . /TeaHouse
 WORKDIR /TeaHouse
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-#     --mount=type=cache,target=/root/.local/share/pnpm/store \
-#     pnpm install --prod --frozen-lockfile
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
-RUN pnpm deploy --filter=backend --prod /prod/backend
-RUN pnpm deploy --filter=frontend --prod /prod/frontend
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm deploy --filter=backend /prod/backend
+# RUN pnpm deploy --filter=frontend /prod/frontend
 
-FROM base AS backend
+FROM base AS backend 
 COPY --from=build /prod/backend /backend
 WORKDIR /backend
-# RUN pnpm puppeteer browsers install chrome
+# RUN pnpm puppeteer browsers install chrome@134.0.6998.35
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+RUN pnpm build-back
+RUN apk add chromium
 EXPOSE 1234
 CMD [ "node", "dist/main" ]
 
-FROM base AS frontend
+FROM nginx:alpine AS frontend
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /prod/frontend /frontend
 WORKDIR /frontend
-RUN pnpm install -d vite
-EXPOSE 80
-CMD [ "pnpm", "vite", "preview", "--host" ]
+RUN pnpm build
+RUN cp -r /prod/frontend/dist /usr/share/nginx/html
+RUN mkdir -p /var/www/certbot
+VOLUME ["/var/www/certbot", "/etc/letsencrypt"]
+EXPOSE 80 443
+CMD ["nginx", "-g", "daemon off;"]

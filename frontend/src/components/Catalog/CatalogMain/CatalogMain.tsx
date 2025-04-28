@@ -1,14 +1,14 @@
 import { ToggleButton } from '#components/Common/ToggleButton/ToggleButton.js';
-import { CatalogType, CatalogTypeContext } from '#utils/contexts.js';
 import { GetProductsRequest } from '#utils/requests.js';
 import { CategoryEntity } from '@tea-house/types';
 import { useState, useEffect, useMemo } from 'react';
 import { Category } from '../Category';
 import styles from './CatalogMain.module.scss';
+import { useNavigate, useParams } from 'react-router';
+import { combineStyles } from '#utils/styles.js';
 
 export function CatalogMain() {
     const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
-    const [catalogType, setCatalogType] = useState<CatalogType>('В чайной');
     useEffect(() => {
         GetProductsRequest().then(setCategories);
     }, []);
@@ -43,27 +43,32 @@ export function CatalogMain() {
         return [teaCat, allCat];
     }, [categories]);
 
+    const { order } = useParams();
+    const navigate = useNavigate();
+
     return (
         <>
-            <div className={styles.toggleButtonWrapper}>
+            <div
+                className={combineStyles(
+                    styles.toggleButtonWrapper,
+                    // productId ? styles.dialog : '',
+                )}
+            >
                 <ToggleButton
                     onToggle1={() => {
-                        setCatalogType('Доставка');
+                        navigate('../t');
                     }}
                     onToggle2={() => {
-                        setCatalogType('В чайной');
+                        navigate('../o');
                     }}
                     textLeft="В чайной"
                     textRight="Доставка"
+                    state={order == 't'}
                 />
             </div>
-            <CatalogTypeContext.Provider value={catalogType}>
-                {(catalogType == 'В чайной' ? teaCat : allCat).map(
-                    (category, ind) => {
-                        return <Category key={ind} category={category} />;
-                    },
-                )}
-            </CatalogTypeContext.Provider>
+            {(order == 't' ? teaCat : allCat).map((category, ind) => {
+                return <Category key={ind} category={category} />;
+            })}
         </>
     );
 }

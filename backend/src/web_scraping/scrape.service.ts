@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Browser, launch, Page } from 'puppeteer';
-import { Client } from 'src/database/entities/client.entity';
+import { Client, Promotion } from 'src/database/entities';
 
 @Injectable()
 export class ScrapeService {
@@ -10,14 +10,12 @@ export class ScrapeService {
     };
 
     async init(): Promise<ScrapeService> {
-        this.browser = await launch({ headless: true });
+        this.browser = await launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-gpu', '--disable-setuid-sandbox'],
+        });
         await this.AuthOnSABY();
         return this;
-    }
-
-    async GetSABYPage(): Promise<string> {
-        const page = await this.GetDiscounts();
-        return page.content();
     }
 
     async AuthOnSABY(): Promise<void> {
@@ -25,28 +23,53 @@ export class ScrapeService {
         await page.goto('https://ret.sbis.ru/');
         await page.waitForSelector('.controls-InputBase__field');
         await this.delay(500);
-        await page.type('.controls-InputBase__field', process.env.SABY_LOGIN, {
-            delay: 100,
-        });
+        await page.type('.controls-InputBase__field', process.env.SABY_LOGIN);
         await page.click('.auth-AdaptiveLoginForm__loginButton');
         await this.delay(1000);
         await page.type(
             '.controls-Password__field_margin-null',
             process.env.SABY_PASS,
-            {
-                delay: 100,
-            },
         );
         await page.click('.auth-AdaptiveLoginForm__loginButton');
         await page.waitForSelector('.NavigationPanels-Sidebar__header');
         await page.close();
     }
 
-    async GetDiscounts(): Promise<Page> {
-        const page: Page = await this.browser.newPage();
-        await page.goto('https://ret.sbis.ru/page/promotion');
-        return page;
-    }
+    //trash))
+    // async GetPromotions(): Promise<Promotion[]> {
+    //     const page: Page = await this.browser.newPage();
+    //     await page.goto('https://ret.sbis.ru');
+    //     await this.delay(1000);
+    //     await page.click('a[data-name="promotion"');
+    //     await this.delay(1000);
+    //     await Promise.all([
+    //         page.waitForNavigation(),
+    //         page.click('a[data-name="promotion"'),
+    //     ]);
+    //     const response = await page.waitForResponse((response) => {
+    //         if (!response.request().hasPostData()) return false;
+    //         const postData = JSON.parse(response.request().postData());
+    //         return postData.method == 'Promotion.GetList';
+    //     });
+    //     const promotions: Promotion[] = [];
+    //     const res = await response.json();
+    //     const types: { n: string; t: string }[] = res.result.s;
+    //     const name = types.findIndex((val) => val.n == 'Name');
+    //     const description = types.findIndex(
+    //         (val) => val.n == 'RegistryDescription',
+    //     );
+    //     res.result.d.forEach((promotion) => {
+    //         if (promotion[description] == null) return;
+    //         const newPromotion = new Promotion();
+    //         newPromotion.name = promotion[name];
+    //         newPromotion.discountPercentage = +(
+    //             promotion[description] as string
+    //         ).split(' ')[1];
+    //         promotions.push(newPromotion);
+    //     });
+    //     page.close();
+    //     return promotions;
+    // }
 
     async GetUsers(): Promise<Client[]> {
         const page: Page = await this.browser.newPage();
@@ -60,15 +83,32 @@ export class ScrapeService {
         });
         const clients: Client[] = [];
         const res = await response.json();
+        const types: { n: string; t: string }[] = res.result.s;
+        const deleted = types.findIndex((val) => val.n == 'НеОтображается');
+        const name = types.findIndex((val) => val.n == 'Name');
+        const num = types.findIndex((val) => val.n == 'Entrepreneur');
+        const uuid = types.findIndex((val) => val.n == 'UUID');
+        const contact = types.findIndex((val) => val.n == 'ContactData');
+        const folders = types.findIndex((val) => val.n == 'Folders');
         res.result.d.forEach((client) => {
-            if (client[30] == true) return;
+            if (client[deleted] == true) return;
             const newClient = new Client();
-            newClient.name = client[12];
-            newClient.num = client[19];
-            if (client[43].d.length != 0) newClient.phone = client[43].d[0][2];
-            newClient.uuid = client[28];
+            newClient.name = client[name];
+            newClient.num = client[num];
+            if (client[contact].d.length != 0)
+                newClient.phone = client[contact].d[0][2];
+            newClient.uuid = client[uuid];
+            // const SABYprom = (client[folders].d as []).find(
+            //     (val) => val[3] != 'Клиенты',
+            // );
+            // if (SABYprom) {
+            //     const prom = new Promotion();
+            //     prom.name = SABYprom[3];
+            //     newClient.promotion = prom;
+            // }
             clients.push(newClient);
         });
+        page.close();
         return clients;
     }
 }

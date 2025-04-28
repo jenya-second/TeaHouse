@@ -1,7 +1,7 @@
 import { category_rpository_name } from 'src/constants';
 import { Category } from '../entities';
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { InsertResult, Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
@@ -24,7 +24,9 @@ export class CategoryService {
             select: {
                 products: {
                     id: true,
-                    images: true,
+                    images: {
+                        id: true,
+                    },
                     cost: true,
                     name: true,
                     unit: true,
@@ -48,12 +50,25 @@ export class CategoryService {
         });
     }
 
-    async saveOne(category: Category): Promise<Category> {
-        return this.categoryRepository.save(category);
+    async updateCategoties(categories: Category[]) {
+        this.deleteAll();
+        return this.categoryRepository.save(categories);
     }
 
-    async saveMany(categories: Category[]): Promise<Category[]> {
-        return this.categoryRepository.save(categories);
+    async findOneByIndexNumber(indexNumber: number) {
+        return this.categoryRepository.findOne({
+            where: {
+                indexNumber: indexNumber,
+            },
+        });
+    }
+
+    async saveOne(category: Category): Promise<InsertResult> {
+        return this.categoryRepository.insert(category);
+    }
+
+    async saveMany(categories: Category[]): Promise<InsertResult> {
+        return this.categoryRepository.insert(categories);
     }
 
     async deleteAll(): Promise<any> {

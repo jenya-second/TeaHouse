@@ -6,14 +6,17 @@ export function ToggleButton({
     onToggle2,
     textLeft,
     textRight,
+    state,
 }: {
     onToggle1: () => any;
     onToggle2: () => any;
     textLeft: string;
     textRight: string;
+    state: boolean;
 }) {
     useEffect(() => {
         const toggleButton = document.getElementById('toggleButton');
+        if (state) toggleButton?.classList.toggle(styles.active);
         toggleButton?.addEventListener('click', function () {
             toggleButton.classList.toggle(styles.active);
 

@@ -5,6 +5,7 @@ import {
     client_rpository_name,
     db_provider_name,
     image_rpository_name,
+    order_in_progress_rpository_name,
     order_rpository_name,
     product_rpository_name,
     sale_nomenclatures_rpository_name,
@@ -18,6 +19,7 @@ import {
     Product,
     SaleNomenclature,
     Image,
+    OrderInProgress,
 } from './entities';
 import {
     CategoryService,
@@ -26,24 +28,29 @@ import {
     ClientService,
     OrderService,
     SaleNomenclatureService,
+    OrderInProgressService,
 } from './services';
 
 const services = [
+    SaleNomenclatureService,
     CategoryService,
     ImageService,
     ProductService,
+    // PromotionService,
     ClientService,
     OrderService,
-    SaleNomenclatureService,
+    OrderInProgressService,
 ];
 
 const providers = [
+    { p: sale_nomenclatures_rpository_name, c: SaleNomenclature },
     { p: category_rpository_name, c: Category },
     { p: image_rpository_name, c: Image },
     { p: product_rpository_name, c: Product },
+    // { p: promotion_rpository_name, c: Promotion },
     { p: client_rpository_name, c: Client },
-    { p: sale_nomenclatures_rpository_name, c: SaleNomenclature },
     { p: order_rpository_name, c: Order },
+    { p: order_in_progress_rpository_name, c: OrderInProgress },
 ];
 
 @Module({

@@ -9,7 +9,13 @@ import {
 import { Injectable } from '@nestjs/common';
 import { catchError, firstValueFrom } from 'rxjs';
 import {
+    frontend_main_page,
     saby_auth_url,
+    saby_cancel_order,
+    saby_create_order,
+    saby_get_order_state,
+    saby_get_order_url,
+    saby_get_payment_link,
     saby_nomenclature_balances_url,
     saby_nomenclature_list_url,
     saby_orders_url,
@@ -137,7 +143,7 @@ export class SABYService {
         let res;
         do {
             res = await this.SABYAuthGet(saby_orders_url, params);
-            if (res.length != 0) {
+            if (!res.data.orders) {
                 orders.push(...res.data.orders);
             }
             params.page += 1;
@@ -145,18 +151,90 @@ export class SABYService {
         return orders;
     }
 
+    async GetOrderInfo(externalId: string) {
+        const res = await this.SABYAuthGet(saby_get_order_url + externalId);
+        return res.data;
+    }
+
+    async CancelOrder(externalId: string) {
+        const res = await this.SABYAuthPut(
+            saby_cancel_order.replace('externalId', externalId),
+        );
+        return res.data;
+    }
+
+    async GetOrderState(externalId: string) {
+        const res = await this.SABYAuthGet(
+            saby_get_order_state.replace('externalId', externalId),
+        );
+        return res.data;
+    }
+
+    async GetPaymentLink(externalId: string): Promise<string> {
+        const data = {
+            externalId: externalId,
+            shopURL: frontend_main_page,
+            successURL: frontend_main_page,
+            errorURL: frontend_main_page,
+        };
+        const config = this.createConfig({}, 'json', JSON.stringify(data));
+        return (
+            await firstValueFrom(
+                this.httpService.get(
+                    saby_get_payment_link.replace('externalId', externalId),
+                    config,
+                ),
+            )
+        ).data.link;
+    }
+
+    async CreateOrder(sabyOrder: SABYOrder) {
+        const data = JSON.stringify(sabyOrder);
+        const res = await this.SABYAuthPost(saby_create_order, data);
+        return res.data;
+    }
+
     SABYAuthGet(
         link: string,
         params: object = {},
         responseType: ResponseType = 'json',
     ): Promise<AxiosResponse> {
-        const config: AxiosRequestConfig = {
+        const config = this.createConfig(params, responseType);
+        return firstValueFrom(this.httpService.get(link, config));
+    }
+
+    SABYAuthPut(
+        link: string,
+        data: string = '',
+        params: object = {},
+        responseType: ResponseType = 'json',
+    ): Promise<AxiosResponse> {
+        const config = this.createConfig(params, responseType);
+        return firstValueFrom(this.httpService.put(link, data, config));
+    }
+
+    SABYAuthPost(
+        link: string,
+        data: string = '',
+        params: object = {},
+        responseType: ResponseType = 'json',
+    ): Promise<AxiosResponse> {
+        const config = this.createConfig(params, responseType);
+        return firstValueFrom(this.httpService.post(link, data, config));
+    }
+
+    createConfig(
+        params: object = {},
+        responseType: ResponseType = 'json',
+        data: string = '',
+    ): AxiosRequestConfig {
+        return {
             responseType: responseType,
             headers: {
                 'X-SBISAccessToken': process.env.SBISAccessToken,
             },
             params: params,
+            data: data,
         };
-        return firstValueFrom(this.httpService.get(link, config));
     }
 }

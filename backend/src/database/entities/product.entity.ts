@@ -57,6 +57,9 @@ export class Product implements ProductEntity {
     @Column('text')
     unit: string;
 
+    @Column('float')
+    balance: number;
+
     @OneToMany(() => Image, (image) => image.product)
     images: Image[];
 

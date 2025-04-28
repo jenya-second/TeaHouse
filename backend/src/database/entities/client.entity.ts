@@ -1,6 +1,12 @@
 import { ClientEntity } from '@tea-house/types';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from '.';
+import {
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Order, OrderInProgress, Promotion } from '.';
 
 @Entity()
 export class Client implements ClientEntity {
@@ -21,4 +27,13 @@ export class Client implements ClientEntity {
 
     @OneToMany(() => Order, (order) => order.client)
     orders: Order[];
+
+    @OneToMany(
+        () => OrderInProgress,
+        (orderInProgress) => orderInProgress.client,
+    )
+    ordersInProgress: OrderInProgress[];
+
+    // @ManyToOne(() => Promotion, (promotion) => promotion.clients)
+    // promotion: Promotion;
 }

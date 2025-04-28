@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build-back": "cd ./backend && nest build",
+    "back-build": "cd ./backend && nest build",
     "update": "pnpm update -w",
     "start-back": "cd ./backend && nest start",
     "start-back:dev": "cd ./backend && nest start --watch",
@@ -27,6 +27,7 @@
     "@nestjs/config": "4.0.1",
     "@nestjs/core": "10.4.15",
     "@nestjs/platform-express": "10.4.15",
+    "@nestjs/schedule": "6.0.0",
     "@react-router/node": "7.2.0",
     "@react-router/serve": "7.2.0",
     "@tea-house/types": "workspace:*",

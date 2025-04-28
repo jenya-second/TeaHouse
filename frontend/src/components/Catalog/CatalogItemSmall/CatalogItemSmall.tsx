@@ -1,61 +1,37 @@
 import { ProductEntity } from '@tea-house/types';
-import { useContext } from 'react';
-import { CatalogTypeContext } from '../../../utils/contexts';
-import { addProduct, deleteProduct } from '../../../redux/basket';
-import { useAppDispatch, useAppSelector } from '../../../redux';
 import styles from './CatalogItemSmall.module.scss';
 import { combineStyles } from '#utils/styles.js';
+import { GetImagePath } from '#utils/requests.js';
+import { Counter } from '../Counter/Counter';
+import { useNavigate, useParams } from 'react-router';
 
-export function CatalogItemSmall(props: { product: ProductEntity }) {
-    const catalogType = useContext(CatalogTypeContext);
-    const dispatch = useAppDispatch();
-    const countRedux = useAppSelector((state) => {
-        const ind = state.basket.value.findIndex((val) => {
-            return val.product.id == props.product.id;
-        });
-        return ind == -1 ? 0 : state.basket.value[ind].count;
-    });
+export function CatalogItemSmall({ product }: { product: ProductEntity }) {
+    const faceImage = product?.images[0];
+    const navigate = useNavigate();
+    const { order } = useParams();
     return (
         <>
-            <div className={combineStyles(styles.item, styles.outShadow)}>
-                <div>Name: {props.product.name}</div>
-                <div>
-                    Cost: {props.product.cost} / {props.product.unit}
-                    <br />
-                    {catalogType == 'В чайной' && (
-                        <>
-                            Count: {countRedux}{' '}
-                            <span
-                                id="click_minus"
-                                onClick={() => {
-                                    dispatch(addProduct(props.product));
-                                }}
-                            >
-                                +
-                            </span>
-                            {'  '}
-                            <span
-                                id="click_plus"
-                                onClick={() => {
-                                    dispatch(deleteProduct(props.product));
-                                }}
-                            >
-                                -
-                            </span>
-                        </>
-                    )}
+            <div
+                className={combineStyles(styles.item, styles.outShadow)}
+                onClick={() => {
+                    navigate(`./${product.id}`);
+                }}
+            >
+                <div
+                    className={styles.image}
+                    style={{
+                        backgroundImage: `url(${GetImagePath(faceImage?.id)})`,
+                    }}
+                />
+                <div className={styles.infoWrapper}>
+                    <div>{product.name}</div>
+                    <div className={styles.bottomWrapper}>
+                        <div>
+                            {product.cost + ' ₽'} / {product.unit}
+                        </div>
+                        {order == 't' && <Counter product={product} />}
+                    </div>
                 </div>
-                {props.product.images &&
-                    props.product.images.map((img) => (
-                        <img
-                            key={img.id}
-                            style={{
-                                margin: '10px',
-                                width: '90%',
-                            }}
-                            src={'http://localhost:1234/image/' + img?.id}
-                        />
-                    ))}
             </div>
         </>
     );
