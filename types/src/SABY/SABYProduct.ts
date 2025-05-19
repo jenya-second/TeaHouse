@@ -1,6 +1,7 @@
 export interface SABYProduct {
     attributes: {
         Прессовка: 'Да' | 'Нет';
+        Размер: number;
     };
     name: string;
     cost: number;
@@ -16,6 +17,7 @@ export interface SABYProduct {
     nomNumber: string;
     unit: string;
     published: boolean;
+    balance: number;
 }
 
 export default SABYProduct;

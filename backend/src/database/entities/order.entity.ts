@@ -43,10 +43,10 @@ export class Order implements OrderEntity {
     @Column('text')
     saleName: string;
 
-    @Column('int4')
+    @Column('float4')
     totalDiscount: number;
 
-    @Column('int4')
+    @Column('float4')
     totalPrice: number;
 
     @ManyToOne(() => Client, (client) => client.orders)

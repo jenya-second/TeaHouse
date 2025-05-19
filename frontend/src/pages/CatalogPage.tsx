@@ -1,5 +1,9 @@
-import { CatalogWrapper } from '#components/Catalog/CatalogWrapper/СatalogWrapper.js';
+import { CatalogMain } from '#components/Catalog/CatalogMain/CatalogMain.js';
 
 export function CatalogPage() {
-    return <CatalogWrapper />;
+    return (
+        <>
+            <CatalogMain />
+        </>
+    );
 }

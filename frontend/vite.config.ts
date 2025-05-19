@@ -4,7 +4,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     cacheDir: '../node_modules/.vite',
     server: {
-        port: 1235,
+        port: 443,
+        allowedHosts: ['oichai.maslo-spb.ru'],
     },
     preview: {
         port: 443,

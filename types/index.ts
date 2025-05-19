@@ -17,3 +17,4 @@ export * from './src/Entities/OrderInProgressEntity';
 export * from './src/Entities/ProductEntity';
 export * from './src/Entities/PromotionEntity';
 export * from './src/Entities/SaleNomenclatureEntity';
+export * from './src/Entities/TelegramUserEntity';

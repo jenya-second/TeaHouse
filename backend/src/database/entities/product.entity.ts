@@ -22,6 +22,8 @@ export class Product implements ProductEntity {
         this.nomNumber = product.nomNumber;
         this.unit = product.unit;
         this.published = product.published;
+        this.balance = product.balance;
+        this.pressAmount = product.attributes.Размер;
     }
 
     @PrimaryGeneratedColumn()
@@ -50,6 +52,9 @@ export class Product implements ProductEntity {
 
     @Column('boolean')
     press: boolean;
+
+    @Column('float4')
+    pressAmount: number;
 
     @Column('boolean')
     published: boolean;

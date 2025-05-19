@@ -1,0 +1,25 @@
+@use '/src/global';
+
+.topMenu {
+    display: flex;
+    overflow: scroll;
+    align-items: center;
+    padding: 3vw;
+    position: absolute;
+    max-width: calc(100% - 6vw);
+}
+
+.topMenu div {
+    text-align: center;
+    padding-left: 4vw;
+    padding-right: 4vw;
+    padding-top: 2vw;
+    padding-bottom: 2vw;
+    margin: 2vw;
+    border-radius: 5vw;
+    background-color: global.$primaryBackground;
+    box-shadow: global.$outShadow;
+    font-family: "Papyrus";
+    font-size: medium;
+    white-space: nowrap;
+}

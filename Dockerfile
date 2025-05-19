@@ -13,15 +13,18 @@ FROM base AS build
 COPY . /TeaHouse
 WORKDIR /TeaHouse
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN touch frontend/.env
+RUN echo "VITE_SERVER_IP=oichaitemp.maslo-spb.ru" >> frontend/.env
+RUN cd ./types && pnpm build
+RUN cd ./backend && pnpm build-back
+RUN cd ./frontend && pnpm build
 RUN pnpm deploy --filter=backend /prod/backend
-# RUN pnpm deploy --filter=frontend /prod/frontend
+RUN pnpm deploy --filter=frontend /prod/frontend
 
 FROM base AS backend 
 COPY --from=build /prod/backend /backend
 WORKDIR /backend
-# RUN pnpm puppeteer browsers install chrome@134.0.6998.35
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-RUN pnpm build-back
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browsers
 RUN apk add chromium
 EXPOSE 1234
 CMD [ "node", "dist/main" ]
@@ -29,9 +32,7 @@ CMD [ "node", "dist/main" ]
 FROM nginx:alpine AS frontend
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /prod/frontend /frontend
-WORKDIR /frontend
-RUN pnpm build
-RUN cp -r /prod/frontend/dist /usr/share/nginx/html
+RUN cp -r frontend/dist/* /usr/share/nginx/html
 RUN mkdir -p /var/www/certbot
 VOLUME ["/var/www/certbot", "/etc/letsencrypt"]
 EXPOSE 80 443

@@ -1,10 +1,15 @@
 $globalGradient: linear-gradient(90deg, rgb(28, 28, 28) 0%, rgba(7,7,7,1) 100%);
-$buttonColor: #FED428;
+$buttonColor: #FFAD01;
+$lightButtonColor: #FED428;
+$lightYellow: #FFFFD9;
 $inShadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.25);
 $outShadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.25);
 $primaryBackground: #1D2025;
 $secondaryBackground: #080808;
+$lightBackground: #CCCCCC;
 $activeButtonColor: #7E78E0;
+$errorColor: #FF4F52;
+$unableColor: #808080;
 
 .inShadow {
     box-shadow: $inShadow;
@@ -25,5 +30,16 @@ $activeButtonColor: #7E78E0;
 .paprikaFont {
     font-family: "Paprika", system-ui;
     font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-weight: 400;
+    font-family: "Papyrus";
+    src: url("../public/1papyrus.ttf");
+}
+
+.papyrusFont {
+    font-family: "Papyrus";
     font-style: normal;
 }

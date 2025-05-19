@@ -21,31 +21,31 @@ export class SaleNomenclature implements SaleNomenclatureEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('int4')
+    @Column('float4')
     checkDiscount: number;
 
-    @Column('int4')
+    @Column('float4')
     checkPrice: number;
 
-    @Column('int4')
+    @Column('float4')
     checkSum: number;
 
     @Column('text')
     key: string;
 
-    @Column('int4')
+    @Column('float4')
     manualPrice: number;
 
-    @Column('int4')
+    @Column('float4')
     quantity: number;
 
-    @Column('int4')
+    @Column('float4')
     totalDiscount: number;
 
-    @Column('int4')
+    @Column('float4')
     totalPrice: number;
 
-    @Column('int4')
+    @Column('float4')
     totalCost: number;
 
     @ManyToOne(() => Product, (product) => product.saleNomenclatures)

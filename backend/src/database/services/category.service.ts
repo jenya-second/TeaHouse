@@ -30,6 +30,10 @@ export class CategoryService {
                     cost: true,
                     name: true,
                     unit: true,
+                    balance: true,
+                    press: true,
+                    pressAmount: true,
+                    nomNumber: true,
                 },
                 subcategories: {
                     id: true,

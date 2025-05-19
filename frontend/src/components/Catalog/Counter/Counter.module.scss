@@ -1,15 +1,20 @@
 @use '/src/global';
-$elemHeigh: 8vw;
+$elemHeigh: 10vw;
 
 .counter {
     display: flex;
-    background-color: global.$secondaryBackground;
-    border-radius: 2vw;
-    width: 30vw;
+    background-color: global.$lightBackground;
+    border-radius: 3vw;
+    width: 35vw;
     height: $elemHeigh;
     font-size: medium;
+    color: black;
     justify-content: space-between;
     align-items: center;
+}
+
+.hid.counter {
+    color: global.$lightYellow;
 }
 
 .plus {
@@ -21,20 +26,42 @@ $elemHeigh: 8vw;
 }
 
 .icon {
-    border-radius: 2vw;
+    border-radius: 3vw;
     width: $elemHeigh;
     height: 100%;
-    background-size: 55%;
+    background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
     background-color: global.$buttonColor;
 }
 
+.red {
+    background-color: global.$errorColor;
+    background-image: url(/trash.svg);
+}
+
+.end {
+    background-color: global.$unableColor;
+}
+
 .hid {
-    background-color: global.$primaryBackground;
+    background-color: global.$buttonColor;
+}
+
+.hid .plus {
+    background-color: transparent;
+    background-image: none;
 }
 
 .hid .minus {
-    background-color: global.$primaryBackground;
+    background-color: transparent;
     background-image: none;
+}
+
+.counter span {
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 4vw;
+    margin: 1vw;
 }

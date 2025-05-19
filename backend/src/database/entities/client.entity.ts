@@ -5,8 +5,11 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    OneToOne,
+    JoinColumn,
 } from 'typeorm';
 import { Order, OrderInProgress, Promotion } from '.';
+import { TelegramUser } from './telegramUser.entity';
 
 @Entity()
 export class Client implements ClientEntity {
@@ -33,6 +36,10 @@ export class Client implements ClientEntity {
         (orderInProgress) => orderInProgress.client,
     )
     ordersInProgress: OrderInProgress[];
+
+    @OneToOne(() => TelegramUser, (telegramUser) => telegramUser.SABYUser)
+    @JoinColumn()
+    tgUser: TelegramUser;
 
     // @ManyToOne(() => Promotion, (promotion) => promotion.clients)
     // promotion: Promotion;

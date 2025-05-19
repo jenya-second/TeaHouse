@@ -20,6 +20,11 @@ export const basketClice = createSlice({
             const ind = state.value.findIndex((val) => {
                 return val.product.id == action.payload.id;
             });
+            const press = action.payload.press;
+            const countInGr = press ? 100 : 25;
+            const max = action.payload.balance / countInGr;
+            const currentCount = ind == -1 ? 0 : state.value[ind].count;
+            // if (currentCount >= max) return;
             if (ind == -1) {
                 state.value.push({ product: action.payload, count: 1 });
             } else {

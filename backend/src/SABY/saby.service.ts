@@ -12,6 +12,7 @@ import {
     frontend_main_page,
     saby_auth_url,
     saby_cancel_order,
+    saby_correct_address,
     saby_create_order,
     saby_get_order_state,
     saby_get_order_url,
@@ -31,6 +32,8 @@ import {
     SABYWarehouse,
     SABYPriceList,
     SABYOrder,
+    SABYDelivery,
+    SABYOrderInProgress,
 } from '@tea-house/types';
 
 @Injectable()
@@ -80,6 +83,7 @@ export class SABYService {
         const params = {
             pointId: process.env.COMPANY_ID,
             priceListId: priceListId,
+            withBalance: true,
             page: 0,
         };
         const products: SABYProduct[] = [];
@@ -143,7 +147,7 @@ export class SABYService {
         let res;
         do {
             res = await this.SABYAuthGet(saby_orders_url, params);
-            if (!res.data.orders) {
+            if (res.data.orders && Object.keys(res.data.orders).length != 0) {
                 orders.push(...res.data.orders);
             }
             params.page += 1;
@@ -151,7 +155,7 @@ export class SABYService {
         return orders;
     }
 
-    async GetOrderInfo(externalId: string) {
+    async GetOrderInfo(externalId: string): Promise<SABYOrderInProgress> {
         const res = await this.SABYAuthGet(saby_get_order_url + externalId);
         return res.data;
     }
@@ -188,10 +192,21 @@ export class SABYService {
         ).data.link;
     }
 
-    async CreateOrder(sabyOrder: SABYOrder) {
-        const data = JSON.stringify(sabyOrder);
+    async CreateOrder(
+        sabyDelivery: SABYDelivery,
+    ): Promise<SABYOrderInProgress> {
+        const data = JSON.stringify(sabyDelivery);
         const res = await this.SABYAuthPost(saby_create_order, data);
         return res.data;
+    }
+
+    async CorrectAddress(addressFull: string) {
+        const params = {
+            enteredAddress: addressFull,
+        };
+        return this.SABYAuthGet(saby_correct_address, params).then(
+            (res) => res.data.addresses,
+        );
     }
 
     SABYAuthGet(

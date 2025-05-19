@@ -9,6 +9,7 @@ import {
     order_rpository_name,
     product_rpository_name,
     sale_nomenclatures_rpository_name,
+    telegram_user_repository_name,
 } from 'src/constants';
 import { DataSource } from 'typeorm';
 import { SABYModule } from 'src/SABY/saby.module';
@@ -20,6 +21,7 @@ import {
     SaleNomenclature,
     Image,
     OrderInProgress,
+    TelegramUser,
 } from './entities';
 import {
     CategoryService,
@@ -29,6 +31,7 @@ import {
     OrderService,
     SaleNomenclatureService,
     OrderInProgressService,
+    TelegramUserService,
 } from './services';
 
 const services = [
@@ -40,6 +43,7 @@ const services = [
     ClientService,
     OrderService,
     OrderInProgressService,
+    TelegramUserService,
 ];
 
 const providers = [
@@ -51,6 +55,7 @@ const providers = [
     { p: client_rpository_name, c: Client },
     { p: order_rpository_name, c: Order },
     { p: order_in_progress_rpository_name, c: OrderInProgress },
+    { p: telegram_user_repository_name, c: TelegramUser },
 ];
 
 @Module({

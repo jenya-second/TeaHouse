@@ -1,10 +1,11 @@
 @use '/src/global';
+
 $top: 20vh;
 
 .backGroundImage {
     position: fixed;
     width: 100%;
-    height: calc($top + 5vw);
+    height: calc($top + 10vw);
     background-image: url('/2.jpg');
     background-size: 100% ;
     background-position: 0px -50px;
@@ -15,9 +16,22 @@ $top: 20vh;
     position: fixed;
     top: $top;
     width: calc(100% - 6vw);
-    overflow: scroll;
     padding: 3vw;
-    max-height: calc(100% - $top - 56px - 3vw);
+    min-height: 25vh;
+    height: calc(100% - $top - 25vw - 3vw);
+    max-height: calc(100% - $top - 25vw - 3vw);
     border-top-left-radius: 10vw;
     border-top-right-radius: 10vw;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 25vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: global.$primaryBackground;
 }

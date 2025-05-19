@@ -3,7 +3,10 @@ export interface SABYDelivery {
     pointId: 244;
     comment?: string;
     customer: {
-        name?: string;
+        name: string;
+        lastname?: string;
+        patronymic?: string;
+        email?: string;
         phone: string;
     };
     datetime: string;

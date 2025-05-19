@@ -1,5 +1,5 @@
 export const SERVER_URL =
-    'http://' +
+    'https://' +
     (import.meta.env.VITE_SERVER_IP ?? 'localhost') +
     ':' +
     (import.meta.env.VITE_SERVER_PORT ?? '1234');

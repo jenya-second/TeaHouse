@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { image_rpository_name, saby_forimg_url } from 'src/constants';
 import { In, InsertResult, Repository } from 'typeorm';
 import { SABYService } from 'src/SABY/saby.service';
-import { createWriteStream, readdirSync, unlinkSync } from 'fs';
+import { createWriteStream, mkdirSync, readdirSync, unlinkSync } from 'fs';
 import { Image } from '../entities';
 import { ProductService } from './product.service';
 
@@ -37,7 +37,7 @@ export class ImageService {
 
     async dlImage(
         url: string,
-        path: string = 'dl_image/newpic.jpg',
+        path: string = './dl_image/newpic.jpg',
     ): Promise<any> {
         return this.SABYService.SABYAuthGet(url, {}, 'stream').then((res) => {
             res.data.pipe(createWriteStream(path));
@@ -55,7 +55,6 @@ export class ImageService {
             return !images.map((val) => val.sabyUrl).includes(val.sabyUrl);
         });
         if (imagesToDel.length != 0) {
-            await this.delImagesInFolder(imagesToDel.map((val) => val.id));
             await this.deleteByIds(imagesToDel.map((val) => val.id));
         }
         for (let i = 0; i < imagesToSave.length; i++) {
@@ -65,16 +64,33 @@ export class ImageService {
             imagesToSave[i].product = product;
         }
         await this.imageRepository.insert(imagesToSave);
-        await this.dlImages(imagesToSave);
+        return this.updateImagesInFolder();
+    }
+
+    async updateImagesInFolder() {
+        const images = await this.findAll();
+        const dir = './dl_image';
+        for (const file of readdirSync(dir)) {
+            const index = images.findIndex(
+                (val) => val.id == +file.split('.')[0],
+            );
+            if (index == -1) {
+                unlinkSync(dir + '/' + file);
+            } else {
+                images.splice(index, 1);
+            }
+        }
+        return this.dlImages(images);
     }
 
     async dlImages(images: Image[]): Promise<any> {
         const promises = [];
+        mkdirSync('./dl_image', { recursive: true });
         images.forEach((img) => {
             promises.push(
                 this.dlImage(
                     saby_forimg_url + img.sabyUrl,
-                    'dl_image/' + img.id + '.jpeg',
+                    './dl_image/' + img.id + '.jpeg',
                 ),
             );
         });

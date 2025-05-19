@@ -1,14 +1,16 @@
-import { ToggleButton } from '#components/Common/ToggleButton/ToggleButton.js';
+import { ToggleButton } from '#components/Catalog/ToggleButton/ToggleButton.js';
 import { GetProductsRequest } from '#utils/requests.js';
 import { CategoryEntity } from '@tea-house/types';
-import { useState, useEffect, useMemo } from 'react';
-import { Category } from '../Category';
+import { useState, useEffect, useMemo, useRef, memo } from 'react';
+import { Category } from '../Category/Category';
 import styles from './CatalogMain.module.scss';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { combineStyles } from '#utils/styles.js';
+import { SubCategory } from '../Subcategory/Subcategory';
 
 export function CatalogMain() {
     const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
+    const [ids, setIds] = useState<number[]>([]);
     useEffect(() => {
         GetProductsRequest().then(setCategories);
     }, []);
@@ -19,15 +21,10 @@ export function CatalogMain() {
     ] => {
         const newCategories: CategoryEntity[] = [];
         const teaCat: CategoryEntity[] = [];
-        const allCat: CategoryEntity[] = [];
         for (const category of categories ?? []) {
             if (!category.parentCategory) {
                 newCategories.push(category);
-                if (category.name == 'Чай') {
-                    teaCat.push(category);
-                } else {
-                    allCat.push(category);
-                }
+                if (category.name == 'Чай') teaCat.push(category);
             }
         }
         for (const category of newCategories) {
@@ -40,35 +37,121 @@ export function CatalogMain() {
             }
             category.subcategories = subcategories;
         }
-        return [teaCat, allCat];
+        return [teaCat, newCategories];
     }, [categories]);
 
-    const { order } = useParams();
-    const navigate = useNavigate();
+    const { order, categoryId } = useParams();
+    const curCategory: CategoryEntity | undefined =
+        categoryId == 't'
+            ? teaCat[0]
+            : allCat.find((val) => val.id.toString() == categoryId);
+
+    const observer = useRef<IntersectionObserver>(null);
+    useEffect(() => {
+        const scroll = document.getElementById('scroll');
+        if (!scroll) return;
+        setIds([]);
+        observer.current = new IntersectionObserver(
+            (entries) => {
+                setIds((prevIds) => {
+                    const locIds = prevIds.concat();
+                    entries.forEach((entry) => {
+                        if (entry.intersectionRatio > 0) {
+                            locIds.push(+entry.target.id);
+                        } else {
+                            const bebe = locIds.findIndex(
+                                (val) => val == +entry.target.id,
+                            );
+                            if (bebe != -1) {
+                                locIds.splice(bebe, 1);
+                            }
+                        }
+                    });
+                    document
+                        .getElementById('menu' + locIds[0])
+                        ?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                        });
+                    return locIds;
+                });
+            },
+            {
+                root: scroll,
+                threshold: 0,
+            },
+        );
+        Array.from(scroll.children).forEach((child) =>
+            observer.current?.observe(child),
+        );
+        return () => {
+            observer.current?.disconnect();
+        };
+    }, [allCat, categoryId]);
 
     return (
         <>
-            <div
-                className={combineStyles(
-                    styles.toggleButtonWrapper,
-                    // productId ? styles.dialog : '',
-                )}
-            >
-                <ToggleButton
-                    onToggle1={() => {
-                        navigate('../t');
-                    }}
-                    onToggle2={() => {
-                        navigate('../o');
-                    }}
-                    textLeft="В чайной"
-                    textRight="Доставка"
-                    state={order == 't'}
-                />
+            <div className={combineStyles(styles.toggleButtonWrapper)}>
+                <ToggleButton state={order == 't'} />
             </div>
-            {(order == 't' ? teaCat : allCat).map((category, ind) => {
-                return <Category key={ind} category={category} />;
-            })}
+            {categoryId != 'all' && (
+                <TopMenu category={curCategory} id={ids[0]} />
+            )}
+            <SubCategories
+                allCat={allCat}
+                categoryId={categoryId}
+                curCategory={curCategory}
+            />
         </>
+    );
+}
+
+const SubCategories = memo(function SubCategories({
+    categoryId,
+    allCat,
+    curCategory,
+}: {
+    categoryId: string | undefined;
+    allCat: CategoryEntity[];
+    curCategory: CategoryEntity | undefined;
+}) {
+    return (
+        <div id={'scroll'} className={styles.scrollWraper}>
+            {categoryId == 'all' ? (
+                allCat.map((category, ind) => (
+                    <Category key={ind} category={category} />
+                ))
+            ) : (
+                <SubCategory category={curCategory} />
+            )}
+        </div>
+    );
+});
+
+function TopMenu({
+    category,
+    id,
+}: {
+    category: CategoryEntity | undefined;
+    id: number;
+}) {
+    return (
+        <div className={styles.topMenu}>
+            {category?.subcategories.map((val, ind) => (
+                <div
+                    onClick={() => {
+                        document.getElementById('' + ind)?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                        });
+                    }}
+                    id={'menu' + ind}
+                    key={ind}
+                    className={id == ind ? styles.current : ''}
+                >
+                    {val.name}
+                </div>
+            ))}
+        </div>
     );
 }

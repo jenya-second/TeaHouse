@@ -1,12 +1,12 @@
 @use '/src/global';
 
 .button {
-    width: 65px;
-    height: 65px;
+    width: 18vw;
+    height: 18vw;
     display: flex;
     justify-content: center;
     border-radius: 25%;
-    background: global.$buttonColor;
+    background: global.$lightButtonColor;
 }
 
 .navImg {
@@ -17,5 +17,10 @@
     font-size: 14px;
     margin-top: 10px;
     text-align: center;
+}
+
+.outShadow2 {
+    box-shadow: 0px 4px 14px 10px rgba(76, 76, 76, 0.25);
+    transition: 0.1s;
 }
 

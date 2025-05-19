@@ -16,6 +16,7 @@ export interface OrderInProgressEntity {
     totalPrice: number;
     totalSum: number;
     totalDiscount: number;
+    state: number;
 }
 
 export default OrderInProgressEntity;

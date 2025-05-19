@@ -5,6 +5,8 @@ build
 dl_image
 cert
 .parcel-cache
+nginx.conf
+docker-compose.yaml
 
 # React Router
 .react-router/

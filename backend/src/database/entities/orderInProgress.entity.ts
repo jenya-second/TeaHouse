@@ -65,14 +65,17 @@ export class OrderInProgress implements OrderInProgressEntity {
     @Column('text')
     paymentType: 'card' | 'online' | 'cash';
 
-    @Column('int4')
+    @Column('float4')
     totalPrice: number;
 
-    @Column('int4')
+    @Column('float4')
     totalSum: number;
 
-    @Column('int4')
+    @Column('float4')
     totalDiscount: number;
+
+    @Column('int4')
+    state: number;
 
     @ManyToOne(() => Client, (client) => client.ordersInProgress)
     client: Client;

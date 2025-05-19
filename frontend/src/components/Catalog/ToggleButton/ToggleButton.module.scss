@@ -2,7 +2,7 @@
 
 .toggleButton {
     width: 60vw;
-    height: 7vw;
+    height: 9vw;
     background-color: global.$primaryBackground;
     border-radius: 2vw;
     position: relative;
@@ -13,7 +13,7 @@
 }
 .toggleButton .slider {
     width: 28vw;
-    height: 5vw;
+    height: 7vw;
     margin: 1vw;
     background-color: global.$secondaryBackground;
     border-radius: 2vw;
@@ -28,6 +28,7 @@
 }
 
 .text {
+    font-size: small;
     display: flex;
     z-index: 1;
 }

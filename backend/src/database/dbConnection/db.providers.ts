@@ -6,7 +6,7 @@ export const databaseProviders = [
     {
         provide: db_provider_name,
         useFactory: async () => {
-            console.log(process.env.DB_HOST);
+            console.log(process.env.DB_NAME);
             const dataSource = new DataSource({
                 type: 'postgres',
                 host: process.env.DB_HOST,

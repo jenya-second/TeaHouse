@@ -1,0 +1,21 @@
+@use '/src/global';
+
+.category {
+    background-image: url('/5.jpg');
+    background-color: rgb(8 0 85 / 50%);
+    background-blend-mode: overlay;
+    background-size: 100% ;
+    background-position: 0px -50px;
+    border-radius: 15vw;
+    text-align: center;
+    margin: 5vw;
+    height: 35vw;
+    line-height: 35vw;
+    font-size: x-large;
+}
+
+.category span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 10vw;
+}

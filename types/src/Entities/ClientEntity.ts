@@ -1,6 +1,7 @@
 import { OrderEntity } from './OrderEntity';
 import OrderInProgressEntity from './OrderInProgressEntity';
 import PromotionEntity from './PromotionEntity';
+import TelegramUserEntity from './TelegramUserEntity';
 
 export interface ClientEntity {
     id: number;
@@ -10,6 +11,7 @@ export interface ClientEntity {
     num: number;
     orders: OrderEntity[];
     ordersInProgress: OrderInProgressEntity[];
+    tgUser: TelegramUserEntity;
     // promotion: PromotionEntity;
 }
 

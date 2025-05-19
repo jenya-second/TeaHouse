@@ -48,10 +48,6 @@ export class RefreshService {
         console.log('Refreshed ' + new Date());
     }
 
-    async SetAutoRefresh() {
-        setInterval(this.RefreshDataBase, 1000 * 60);
-    }
-
     async GetRefreshedOrders(): Promise<[Order[], SaleNomenclature[]]> {
         const [start, end] = this.GetTodays();
         const orders: Order[] = [];

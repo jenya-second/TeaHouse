@@ -6,3 +6,4 @@ export * from './orderInProgress.service';
 export * from './product.service';
 export * from './promotion.service';
 export * from './saleNomenclature.service';
+export * from './telegramUser.service';

@@ -9,6 +9,7 @@ export interface ProductEntity {
     description: string;
     descriptionSimple: string;
     press: boolean;
+    pressAmount: number;
     externalId: string;
     indexNumber: number;
     nomNumber: string;

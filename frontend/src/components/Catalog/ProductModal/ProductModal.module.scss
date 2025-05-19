@@ -2,12 +2,14 @@
 $top: 20vh;
 
 .wrapper {
-    background: global.$primaryBackground;
+    background: global.$secondaryBackground;
     position: fixed;
     top: 100%;
     width: 100%;
+    left: 0;
+    right: 100%;
     overflow: scroll;
-    max-height: calc(100% - $top - 3vw);
+    max-height: calc(100% - $top);
     height: 100%;
     border-top-left-radius: 10vw;
     border-top-right-radius: 10vw;

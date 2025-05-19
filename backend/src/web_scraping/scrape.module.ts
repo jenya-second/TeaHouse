@@ -9,8 +9,8 @@ import { scrape_provider_name } from 'src/constants';
         {
             provide: scrape_provider_name,
             useFactory: async () => {
-                const service: ScrapeService = new ScrapeService();
-                return await service.init();
+                // const service: ScrapeService = new ScrapeService();
+                // return await service.init();
             },
         },
     ],

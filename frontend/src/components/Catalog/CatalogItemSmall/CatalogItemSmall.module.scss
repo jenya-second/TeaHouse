@@ -1,17 +1,22 @@
 @use '/src/global';
-$elemHeigh: 25vw;
+$elemHeigh: 26vw;
 
 .item {
     border-radius: 5vw;
     background: global.$primaryBackground;
-    margin: 5vw;
+    margin: 1vw;
+    margin-top: 5vw;
+    margin-top: 5vw;
     height: $elemHeigh;
     display: flex;
 }
 
 .image {
-    height: $elemHeigh;
-    min-width: $elemHeigh;
+    height: calc( $elemHeigh - 2vw);
+    min-width: calc( $elemHeigh - 2vw );
+    margin: 1vw;
+    // height: $elemHeigh;
+    // min-width: $elemHeigh;
     border-radius: 5vw;
     background-size: 100%;
     background-position: center;
