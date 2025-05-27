@@ -1,0 +1,19 @@
+{
+  "callouts": {
+    "custom": [],
+    "settings": {
+      "important": [
+        {
+          "changes": {
+            "icon": "lucide-flame"
+          }
+        }
+      ]
+    }
+  },
+  "calloutDetection": {
+    "obsidian": true,
+    "theme": true,
+    "snippet": true
+  }
+}

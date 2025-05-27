@@ -1,0 +1,207 @@
+{
+  "autoFold": true,
+  "hideEmptyEntry": true,
+  "hideEmptyEntryInSideDock": true,
+  "propertiesVisible": "",
+  "propertyHideAll": "hide",
+  "entries": [
+    {
+      "name": "excalidraw-autoexport",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-css",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-font",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-font-color",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-mask",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-link-brackets",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-link-prefix",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-plugin",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-url-prefix",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-open-md",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-onload-script",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-linkbutton-opacity",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-border-color",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-default-mode",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-embeddable-theme",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-export-dark",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-export-embed-scene",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-export-padding",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-export-pngscale",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "excalidraw-export-transparent",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "aliases",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    },
+    {
+      "name": "cssclasses",
+      "hide": {
+        "tableInactive": false,
+        "tableActive": false,
+        "fileProperties": false,
+        "allProperties": false
+      }
+    }
+  ]
+}
