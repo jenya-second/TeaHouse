@@ -56,6 +56,9 @@ export class ProductService {
             },
             relations: {
                 images: true,
+                category: {
+                    parentCategory: true,
+                },
             },
         });
     }

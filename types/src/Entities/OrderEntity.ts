@@ -21,4 +21,7 @@ export interface OrderEntity {
     saleName: string;
     totalDiscount: number;
     totalPrice: number;
+    closedWTZ: string;
+    fiscalSign: string;
+    KKTNumber: string;
 }

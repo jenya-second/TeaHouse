@@ -1,0 +1,17 @@
+@use '/src/global';
+
+.main {
+    text-align: center;
+    font-size: large;
+}
+
+.image {
+    background-image: url('/kettle.svg');
+    width: 100%;
+    height: 60vw;
+    padding-top: 10vw;
+    padding-bottom: 10vw;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+}

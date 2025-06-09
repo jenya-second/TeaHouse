@@ -34,7 +34,7 @@ export class SaleNomenclatureService {
     async updateSaleNomenclatures(saleNomenclatures: SaleNomenclature[]) {
         for (let i = 0; i < saleNomenclatures.length; i++) {
             const salenom = await this.findOneByKey(saleNomenclatures[i].key);
-            const order = await this.orderService.findOneByKey(
+            const order = await this.orderService.getOneByKey(
                 saleNomenclatures[i].order.key,
             );
             if (salenom) saleNomenclatures[i].id = salenom.id;

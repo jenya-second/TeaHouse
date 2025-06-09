@@ -21,10 +21,13 @@ export const basketClice = createSlice({
                 return val.product.id == action.payload.id;
             });
             const press = action.payload.press;
-            const countInGr = press ? 100 : 25;
-            const max = action.payload.balance / countInGr;
+            const countInGr = press
+                ? action.payload.pressAmount /
+                  (action.payload.pressAmount >= 200 ? 2 : 1)
+                : 25;
+            const max = Math.floor(action.payload.balance / countInGr);
             const currentCount = ind == -1 ? 0 : state.value[ind].count;
-            // if (currentCount >= max) return;
+            if (currentCount >= max) return;
             if (ind == -1) {
                 state.value.push({ product: action.payload, count: 1 });
             } else {
@@ -45,9 +48,12 @@ export const basketClice = createSlice({
                 state.value[ind].count -= 1;
             }
         },
+        deleteAll: () => {
+            return { value: [] };
+        },
     },
 });
 
-export const { addProduct, deleteProduct } = basketClice.actions;
+export const { addProduct, deleteProduct, deleteAll } = basketClice.actions;
 
 export default basketClice.reducer;

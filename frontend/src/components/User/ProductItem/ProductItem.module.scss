@@ -1,0 +1,65 @@
+@use '/src/global';
+
+$elemHeigh: 26vw;
+
+.item {
+    border-radius: 5vw;
+    background: global.$primaryBackground;
+    margin: 2vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    height: $elemHeigh;
+    display: flex;
+    position: relative;
+    &.before {
+        margin-bottom: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        padding-top: 5vw;
+    }
+
+    &.after {
+        margin-top: 0;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        padding-top: 5vw;
+        background-color: #FEFF96;
+        color: black;
+    }
+
+    .podpiska {
+        position: absolute;
+        font-weight: 500;
+        font-size: 3.5vw;
+        top: 1.5vw;
+        left: 2.5vw;
+        width: 20vw;
+        text-align: center;
+    }
+}
+
+.image {
+    height: calc( $elemHeigh - 2vw);
+    min-width: calc( $elemHeigh - 2vw );
+    margin: 1vw;
+    border-radius: 5vw;
+    background-size: 100%;
+    background-position: center;
+}
+
+.infoWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    font-size: small;
+    width: calc(100% - 10vw);
+}
+
+.bottomWrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}

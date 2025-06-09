@@ -20,6 +20,9 @@ export class Order implements OrderEntity {
         this.saleName = Order.SaleName;
         this.totalDiscount = Order.TotalDiscount;
         this.totalPrice = Order.TotalPrice;
+        this.KKTNumber = Order.Payments[0]?.KKTNumber;
+        this.closedWTZ = Order.Payments[0]?.ClosedWTZ;
+        this.fiscalSign = Order.Payments[0]?.FiscalSign;
     }
 
     @PrimaryGeneratedColumn()
@@ -48,6 +51,15 @@ export class Order implements OrderEntity {
 
     @Column('float4')
     totalPrice: number;
+
+    @Column('text')
+    KKTNumber: string;
+
+    @Column('text')
+    closedWTZ: string;
+
+    @Column('text')
+    fiscalSign: string;
 
     @ManyToOne(() => Client, (client) => client.orders)
     client: Client;

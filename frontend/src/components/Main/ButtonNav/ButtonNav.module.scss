@@ -5,8 +5,12 @@
     height: 18vw;
     display: flex;
     justify-content: center;
-    border-radius: 25%;
-    background: global.$lightButtonColor;
+    border-radius: 20%;
+    background-image: url('/menu_stroke.svg');
+    background-size: 100%;
+    &.active {
+        background-image: url('/menu_stroke_active.svg');
+    }
 }
 
 .navImg {
@@ -17,10 +21,5 @@
     font-size: 14px;
     margin-top: 10px;
     text-align: center;
-}
-
-.outShadow2 {
-    box-shadow: 0px 4px 14px 10px rgba(76, 76, 76, 0.25);
-    transition: 0.1s;
 }
 

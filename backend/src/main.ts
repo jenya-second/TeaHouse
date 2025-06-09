@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { readFileSync } from 'fs';
+import { ConsoleLogger } from '@nestjs/common';
 
 async function bootstrap() {
     // const httpsOptions: { key: any; cert: any } = { key: '', cert: '' };

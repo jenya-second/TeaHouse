@@ -18,20 +18,12 @@ export function MainNav() {
             />
             <div className={combineStyles(styles.navBar, styles.inShadow)}>
                 <ButtonNav
-                    to={'/main/o/all'}
+                    to={'/o/all'}
                     signature="Каталог"
                     icon="/catalogLogo.svg"
                 />
-                <ButtonNav
-                    to={'/main/basket'}
-                    signature="Заказ"
-                    icon="/order.svg"
-                />
-                <ButtonNav
-                    to={'/profile'}
-                    signature="Профиль"
-                    icon="/user.svg"
-                />
+                <ButtonNav to={'/basket'} signature="Заказ" icon="/order.svg" />
+                <ButtonNav to={'/user'} signature="Профиль" icon="/user.svg" />
             </div>
         </>
     );

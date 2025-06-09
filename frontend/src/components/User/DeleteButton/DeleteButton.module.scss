@@ -1,0 +1,15 @@
+@use '/src/global';
+
+.deleteButton {
+    position: absolute;
+    top: 5vw;
+    right: 8vw;
+    height: 9vw;
+    width: 9vw;
+    border-radius: 3vw;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 85%;
+    background-color: #FF4F52;
+    background-image: url(/trash.svg);
+}

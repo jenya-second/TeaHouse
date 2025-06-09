@@ -2,7 +2,7 @@ import ClientEntity from './ClientEntity';
 import SaleNomenclatureEntity from './SaleNomenclatureEntity';
 
 export interface OrderInProgressEntity {
-    id: string;
+    id: number;
     key: string;
     number: number;
     comment: string;
@@ -17,6 +17,7 @@ export interface OrderInProgressEntity {
     totalSum: number;
     totalDiscount: number;
     state: number;
+    payState: boolean;
 }
 
 export default OrderInProgressEntity;

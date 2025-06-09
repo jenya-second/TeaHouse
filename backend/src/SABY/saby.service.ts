@@ -34,25 +34,25 @@ import {
     SABYOrder,
     SABYDelivery,
     SABYOrderInProgress,
+    SABYOrderState,
 } from '@tea-house/types';
 
 @Injectable()
 export class SABYService {
     constructor(private readonly httpService: HttpService) {}
 
-    private GetAuthHeaders(): Promise<SABYAuthHeaders> {
-        return firstValueFrom(
+    private async GetAuthHeaders(): Promise<SABYAuthHeaders> {
+        const res = await firstValueFrom(
             this.httpService.post(saby_auth_url, {
                 app_client_id: process.env.APP_CLIENT_ID,
                 app_secret: process.env.APP_SECRET,
                 secret_key: process.env.SECRET_KEY,
             }),
-        ).then((res) => {
-            return {
-                SBISAccessToken: res.data.access_token,
-                SBISSessionId: res.data.sid,
-            };
-        });
+        );
+        return {
+            SBISAccessToken: res.data.access_token,
+            SBISSessionId: res.data.sid,
+        };
     }
 
     async MakeAuth(): Promise<void> {
@@ -167,7 +167,7 @@ export class SABYService {
         return res.data;
     }
 
-    async GetOrderState(externalId: string) {
+    async GetOrderState(externalId: string): Promise<SABYOrderState> {
         const res = await this.SABYAuthGet(
             saby_get_order_state.replace('externalId', externalId),
         );

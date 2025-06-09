@@ -55,7 +55,7 @@ export class CategoryService {
     }
 
     async updateCategoties(categories: Category[]) {
-        this.deleteAll();
+        await this.deleteAll();
         return this.categoryRepository.save(categories);
     }
 

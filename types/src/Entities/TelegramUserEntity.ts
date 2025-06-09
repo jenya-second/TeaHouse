@@ -1,4 +1,4 @@
-import ClientEntity from "./ClientEntity";
+import ClientEntity from './ClientEntity';
 
 export interface TelegramUserEntity {
     id: number;

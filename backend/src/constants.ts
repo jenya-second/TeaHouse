@@ -33,5 +33,5 @@ export const saby_get_payment_link =
 export const saby_create_order = 'https://api.sbis.ru/retail/order/create';
 export const saby_correct_address =
     'https://api.sbis.ru/retail/delivery/suggested-address?';
-export const frontend_main_page = 'https://oichai.maslo-spb.ru/';
+export const frontend_main_page = 'https://t.me/oichai_bot?startapp';
 export const telegram_bot = 'volar-bebe';

@@ -1,0 +1,40 @@
+@use '/src/global';
+
+.popUp {
+    position: fixed;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 75vw;
+    left: 50vw;
+    top: -30vw;
+    transition: 1s;
+    background-color: global.$primaryBackground;
+    height: 10vh;
+    z-index: 10;
+    transform: translateX(-50%);
+    box-shadow: global.$outShadow;
+    border-radius: 10vw;
+    border-color: #FF4F52;
+    border-width: 2vw;
+    border-style: solid;
+    font-size: medium;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    text-align: center;
+
+    &.active {
+        top: 10vw;
+        animation: popUpAnim 1s;
+    }
+}
+
+@keyframes popUpAnim {
+    from {
+        top: -30vw;
+    }
+
+    to {
+        top: 10vw;
+    }
+}

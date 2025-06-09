@@ -1,0 +1,30 @@
+@use '/src/global';
+
+.i {
+    margin-left: 20vw;
+    margin-right: 20vw;
+    width: 60vw;
+    height: 60vw;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &.newOrders {
+        background-image: url(/new_orders_big.svg);
+    }
+
+    &.ordersInProgress {
+        background-image: url(/orders_in_progress_big.svg);
+    }
+
+    &.completeOrders {
+        background-image: url(/completed_orders_big.svg);
+    }
+}
+
+.textWrap {
+    padding-left: 10vw;
+    padding-right: 10vw;
+    font-size: 5vw;
+    flex: 1;
+}

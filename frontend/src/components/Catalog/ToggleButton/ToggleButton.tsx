@@ -11,23 +11,39 @@ export const ToggleButton = memo(function ToggleButton({
     const navigate = useNavigate();
 
     return (
-        <div
-            onClick={() => {
-                if (state) {
-                    navigate('/main/o/all');
-                } else {
-                    navigate('/main/t/t');
-                }
-            }}
-            className={combineStyles(
-                styles.toggleButton,
-                state ? styles.active : '',
-            )}
-            id="toggleButton"
-        >
-            <div className={styles.slider}></div>
-            <div className={styles.text}>{'В чайной'}</div>
-            <div className={styles.text}>{'Доставка'}</div>
+        <div className={styles.toggleButtonWrapper}>
+            <div
+                onClick={() => {
+                    if (state) {
+                        navigate('/o/all');
+                    } else {
+                        navigate('/t/t');
+                    }
+                }}
+                className={combineStyles(
+                    styles.toggleButton,
+                    state ? styles.active : '',
+                )}
+                id="toggleButton"
+            >
+                <div className={styles.slider}></div>
+                <div
+                    className={combineStyles(
+                        styles.text,
+                        !state ? styles.textActive : '',
+                    )}
+                >
+                    {'В чайной'}
+                </div>
+                <div
+                    className={combineStyles(
+                        styles.text,
+                        state ? styles.textActive : '',
+                    )}
+                >
+                    {'Доставка'}
+                </div>
+            </div>
         </div>
     );
 });

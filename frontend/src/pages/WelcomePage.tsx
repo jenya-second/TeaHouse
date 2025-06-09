@@ -1,8 +1,9 @@
-import { BackButton } from '#components/Common/BackButton/BackButton.js';
-import { ImageDisplay } from '#components/ImageDisplay.js';
+import { ImageDisplay } from '#components/Main/ImageDisplay/ImageDisplay.js';
 import { Footer } from '#components/Main/Footer/Footer.js';
 import { MainNav } from '#components/Main/MainNav/MainNav.js';
 import { EndPhrases, Phrases } from '#constants/mainPagePahrases.js';
+import { backButton, closeMiniApp } from '@telegram-apps/sdk-react';
+import { useEffect } from 'react';
 
 export function WelcomePage() {
     const heights: string[] = [
@@ -17,9 +18,16 @@ export function WelcomePage() {
         '39.5',
         '44.5',
     ];
+
+    useEffect(() => {
+        if (backButton.onClick.isAvailable()) {
+            const off = backButton.onClick(closeMiniApp);
+            return off;
+        }
+    }, []);
+
     return (
         <>
-            <BackButton />
             <MainNav />
             <ImageDisplay
                 src="/bigLogo.svg"

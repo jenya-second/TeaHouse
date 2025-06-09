@@ -1,0 +1,17 @@
+@use '/src/global';
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    background-color: global.$buttonColor;
+    color: black;
+    padding: 5vw;
+    font-size: 7vw;
+    border-radius: 4vw;
+    margin: 7vw;
+    width: 60vw;
+    text-align: center;
+}

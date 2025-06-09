@@ -1,11 +1,17 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { order_in_progress_rpository_name } from 'src/constants';
 import { Repository, InsertResult, In } from 'typeorm';
-import { Client, OrderInProgress, SaleNomenclature } from '../entities';
+import {
+    Client,
+    OrderInProgress,
+    SaleNomenclature,
+    TelegramUser,
+} from '../entities';
 import { SaleNomenclatureService } from './saleNomenclature.service';
-import { SABYOrderInProgress } from '@tea-house/types';
+import { ClientEntity, SABYOrderInProgress } from '@tea-house/types';
 import { ClientService } from './client.service';
 import { ProductService } from './product.service';
+import { TelegramUserService } from './telegramUser.service';
 
 @Injectable()
 export class OrderInProgressService {
@@ -15,6 +21,7 @@ export class OrderInProgressService {
         private readonly saleNomenclaturesService: SaleNomenclatureService,
         private readonly clientService: ClientService,
         private readonly productService: ProductService,
+        private readonly telegramUserService: TelegramUserService,
     ) {}
 
     async findAll(): Promise<OrderInProgress[]> {
@@ -58,10 +65,15 @@ export class OrderInProgressService {
         const newOrder = new OrderInProgress(order);
         newOrder.state = state;
         let client = await this.clientService.findByPhone(order.customer.phone);
+        const tgClient = await this.telegramUserService.findByPhone(
+            order.customer.phone,
+        );
         if (!client) {
             client = new Client();
+            client.tgUser = new TelegramUser();
             client.phone = order.customer.phone;
             client.name = order.customer.name;
+            client.tgUser.id = tgClient.id;
             await this.clientService.saveOne(client);
         }
         newOrder.client = client;
@@ -92,15 +104,104 @@ export class OrderInProgressService {
         });
     }
 
+    async setPayStateByKey(key: string) {
+        return this.orderInProgressRepository.update(
+            {
+                key: key,
+            },
+            { payState: true },
+        );
+    }
+
+    async findByUser(
+        tgId: number,
+        pagination?: number,
+        page?: number,
+    ): Promise<OrderInProgress[]> {
+        return this.orderInProgressRepository.find({
+            select: {
+                id: true,
+                key: true,
+                totalPrice: true,
+                datetime: true,
+                state: true,
+                payState: true,
+                nomenclatures: {
+                    quantity: true,
+                    product: {
+                        indexNumber: true,
+                        name: true,
+                    },
+                },
+            },
+            relations: {
+                nomenclatures: {
+                    product: true,
+                },
+            },
+            where: {
+                client: {
+                    tgUser: {
+                        tgId: tgId,
+                    },
+                },
+            },
+            take: pagination,
+            skip: pagination ? pagination * page : 0,
+        });
+    }
+
+    async getAllByKey(key: string) {
+        return this.orderInProgressRepository.find({
+            relations: {
+                nomenclatures: {
+                    product: {
+                        images: true,
+                    },
+                },
+                client: {
+                    tgUser: true,
+                },
+            },
+            where: {
+                key: key,
+            },
+        });
+    }
+
+    async findById(id: number) {
+        return this.orderInProgressRepository.findOne({
+            relations: {
+                client: {
+                    tgUser: true,
+                },
+            },
+            where: {
+                id: id,
+            },
+            select: {
+                id: true,
+                key: true,
+                client: {
+                    id: true,
+                    tgUser: {
+                        id: true,
+                        tgId: true,
+                    },
+                },
+            },
+        });
+    }
+
     async deleteByIds(ids: number[]) {
         return this.orderInProgressRepository.delete({
             id: In(ids),
         });
     }
 
-    async deleteByKey(key: string) {
+    async deleteByKeys(keys: string[]) {
         return this.orderInProgressRepository.delete({
-            key: key,
+            key: In(keys),
         });
     }
 

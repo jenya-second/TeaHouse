@@ -11,11 +11,18 @@
     justify-content: space-around;
     align-items: center;
 }
+
+.toggleButtonWrapper {
+    position: fixed;
+    top: 13vh;
+    left: calc(50% - 30vw);
+}
+
 .toggleButton .slider {
     width: 28vw;
     height: 7vw;
     margin: 1vw;
-    background-color: global.$secondaryBackground;
+    background-color: global.$activeButtonColor;
     border-radius: 2vw;
     position: absolute;
     top: 0;
@@ -31,4 +38,10 @@
     font-size: small;
     display: flex;
     z-index: 1;
+    transition: 0.5s;
+    font-weight: 300;
+}
+
+.textActive {
+    font-weight: 500;
 }

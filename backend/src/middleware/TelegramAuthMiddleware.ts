@@ -5,8 +5,19 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class TelegramAuthMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-        if (!req.body.initData) next('No init data');
-        const initData = new URLSearchParams(req.body.initData);
+        if (!req.headers.authorization) {
+            next('No init data');
+            return;
+        }
+        if (this.checkInitData(req)) {
+            next();
+        } else {
+            next('Wrong init data');
+        }
+    }
+
+    private checkInitData(req: Request): boolean {
+        const initData = new URLSearchParams(req.headers.authorization);
         const hash = initData.get('hash');
         const dataToCheck: string[] = [];
         initData.sort();
@@ -19,10 +30,6 @@ export class TelegramAuthMiddleware implements NestMiddleware {
         const _hash = createHmac('sha256', secret)
             .update(dataToCheck.join('\n'))
             .digest('hex');
-        if (hash === _hash) {
-            next();
-        } else {
-            next('Wrong init data');
-        }
+        return hash === _hash;
     }
 }

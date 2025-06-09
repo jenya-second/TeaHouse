@@ -21,14 +21,14 @@ export const ButtonNav = memo(function ButtonNav({
         routes.push(to);
     }
     return (
-        <div className={styles.wraper}>
+        <div>
             <Link
                 to={to}
                 className={combineStyles(
                     styles.button,
                     routes.find((val) => location.pathname.startsWith(val))
-                        ? styles.outShadow2
-                        : styles.outShadow,
+                        ? styles.active
+                        : '',
                 )}
             >
                 <img className={styles.navImg} src={icon} />

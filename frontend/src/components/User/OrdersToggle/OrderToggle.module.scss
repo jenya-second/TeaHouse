@@ -1,0 +1,40 @@
+@use '/src/global';
+
+.toggleButton {
+    width: 90vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    height: 9vw;
+    background-color: global.$primaryBackground;
+    border-radius: 2vw;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    & .slider {
+        width: 28vw;
+        height: 7vw;
+        margin: 1vw;
+        background-color: global.$activeButtonColor;
+        border-radius: 2vw;
+        position: absolute;
+        top: 0;
+        transition: 0.5s;
+    }
+
+    & .text {
+        font-size: small;
+        display: flex;
+        z-index: 1;
+        transition: 0.5s;
+        font-weight: 300;
+        flex: 1;
+        justify-content: center;
+    }
+
+    & .textActive {
+        font-weight: 500;
+    }
+}

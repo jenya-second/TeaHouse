@@ -1,6 +1,12 @@
 @use '/src/global';
 
 $top: 20vh;
+$topSmall: 10vh;
+$footerHeight: 25vw;
+$footerPadding: 5vh;
+$mainWrapperPadding: 0vw;
+$mainWrapperHeight: calc(100% - $top - $footerHeight - $footerPadding - $mainWrapperPadding);
+$mainWrapperHeightSmall: calc(100% - $topSmall - $footerHeight - $footerPadding - $mainWrapperPadding);
 
 .backGroundImage {
     position: fixed;
@@ -15,13 +21,19 @@ $top: 20vh;
     background: global.$globalGradient;
     position: fixed;
     top: $top;
-    width: calc(100% - 6vw);
-    padding: 3vw;
+    width: calc(100% - $mainWrapperPadding * 2);
+    padding: $mainWrapperPadding;
     min-height: 25vh;
-    height: calc(100% - $top - 25vw - 3vw);
-    max-height: calc(100% - $top - 25vw - 3vw);
+    height: $mainWrapperHeight;
+    max-height: $mainWrapperHeight;
     border-top-left-radius: 10vw;
     border-top-right-radius: 10vw;
+    transition: 0.2s;
+    &.small {
+        top: $topSmall;
+        max-height: $mainWrapperHeightSmall;
+        height: $mainWrapperHeightSmall;
+    }
 }
 
 .footer {
@@ -29,9 +41,10 @@ $top: 20vh;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 25vw;
+    height: $footerHeight;
     display: flex;
     align-items: center;
     justify-content: space-around;
     background-color: global.$primaryBackground;
+    padding-bottom: $footerPadding;
 }

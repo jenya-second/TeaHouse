@@ -26,11 +26,22 @@ export class TelegramUserService {
         });
     }
 
+    async findByPhone(phone: string) {
+        const clients = await this.telegramUserRepository.find();
+        return clients.find(
+            (val) => this.simplePhone(phone) == this.simplePhone(val.phone),
+        );
+    }
+
     async saveOne(tgUser: TelegramUser) {
         return this.telegramUserRepository.insert(tgUser);
     }
 
     async saveMany(tgUsers: TelegramUser[]) {
         return this.telegramUserRepository.insert(tgUsers);
+    }
+
+    simplePhone(phone: string) {
+        return phone ? phone.replaceAll(/\+|\(|\)|-| /g, '') : '';
     }
 }

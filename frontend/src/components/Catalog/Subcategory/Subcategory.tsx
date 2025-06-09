@@ -14,19 +14,27 @@ export function SubCategory({
         <>
             {category?.subcategories.map((val, ind) => (
                 <div id={ind.toString()} key={ind}>
-                    <h2>{val.name}</h2>
-                    {val.products.map((product, i) => (
+                    <span
+                        style={{
+                            margin: '5vw',
+                            fontFamily: 'Papyrus',
+                            fontSize: 'large',
+                        }}
+                    >
+                        {val.name}
+                    </span>
+                    {val.products.map((product) => (
                         <div
-                            key={i}
+                            key={product.nomNumber}
                             onClick={() =>
                                 navigate(
-                                    `/main/${order}/${categoryId}/${product.id}`,
+                                    `/${order}/${categoryId}/${product.id}`,
                                 )
                             }
                         >
                             <CatalogItemSmall
                                 product={product}
-                                navigateTo={`/main/${order}/${categoryId}/${product.id}`}
+                                showCounter={order == 't'}
                             />
                         </div>
                     ))}

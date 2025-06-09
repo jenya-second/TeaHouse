@@ -1,37 +1,75 @@
 @use '/src/global';
-$top: 20vh;
+$top: 10vh;
 
-.wrapper {
-    background: global.$secondaryBackground;
+.modal {
+    background: global.$globalGradient;
     position: fixed;
-    top: 100%;
     width: 100%;
     left: 0;
     right: 100%;
-    overflow: scroll;
-    max-height: calc(100% - $top);
-    height: 100%;
+    height: calc(100% - $top);
     border-top-left-radius: 10vw;
     border-top-right-radius: 10vw;
     z-index: 2;
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.wrapper {
+    overflow: scroll;
+    max-height: 100%;
+}
+
+.wrapper:has(+ .footer) {
+    max-height: calc(100% - 25vw - 5vh);
+}
+
+.blur {
+    position: fixed;
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    transition: 0.5s;
+    &.blurVisible {
+        top: 0;
+    }
 }
 
 .visible {
-    top: 20vh;
-    transition: 0.5s;
+    top: $top;
 }
 
 .hidden {
     top: 100%;
-    transition: 0.5s;
 }
 
-.modalImage {
+.imageWrapper {
     border-radius: 10vw;
-    width: 100%;
-    height: 100vw;
-    background-size: 100%;
-    background-position: center;
+    background-color: global.$primaryBackground;
+    text-align: center;
+
+    & span {
+        text-align: left;
+        padding: 3vw;
+        font-size: 4vw;
+        display: flex;
+        flex-direction: column;
+        & div {
+            padding: 1vw;
+        }
+    }
+
+    & img {
+        padding: 4vw;
+        border-radius: 10vw;
+        width: 50%;
+        height: 50vw;
+        background-size: 100%;
+        background-position: center;
+    }
 }
 
 .infoWrapper {
@@ -44,6 +82,7 @@ $top: 20vh;
 
 .recomendations {
     display: flex;
+    font-size: 4vw;
     align-items: center;
     justify-content: space-evenly;
 }
@@ -56,31 +95,129 @@ $top: 20vh;
     background-position: center;
 }
 
-.buttons {
-    display: flex;
-    min-width: 200%;
-    overflow: hidden;
-    gap: 5vw;
-    padding-bottom: 5vw;
-    // height: 20vw;
-    // background-color: global.$secondaryBackground;
+.bigTeapod {
+    width: 20vw;
+    height: 20vw;
+    background-image: url('/teapod.svg');
+    background-size: 100%;
+    background-position: center;
 }
 
-.toOrder {
-    background-color: global.$buttonColor;
-    border-radius: 5vw;
-    color: black;
+.emptyRecomendations {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: medium;
+    align-items: center;
+    & span {
+        padding: 6vw;
+    }
+}
+
+.footer {
+    position: absolute;
+    font-size: 5vw;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(25vw + 5vh);
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    background-color: global.$primaryBackground;
+    z-index: 2;
+    text-align: center;
 }
 
-.full {
-    width: 90vw;
-    transition: 0.5s;
+.button {
+    width: 12vw;
+    height: 12vw;
+    display: flex;
+    justify-content: center;
+    border-radius: 25%;
+    background: global.$lightButtonColor;
 }
 
-.collapsed {
-    width: 55vw;
-    transition: 0.5s;
+.navImg {
+    width: 60%;
+}
+
+.item {
+    border-radius: 10vw;
+    margin: 3vw;
+    padding: 4vw;
+    background-color: global.$primaryBackground;
+    font-size: medium;
+    text-align: center;
+}
+
+.pressCards {
+    display: flex;
+    justify-content: space-around
+}
+
+.card {
+    align-items: center;
+    border-radius: 10vw;
+    display: flex;
+    flex-direction: column;
+    margin: 3vw;
+    padding: 4vw;
+    font-weight: 500;
+    color: black;
+    background-color: #FEFF96;
+    gap: 5vw;
+    width: 30vw;
+    position: relative;
+    
+    & .full {
+        background-image: url('/ellipseBig.svg');
+    }
+    
+    & .half {
+        background-image: url('/half-ellipseBig.svg');
+    }
+
+    & .img {
+        width: 25vw;
+        height: 25vw;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+.cardHover {
+    position: absolute;
+    background-color: #5f5f5ec8;
+    border-radius: 10vw;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-4vw);
+}
+
+.fullText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-4vw);
+    position: absolute;
+    font-family: "Papyrus";
+    font-size: 8vw;
+    color: #FFFFD8;
+}
+
+.halfText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transform: translate(6vw,-4vw);
+    position: absolute;
+    font-family: "Papyrus";
+    font-size: 8vw;
+    color: #FFFFD8;
 }

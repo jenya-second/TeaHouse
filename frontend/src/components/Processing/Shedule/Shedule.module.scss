@@ -1,0 +1,19 @@
+@use '/src/global';
+
+.textWrap {
+    margin: 7vw;
+}
+
+p {
+    margin: 0;
+    font-size: 4vw;
+    &:first-child {
+        text-align: center;
+        margin: 5vw;
+    }
+
+    & span {
+        color: red;
+        font-weight: 700;
+    }
+}

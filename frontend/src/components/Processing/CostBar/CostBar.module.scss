@@ -1,0 +1,25 @@
+@use '/src/global';
+
+.main {
+    background-color: global.$primaryBackground;
+}
+
+.row {
+    display: flex;
+    padding: 2vw;
+    justify-content: space-between;
+    align-items: center;
+    font-size: large;
+    & span:first-child {
+        margin-left: 5vw;
+    }
+
+    & span:last-child {
+        width: 40vw;
+    }
+}
+
+.text {
+    font-size: 3vw;
+    font-weight: 700;
+}

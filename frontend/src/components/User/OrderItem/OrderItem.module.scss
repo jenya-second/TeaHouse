@@ -1,0 +1,63 @@
+@use '/src/global';
+
+.item {
+    margin-left: 12vw;
+    margin-bottom: 3vw;
+    height: 20vw;
+    width: 75vw;
+    background-color: #55585D;
+    display: flex;
+    position: relative;
+    border-radius: 5vw;
+    align-items: center;
+
+    &.cor {
+        background-color: #FEFF96;
+
+        .text {
+            color: black;
+        }
+    }
+
+    .icon {
+        width: 20vw;
+        height: 20vw;
+        background-size: 80%;
+        background-repeat: no-repeat;
+        background-position: center;
+    
+        &.newOrders {
+            background-image: url(/new_orders.svg);
+        }
+    
+        &.ordersInProgress {
+            background-image: url(/orders_in_progress.svg);
+        }
+    
+        &.completeOrders {
+            background-image: url(/completed_orders.svg);
+        }
+    }
+
+    .text {
+        font-size: 3.5vw;
+        flex: 1;
+        text-align: center;
+        & span {
+            font-weight: 700;
+        }
+    }
+
+    .correct {
+        position: absolute;
+        top: 3vw;
+        right: 5vw;
+        color: red;
+        font-size: 3vw;
+    }
+}
+
+.date {
+    margin: 2vw;
+    margin-left: 10vw;
+}

@@ -52,7 +52,7 @@ export class ClientService {
         const tgUsers = await this.telegramUserService.findAll();
         const phones = tgUsers.map((val) => this.simplePhone(val.phone));
         for (let i = 0; i < clients.length; i++) {
-            const client = await this.findOneByNum(clients[i].num);
+            const client = await this.findByPhone(clients[i].phone);
             if (client) {
                 clients[i].id = client.id;
                 if (client.tgUser) clients[i].tgUser = client.tgUser;

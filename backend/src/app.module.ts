@@ -4,7 +4,7 @@ import {
     NestModule,
     RequestMethod,
 } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { PublicController } from './public.controller';
 import { SABYModule } from './SABY/saby.module';
 import { ConfigModule } from '@nestjs/config';
 import { ScrapeModule } from './web_scraping/scrape.module';
@@ -12,6 +12,7 @@ import { DatabaseModule } from './database/db.module';
 import { RefreshModule } from './refresh/refresh.module';
 import { TelegramBotModule } from './telegram/telegram.module';
 import { TelegramAuthMiddleware } from './middleware/TelegramAuthMiddleware';
+import { AuthController } from './auth.controller';
 
 @Module({
     imports: [
@@ -24,12 +25,10 @@ import { TelegramAuthMiddleware } from './middleware/TelegramAuthMiddleware';
             isGlobal: true,
         }),
     ],
-    controllers: [AppController],
+    controllers: [PublicController, AuthController],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(TelegramAuthMiddleware)
-            .forRoutes({ path: '', method: RequestMethod.POST });
+        consumer.apply(TelegramAuthMiddleware).forRoutes(AuthController);
     }
 }

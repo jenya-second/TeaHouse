@@ -10,7 +10,7 @@ export function Category({ category }: { category: CategoryEntity }) {
         <>
             <div
                 onClick={() => {
-                    navigate(`/main/o/${category.id}`);
+                    navigate(`/o/${category.id}`);
                 }}
                 className={combineStyles(
                     styles.category,

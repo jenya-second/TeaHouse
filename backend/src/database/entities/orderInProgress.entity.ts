@@ -36,10 +36,12 @@ export class OrderInProgress implements OrderInProgressEntity {
         this.totalPrice = orderInProgress.totalPrice;
         this.totalSum = orderInProgress.totalSum;
         this.totalDiscount = orderInProgress.totalDiscount;
+        this.state = 10;
+        this.payState = false;
     }
 
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @Column('text')
     key: string;
@@ -76,6 +78,9 @@ export class OrderInProgress implements OrderInProgressEntity {
 
     @Column('int4')
     state: number;
+
+    @Column('boolean')
+    payState: boolean;
 
     @ManyToOne(() => Client, (client) => client.ordersInProgress)
     client: Client;

@@ -22,7 +22,6 @@ export function ImageDisplay({
     myStyle.textAlign = 'center';
     myStyle.display = 'flex';
     myStyle.alignItems = 'center';
-    // myStyle.height = '100%';
     myStyle.width = '100%';
     return (
         <div style={myStyle}>

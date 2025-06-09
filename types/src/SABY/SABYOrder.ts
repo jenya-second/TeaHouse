@@ -12,8 +12,13 @@ export interface SABYOrder {
         Amount: number;
         CheckNumber: string;
         Comment: string;
+        ClosedWTZ: string;
         FiscalNumber: string;
         FiscalSign: string;
+        KKTFiscalNumber: string;
+        KKTNumber: string;
+        Nonfiscal: string;
+        OpenedWTZ: string;
         Positions: number[];
     }[];
     SaleNomenclatures: SABYSaleNomenclature[];

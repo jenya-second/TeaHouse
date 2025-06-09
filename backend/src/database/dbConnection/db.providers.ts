@@ -16,7 +16,6 @@ export const databaseProviders = [
                 database: process.env.DB_NAME,
                 entities: [__dirname + '/../**/*.entity{.ts,.js}'],
                 namingStrategy: new SnakeNamingStrategy(),
-                // logging: true,
             });
 
             return dataSource.initialize();

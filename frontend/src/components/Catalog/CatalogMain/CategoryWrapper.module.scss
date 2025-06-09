@@ -1,14 +1,9 @@
 @use '/src/global';
 
-.toggleButtonWrapper {
-    position: fixed;
-    top: 13vh;
-    left: calc(50% - 30vw);
-}
-
 .dialog {
     display: none;
 }
+
 .topMenu {
     display: flex;
     overflow: scroll;

@@ -14,6 +14,7 @@ $elemHeigh: 10vw;
 }
 
 .hid.counter {
+    background-color: transparent;
     color: global.$lightYellow;
 }
 
@@ -44,13 +45,12 @@ $elemHeigh: 10vw;
     background-color: global.$unableColor;
 }
 
-.hid {
+.yellow {
     background-color: global.$buttonColor;
 }
 
-.hid .plus {
-    background-color: transparent;
-    background-image: none;
+.hid {
+    background-color: global.$buttonColor;
 }
 
 .hid .minus {
@@ -64,4 +64,59 @@ $elemHeigh: 10vw;
     vertical-align: middle;
     line-height: 4vw;
     margin: 1vw;
+    flex: 1;
+}
+
+.full {
+    background-image: url('/ellipse.svg');
+    width: $elemHeigh;
+    height: 100%;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.half {
+    background-image: url('/half-ellipse.svg');
+    width: $elemHeigh;
+    height: 100%;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.bottomText {
+    color: global.$lightYellow;
+    text-align: center;
+    font-size: small;
+    width: 35vw;
+}
+
+.circles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 6vw;
+}
+
+.split {
+    font-size: 8vw;
+    font-family: "Roboto", sans-serif;
+}
+
+.nulled {
+    font-weight: 600;
+    text-align: center;
+    font-size: 4vw;
+    color: global.$errorColor;
+    width: 100%;
+}
+
+.deliv {
+    font-weight: 500;
+    text-align: center;
+    font-size: 4vw;
+    width: 100%;
 }
