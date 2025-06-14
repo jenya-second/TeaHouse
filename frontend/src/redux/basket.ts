@@ -5,6 +5,8 @@ export interface BasketState {
     value: { product: ProductEntity; count: number }[];
 }
 
+// const i:  = JSON.parse(localStorage.getItem('basket') ?? '[]');
+
 const init: BasketState = {
     value: [],
 };
@@ -33,6 +35,10 @@ export const basketClice = createSlice({
             } else {
                 state.value[ind].count += 1;
             }
+            const s = state.value.map((val) => {
+                return { index: val.product.nomNumber, count: val.count };
+            });
+            localStorage.setItem('basket', JSON.stringify(s));
         },
         deleteProduct: (
             state: BasketState,
@@ -47,13 +53,26 @@ export const basketClice = createSlice({
             } else {
                 state.value[ind].count -= 1;
             }
+            const s = state.value.map((val) => {
+                return { index: val.product.nomNumber, count: val.count };
+            });
+            localStorage.setItem('basket', JSON.stringify(s));
         },
         deleteAll: () => {
+            localStorage.setItem('basket', '[]');
             return { value: [] };
+        },
+        initBasket: (_: BasketState, action: PayloadAction<BasketState>) => {
+            const s = action.payload.value.map((val) => {
+                return { index: val.product.nomNumber, count: val.count };
+            });
+            localStorage.setItem('basket', JSON.stringify(s));
+            return action.payload;
         },
     },
 });
 
-export const { addProduct, deleteProduct, deleteAll } = basketClice.actions;
+export const { addProduct, deleteProduct, deleteAll, initBasket } =
+    basketClice.actions;
 
 export default basketClice.reducer;

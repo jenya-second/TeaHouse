@@ -18,9 +18,46 @@ import { ProcessingPage } from '#pages/ProcessingPage.js';
 import { UserPage } from '#pages/UserPage.js';
 import { OrderPage } from '#pages/OrderPage.js';
 import { FullOrder } from '#pages/FullOrder.js';
+import { OrderInfo, UserInfo } from '#utils/utils.js';
 
 function App() {
     useEffect(() => {
+        const z = localStorage.getItem('user');
+        const x = localStorage.getItem('orderInfoGlobal');
+        const c = localStorage.getItem('orderInfo');
+        const v = localStorage.getItem('basket');
+        if (!z) {
+            const user: UserInfo = {
+                firstname: '',
+                lastname: '',
+                id: -1,
+                phone: '',
+                tgId: -1,
+                username: '',
+            };
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+        if (!x) {
+            const orderInfo: OrderInfo = {
+                address: '',
+                comment: '',
+                firstname: '',
+                lastname: '',
+                patronymic: '',
+                phone: '',
+            };
+            localStorage.setItem('orderInfoGlobal', JSON.stringify(orderInfo));
+            localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
+        }
+        if (!c) {
+            localStorage.setItem(
+                'orderInfo',
+                localStorage.getItem('orderInfoGlobal') ?? '?',
+            );
+        }
+        if (!v) {
+            localStorage.setItem('orderInfo', '[]');
+        }
         try {
             init();
             const params = retrieveLaunchParams();

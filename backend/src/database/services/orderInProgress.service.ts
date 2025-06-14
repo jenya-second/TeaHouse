@@ -104,12 +104,15 @@ export class OrderInProgressService {
         });
     }
 
-    async setPayStateByKey(key: string) {
+    async setPayStateByKey(
+        key: string,
+        payState: 'not' | 'processing' | 'fulfilled',
+    ) {
         return this.orderInProgressRepository.update(
             {
                 key: key,
             },
-            { payState: true },
+            { payState: payState },
         );
     }
 

@@ -5,7 +5,7 @@ export interface SABYOrderState {
         amount: number;
         errorMessage: string;
         id: number;
-        isClossed: boolean;
+        isClosed: boolean;
         paymentType: string;
         sale: number;
     }[];

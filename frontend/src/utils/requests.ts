@@ -4,6 +4,8 @@ import {
     OrderEntity,
     OrderInProgressEntity,
     ProductEntity,
+    SABYOrderState,
+    TelegramUserEntity,
 } from '@tea-house/types';
 import {
     COMPLETED_ORDERS,
@@ -16,6 +18,7 @@ import {
     PRODUCT_ONE_URL,
     PRODUCTS_URL,
     SERVER_URL,
+    USER,
 } from './constants';
 import { initData } from '@telegram-apps/sdk-react';
 
@@ -87,9 +90,7 @@ export async function getOrderInProgressByKey(
     return extractAuthFetch(CreateApiLink(`${ORDERS_IN_PROGRESS}/${key}`));
 }
 
-export async function getOrderStateByKey(
-    key: string,
-): Promise<OrderInProgressEntity[]> {
+export async function getOrderStateByKey(key: string): Promise<SABYOrderState> {
     return extractAuthFetch(CreateApiLink(ORDER_STATE + key));
 }
 
@@ -104,4 +105,8 @@ export async function DeleteOrder(orderId: number): Promise<boolean> {
         method: 'DELETE',
     };
     return extractAuthFetch(CreateApiLink(DELETE_ORDER + orderId), request);
+}
+
+export async function GetUser(): Promise<TelegramUserEntity> {
+    return extractAuthFetch(CreateApiLink(USER));
 }

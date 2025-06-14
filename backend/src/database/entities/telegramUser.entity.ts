@@ -22,6 +22,9 @@ export class TelegramUser implements TelegramUserEntity {
     @Column('int8')
     tgId: number;
 
+    @Column('text')
+    chatId: string;
+
     @OneToOne(() => Client, (client) => client.tgUser)
     SABYUser: Client;
 }

@@ -12,7 +12,9 @@ export function CostBar({
         <div className={combineStyles(styles.main, styles.outShadow)}>
             <div className={styles.row}>
                 <span>Сумма заказа:</span>
-                <span>{cost + ' ₽'}</span>
+                <span>
+                    {cost - (delivery != undefined ? delivery : 0) + ' ₽'}
+                </span>
             </div>
             <div className={styles.row}>
                 <span>Доставка:</span>
@@ -24,9 +26,7 @@ export function CostBar({
             </div>
             <div className={styles.row}>
                 <span>Итого:</span>
-                <span>
-                    {cost + (delivery != undefined ? delivery : 0) + ' ₽'}
-                </span>
+                <span>{cost + ' ₽'}</span>
             </div>
         </div>
     );

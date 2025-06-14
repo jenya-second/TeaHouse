@@ -4,6 +4,7 @@ import { CostBar } from '#components/Processing/CostBar/CostBar.js';
 import { ConfirmButtonPayment } from '#components/User/ConfirmButton2/ConfirmButtonPayment.js';
 import { DeleteButton } from '#components/User/DeleteButton/DeleteButton.js';
 import { OrderInfo } from '#components/User/OrderInfo/OrderInfo.js';
+import { PaymentAwait } from '#components/User/OrderItem/OrderItem.js';
 import {
     ProductChangedItem,
     ProductItem,
@@ -11,15 +12,12 @@ import {
 import {
     GetCompleteOrderByKey,
     getOrderInProgressByKey,
+    getOrderStateByKey,
 } from '#utils/requests.js';
 import { CircularProgress } from '@mui/material';
-import {
-    OrderEntity,
-    OrderInProgressEntity,
-    SaleNomenclatureEntity,
-} from '@tea-house/types';
+import { OrderEntity, OrderInProgressEntity } from '@tea-house/types';
 import { initData, useSignal } from '@telegram-apps/sdk-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 export function FullOrder() {
@@ -27,41 +25,32 @@ export function FullOrder() {
     const [order, setOrder] = useState<OrderEntity[] | OrderInProgressEntity[]>(
         [],
     );
+    const [payState, setPayState] = useState<
+        'not' | 'processing' | 'fulfilled'
+    >();
+    const timer = useRef<NodeJS.Timeout>(undefined);
     const init = useSignal(initData.raw);
-    let date: string[] = [];
-    let viewType: 1 | 2 | 3 = 1;
-    let items: SaleNomenclatureEntity[] = [];
-    let deliveryCost: number | undefined = 0;
-    if (order && order.length != 0) {
-        if ((order[0] as OrderInProgressEntity).datetime) {
-            if (order.length == 1) {
-                viewType = 1;
-            } else if ((order[0] as OrderInProgressEntity).payState) {
-                viewType = 3;
-            } else {
-                viewType = 2;
-            }
+
+    const notifyPayState = async () => {
+        if (!orderKey) {
+            timer.current = setTimeout(notifyPayState, 5000);
+            return;
+        }
+        const state = await getOrderStateByKey(orderKey);
+        let newT: 'not' | 'processing' | 'fulfilled';
+        if (state.payments.length == undefined) {
+            newT = 'not';
         } else {
-            viewType = 3;
+            newT = state.payments[0].isClosed ? 'fulfilled' : 'processing';
         }
-        date = (
-            (order[0] as OrderEntity).dateWTZ ||
-            (order[0] as OrderInProgressEntity).datetime
-        )
-            .split(' ')[0]
-            .split('-');
-        if ((order[0] as OrderInProgressEntity).datetime)
-            date[0] = `${+date[0] - 1}`;
-        items =
-            (order[0] as OrderEntity).saleNomenclatures ||
-            (order[0] as OrderInProgressEntity).nomenclatures;
-        if (viewType != 3 && !(order[0] as OrderInProgressEntity).isPickup) {
-            const deliveryItem = items.find(
-                (val) => val.product.name == 'Доставка',
-            );
-            deliveryCost = deliveryItem?.totalPrice;
-        }
-    }
+        setPayState((val) => {
+            console.log(val, newT);
+            if (!val || newT == 'not') {
+                timer.current = setTimeout(notifyPayState, 5000);
+            }
+            return val == newT ? val : newT;
+        });
+    };
 
     useEffect(() => {
         if (!orderKey || !init) return;
@@ -71,35 +60,57 @@ export function FullOrder() {
         if (orderType == 'c') {
             GetCompleteOrderByKey(orderKey).then((res) => setOrder([res]));
         }
+        notifyPayState();
+        return () => clearTimeout(timer.current);
     }, [init]);
 
-    const jsxItems = useMemo(() => {
-        if (order.length == 0) return <></>;
+    const [jsxItems, viewType, date, deliveryCost] = useMemo(() => {
+        if (order.length == 0 || !payState)
+            return [<></>, 3, ['00', '00', '00'], 0];
         const ord = order as OrderInProgressEntity[];
-        if (ord[0].nomenclatures) {
+        let viewType: 1 | 2 | 3 | 4 = 1;
+        if (orderType == 'p') {
+            if (order.length == 1) {
+                viewType = 1;
+            } else if (payState != 'not') {
+                viewType = payState == 'fulfilled' ? 3 : 4;
+            } else {
+                viewType = 2;
+            }
+        } else {
+            viewType = 3;
+        }
+        const date = ((order[0] as OrderEntity).dateWTZ || ord[0].datetime)
+            .split(' ')[0]
+            .split('-');
+        if (orderType == 'p') date[0] = `${+date[0] - 1}`;
+        if (orderType == 'p') {
             ord.sort((a, b) => b.state - a.state);
         }
-        const myItems =
+        const items =
             (order[0] as OrderEntity).saleNomenclatures || ord[0].nomenclatures;
         if (viewType != 2) {
-            return (
+            const jsxItems = (
                 <>
-                    {myItems.map((val, i) => (
+                    {items.map((val, i) => (
                         <ProductItem nom={val} key={i} />
                     ))}
                 </>
             );
+            return [jsxItems, viewType, date, ord[0]?.isPickup ? 0 : undefined];
         }
-        const d = ord[0].nomenclatures.find(
+        const deliveryItem = items.find(
             (val) => val.product.name == 'Доставка',
         );
         const prev = ord[ord.length - 1].nomenclatures.filter(
             (val) =>
-                val.product.name != 'Доставка' || 'Услуга доставки товаров',
+                val.product.name != 'Доставка' &&
+                val.product.name != 'Услуга доставки товаров',
         );
         const cur = ord[0].nomenclatures.filter(
             (val) =>
-                val.product.name != 'Доставка' || 'Услуга доставки товаров',
+                val.product.name != 'Доставка' &&
+                val.product.name != 'Услуга доставки товаров',
         );
         const ans = prev.map((val, i) => {
             const a = cur.find(
@@ -118,13 +129,16 @@ export function FullOrder() {
                 />
             );
         });
-        return (
+        const jsxItems = (
             <>
                 {ans}
-                {d && <ProductItem key={0} nom={d} delivery={true} />}
+                {deliveryItem && (
+                    <ProductItem key={0} nom={deliveryItem} delivery={true} />
+                )}
             </>
         );
-    }, [order]);
+        return [jsxItems, viewType, date, deliveryItem?.totalPrice];
+    }, [order, payState]);
 
     return (
         <>
@@ -135,14 +149,15 @@ export function FullOrder() {
                     <PageName
                         name={`Заказ от ${date[2]}.${date[1]}.${+date[0]}`}
                     />
-                    {viewType != 3 && (
+                    {(viewType == 1 || viewType == 2) && (
                         <DeleteButton
                             id={(order[0] as OrderInProgressEntity).id}
                         />
                     )}
                     <ScrollWrapper aaah={true}>
+                        {viewType == 4 && <PaymentAwait />}
                         {jsxItems}
-                        {viewType != 3 && (
+                        {(viewType == 1 || viewType == 2) && (
                             <>
                                 <OrderInfo
                                     order={order[0] as OrderInProgressEntity}

@@ -17,7 +17,7 @@ export interface OrderInProgressEntity {
     totalSum: number;
     totalDiscount: number;
     state: number;
-    payState: boolean;
+    payState: 'not' | 'processing' | 'fulfilled';
 }
 
 export default OrderInProgressEntity;

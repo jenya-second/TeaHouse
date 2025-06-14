@@ -7,6 +7,7 @@ export interface TelegramUserEntity {
     firstName: string;
     lastName: string;
     tgId: number;
+    chatId: string;
     SABYUser: ClientEntity;
 }
 

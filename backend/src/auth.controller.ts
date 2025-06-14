@@ -148,6 +148,13 @@ export class AuthController {
         return this.SABYService.GetPaymentLink(key);
     }
 
+    @Get('whoami')
+    async getUser(@Request() req: ExpRequest) {
+        const initData = new URLSearchParams(req.headers.authorization);
+        const userId = JSON.parse(initData.get('user')).id;
+        return this.telegramUserService.findOneByTgId(userId);
+    }
+
     @Delete(':orderId')
     async deleteNewOrder(
         @Request() req: ExpRequest,

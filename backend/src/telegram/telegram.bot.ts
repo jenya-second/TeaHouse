@@ -76,6 +76,7 @@ export class OichaiBot extends TelegramBot {
                     lastName: message.contact.last_name,
                     phone: message.contact.phone_number,
                     username: message.from.username,
+                    chatId: '' + message.chat.id,
                 } as TelegramUser;
                 await this.telegramUserService.saveOne(contact);
                 this.sendMessage({

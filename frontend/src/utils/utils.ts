@@ -24,3 +24,21 @@ export function GrammCount({
         ? (count * product.pressAmount) / (product.pressAmount >= 200 ? 2 : 1)
         : count * 25;
 }
+
+export interface UserInfo {
+    id: number;
+    firstname: string;
+    lastname: string;
+    phone: string;
+    tgId: number;
+    username: string;
+}
+
+export interface OrderInfo {
+    firstname: string;
+    lastname: string;
+    patronymic: string;
+    phone: string;
+    address: string;
+    comment: string;
+}

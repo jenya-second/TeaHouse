@@ -73,7 +73,7 @@ export class PublicController {
             return;
         }
         const orderState = await this.SABYService.GetOrderState(orderKey);
-        if (orderState.state == 220) {
+        if (orderState.state == 220 || orderState.state == 200) {
             this.orderInProgressService.deleteByKeys([orderInfo.key]);
             return;
         }
@@ -81,17 +81,23 @@ export class PublicController {
             console.log(orderInfo);
             console.log(orderState);
             if (orderState.payments[0]?.id) {
-                this.orderInProgressService.setPayStateByKey(orderInfo.key);
+                if (orderState.payments[0].isClosed) {
+                    this.orderInProgressService.setPayStateByKey(
+                        orderInfo.key,
+                        'fulfilled',
+                    );
+                } else {
+                    this.orderInProgressService.setPayStateByKey(
+                        orderInfo.key,
+                        'processing',
+                    );
+                }
                 return;
             }
             this.orderInProgressService.insertOrderFromSABYOrder(
                 orderInfo,
                 orderState.state,
             );
-        }
-        if (orderState.state == 200) {
-            this.orderInProgressService.deleteByKeys([orderInfo.key]);
-            return;
         }
     }
 }

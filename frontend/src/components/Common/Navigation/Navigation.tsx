@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { combineStyles } from '#utils/styles.js';
 import { Badge } from '@mui/material';
 import { useAppSelector } from '#redux/index.js';
+import { GetUser } from '#utils/requests.js';
 
 export function Navigation() {
     const navigation = useNavigate();
@@ -24,6 +25,10 @@ export function Navigation() {
     const isFullscreen = useSignal(viewport.isFullscreen);
 
     useEffect(() => {
+        GetUser().then((res) => {
+            if (!res) return;
+            localStorage.setItem('user', JSON.stringify(res));
+        });
         if (backButton.onClick.isAvailable()) {
             backButton.offClick(closeMiniApp);
             const off = backButton.onClick(() => navigation(-1));

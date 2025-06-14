@@ -5,11 +5,11 @@ import { combineStyles } from '#utils/styles.js';
 export function OrderItem({
     type,
     order,
-    cor = false,
+    cor,
 }: {
     type: 1 | 2 | 3;
     order: OrderEntity | OrderInProgressEntity;
-    cor?: boolean;
+    cor?: 'cor' | 'tran';
 }) {
     const date = (
         (order as OrderEntity).dateWTZ ||
@@ -27,7 +27,8 @@ export function OrderItem({
             iconImage = styles.ordersInProgress;
             break;
         default:
-            iconImage = styles.completeOrders;
+            iconImage =
+                cor == 'tran' ? styles.processingOrder : styles.completeOrders;
     }
 
     return (
@@ -41,11 +42,21 @@ export function OrderItem({
                     Заказ на сумму <span>{order.totalPrice + ' ₽'}</span>
                 </div>
                 {cor && (
-                    <div className={styles.correct}>
-                        *Присутствуют корректировки
+                    <div
+                        className={
+                            cor == 'cor' ? styles.correct : styles.process
+                        }
+                    >
+                        {cor == 'cor'
+                            ? 'Присутствуют корректировки'
+                            : 'проверка оплаты'}
                     </div>
                 )}
             </div>
         </>
     );
+}
+
+export function PaymentAwait() {
+    return <div className={styles.paymentAwait}>Обработка оплаты</div>;
 }

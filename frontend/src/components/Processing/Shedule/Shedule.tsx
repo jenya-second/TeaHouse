@@ -1,21 +1,24 @@
 import { useAppDispatch, useAppSelector } from '#redux/index.js';
 import { PostNewOrder } from '#utils/requests.js';
 import { Delivery } from '@tea-house/types';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './Shedule.module.scss';
 import { CostBar } from '../CostBar/CostBar';
 import { ConfirmButton } from '../ConfirmButton/ConfirmButton';
 import { FormInput } from '../FormInput/FormInput';
 import { usePopUp } from '#components/Common/PopUp/PopUp.js';
-import { GrammCount, ProductCost } from '#utils/utils.js';
+import { GrammCount, OrderInfo, ProductCost } from '#utils/utils.js';
 import { deleteAll } from '#redux/basket.js';
 import { useNavigate } from 'react-router';
 
 export function Shedule() {
     const products = useAppSelector((state) => state.basket.value);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [patronymic, setPatronymic] = useState('');
+    const o = localStorage.getItem('orderInfo');
+    if (!o) return;
+    const order: OrderInfo = JSON.parse(o);
+    const [firstName, setFirstName] = useState(order.firstname);
+    const [lastName, setLastName] = useState(order.lastname);
+    const [patronymic, setPatronymic] = useState(order.patronymic);
     const [PopUp, showPopUp] = usePopUp();
     const [sending, setSending] = useState(false);
     const navigate = useNavigate();
@@ -39,6 +42,16 @@ export function Shedule() {
 
     const validateForm = () => {
         return firstName.length > 1 && lastName.length > 1;
+    };
+
+    const saveLocal = () => {
+        const o = localStorage.getItem('orderInfo');
+        if (!o) return;
+        const order: OrderInfo = JSON.parse(o);
+        order.firstname = firstName;
+        order.lastname = lastName;
+        order.patronymic = patronymic;
+        localStorage.setItem('orderInfo', JSON.stringify(order));
     };
 
     const sendOrder = async () => {
@@ -74,8 +87,14 @@ export function Shedule() {
             return;
         }
         dispatch(deleteAll());
+        localStorage.setItem(
+            'orderInfo',
+            localStorage.getItem('orderInfo') ?? '{}',
+        );
         navigate('/user/history');
     };
+
+    useEffect(() => saveLocal());
 
     return (
         <>

@@ -37,6 +37,10 @@
         &.completeOrders {
             background-image: url(/completed_orders.svg);
         }
+
+        &.processingOrder {
+            background-image: url(/clock.svg);
+        }
     }
 
     .text {
@@ -50,9 +54,21 @@
 
     .correct {
         position: absolute;
+        width: 50vw;
+        text-align: center;
         top: 3vw;
-        right: 5vw;
+        right: 0;
         color: red;
+        font-size: 3vw;
+    }
+
+    .process {
+        position: absolute;
+        width: 50vw;
+        text-align: center;
+        top: 3vw;
+        right: 0;
+        color: #7E78E0;
         font-size: 3vw;
     }
 }
@@ -60,4 +76,16 @@
 .date {
     margin: 2vw;
     margin-left: 10vw;
+}
+
+.paymentAwait {
+    width: 100%;
+    background-color: #1D2025;
+    color: #7E78E0;
+    font-size: 8vw;
+    text-align: center;
+    margin-top: 4vw;
+    padding-top: 4vw;
+    margin-bottom: 4vw;
+    padding-bottom: 4vw;
 }

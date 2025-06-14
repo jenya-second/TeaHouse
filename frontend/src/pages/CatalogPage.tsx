@@ -3,14 +3,18 @@ import {
     TopMenu,
 } from '#components/Catalog/CatalogMain/CategoryWrapper.js';
 import { ToggleButton } from '#components/Catalog/ToggleButton/ToggleButton.js';
+import { initBasket } from '#redux/basket.js';
+import { useAppDispatch } from '#redux/index.js';
 import { GetProductsRequest } from '#utils/requests.js';
-import { CategoryEntity } from '@tea-house/types';
+import { CategoryEntity, ProductEntity } from '@tea-house/types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 export function CatalogPage() {
     const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
     const [ids, setIds] = useState<number[]>([]);
+    const dispatch = useAppDispatch();
+
     useEffect(() => {
         GetProductsRequest().then(setCategories);
     }, []);
@@ -50,6 +54,28 @@ export function CatalogPage() {
         teaCat[0].subcategories = teaCat[0].subcategories.filter(
             (val) => val.products.length != 0,
         );
+        const b = localStorage.getItem('basket');
+        if (!b) return [teaCat, newCategories];
+        const state: { product: ProductEntity; count: number }[] = [];
+        const basket: { index: string; count: number }[] = JSON.parse(b);
+        teaCat[0].subcategories.forEach((cat) => {
+            basket.forEach((val) => {
+                const product = cat.products.find(
+                    (z) => z.nomNumber == val.index,
+                );
+                if (!product) return;
+                const countInGr = product.press
+                    ? product.pressAmount / (product.pressAmount >= 200 ? 2 : 1)
+                    : 25;
+                const max = Math.floor(product.balance / countInGr);
+                state.push({
+                    count: Math.min(max, val.count),
+                    product: product,
+                });
+            });
+        });
+        setTimeout(() => dispatch(initBasket({ value: state })), 1000);
+
         return [teaCat, newCategories];
     }, [categories]);
 
