@@ -2,9 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import basketReducer from './basket';
 import { useDispatch, useSelector } from 'react-redux';
 import orderSelectReducer from './orders';
+import checksReducer from './checks';
 
 export const store = configureStore({
-    reducer: { basket: basketReducer, orderSelect: orderSelectReducer },
+    reducer: {
+        basket: basketReducer,
+        orderSelect: orderSelectReducer,
+        checks: checksReducer,
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

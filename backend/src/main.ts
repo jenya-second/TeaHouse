@@ -1,22 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { readFileSync } from 'fs';
-import { ConsoleLogger } from '@nestjs/common';
 
 async function bootstrap() {
-    // const httpsOptions: { key: any; cert: any } = { key: '', cert: '' };
-    // try {
-    //     httpsOptions.key = readFileSync(
-    //         '../cert/live/oichai.maslo-spb.ru/privkey.pem',
-    //     );
-    //     httpsOptions.cert = readFileSync(
-    //         '../cert/live/oichai.maslo-spb.ru/fullchain.pem',
-    //     );
-    // } catch (e) {}
     const app = await NestFactory.create(AppModule, {
         cors: true,
-        // httpsOptions: httpsOptions,
     });
     const configService = app.get<ConfigService>(ConfigService);
     await ConfigModule.envVariablesLoaded;

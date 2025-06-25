@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '#redux/index.js';
 import { PostNewOrder } from '#utils/requests.js';
-import { Delivery } from '@tea-house/types';
+import { Delivery, TelegramUserEntity } from '@tea-house/types';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CostBar } from '../CostBar/CostBar';
 import { ConfirmButton } from '../ConfirmButton/ConfirmButton';
@@ -9,6 +9,7 @@ import { usePopUp } from '#components/Common/PopUp/PopUp.js';
 import { useNavigate } from 'react-router';
 import { deleteAll } from '#redux/basket.js';
 import { GrammCount, OrderInfo } from '#utils/utils.js';
+import styles from './DeliveryForm.module.scss';
 
 export function DeliveryForm() {
     const products = useAppSelector((state) => state.basket.value);
@@ -23,8 +24,15 @@ export function DeliveryForm() {
     const [comment, setComment] = useState(order.comment);
     const [PopUp, showPopUp] = usePopUp();
     const [sending, setSending] = useState(false);
+    const [check, setCheck] = useState(true);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    const userPhone = (
+        JSON.parse(
+            localStorage.getItem('user') || '{"phone":"+7"}',
+        ) as TelegramUserEntity
+    ).phone;
 
     let cost = 0;
     products.forEach((val) => {
@@ -112,11 +120,24 @@ export function DeliveryForm() {
             return;
         }
         dispatch(deleteAll());
-        localStorage.setItem(
-            'orderInfo',
-            localStorage.getItem('orderInfo') ?? '{}',
-        );
-        navigate('/user/history');
+        if (check) {
+            const o = localStorage.getItem('orderInfoGlobal');
+            if (!o) return;
+            const order: OrderInfo = JSON.parse(o);
+            order.address = address;
+            order.comment = comment;
+            order.firstname = firstName;
+            order.lastname = lastName;
+            order.patronymic = patronymic;
+            order.phone = phone;
+            localStorage.setItem('orderInfoGlobal', JSON.stringify(order));
+        } else {
+            localStorage.setItem(
+                'orderInfo',
+                localStorage.getItem('orderInfoGlobal') ?? '{}',
+            );
+        }
+        navigate('/user/history', { replace: true });
     };
 
     useEffect(() => saveLocal());
@@ -144,7 +165,7 @@ export function DeliveryForm() {
             />
             <div
                 onFocus={() => {
-                    if (phone.length < 1) setPhone('+7');
+                    if (phone.length < 1) setPhone(userPhone);
                 }}
             >
                 <FormInput
@@ -166,6 +187,17 @@ export function DeliveryForm() {
                 onChange={(e) => setComment(e.target.value.substring(0, 200))}
                 value={comment}
             />
+            <div className={styles.checkWrapper}>
+                <input
+                    id="check"
+                    type="checkbox"
+                    checked={check}
+                    onChange={() => setCheck(!check)}
+                />
+                <label htmlFor="check">
+                    {'Обновить мой адрес доставки в профиле'}
+                </label>
+            </div>
             <CostBar cost={cost} />
             <ConfirmButton sending={sending} onClick={sendOrder} />
         </>

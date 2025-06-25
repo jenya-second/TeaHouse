@@ -30,9 +30,11 @@ export class RefreshService {
 
     @Cron('00 */10 * * * *')
     async RefreshDataBase() {
-        // await this.clientService.updateClients(
-        //     await this.scrapeService.GetUsers(),
-        // );
+        if (this.scrapeService) {
+            await this.clientService.updateClients(
+                await this.scrapeService.GetUsers(),
+            );
+        }
         const SABYproducts: SABYProduct[] =
             await this.SABYService.GetProductsFromPriceList('10');
         const [images, products, categories] =
@@ -48,8 +50,10 @@ export class RefreshService {
         console.log('Refreshed ' + new Date());
     }
 
-    async GetRefreshedOrders(): Promise<[Order[], SaleNomenclature[]]> {
-        const [start, end] = this.GetTodays();
+    async GetRefreshedOrders(
+        date?: string,
+    ): Promise<[Order[], SaleNomenclature[]]> {
+        const [start, end] = date ? this.GetDays(date) : this.GetTodays();
         const orders: Order[] = [];
         const saleNomenclatures: SaleNomenclature[] = [];
         const sabyorders = await this.SABYService.GetOrders(start, end);
@@ -81,5 +85,21 @@ export class RefreshService {
         actual.setDate(actual.getDate() + 1);
         const end = actual.toISOString().split('T')[0] + ' 00:00:00';
         return [start, end];
+    }
+
+    GetDays(date: string): [string, string] {
+        const actual = new Date(date); //'2025-05-17'
+        const start = actual.toISOString().split('T')[0] + ' 00:00:00';
+        actual.setDate(actual.getDate() + 1);
+        const end = actual.toISOString().split('T')[0] + ' 00:00:00';
+        return [start, end];
+    }
+
+    async RefreshDay(date: string) {
+        const [orders, saleNomenclatures] = await this.GetRefreshedOrders(date);
+        await this.orderService.updateOrders(orders);
+        await this.saleNomenclaturesService.updateSaleNomenclatures(
+            saleNomenclatures,
+        );
     }
 }

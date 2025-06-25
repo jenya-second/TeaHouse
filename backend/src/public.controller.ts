@@ -5,6 +5,8 @@ import {
     Post,
     StreamableFile,
     Request,
+    Inject,
+    Res,
 } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -17,7 +19,9 @@ import { Category, OrderInProgress, Product } from './database/entities';
 import { RefreshService } from './refresh/refresh.service';
 import { SABYService } from './SABY/saby.service';
 import { SABYOrderInProgress } from '@tea-house/types';
-import { Request as ExpRequest } from 'express';
+import { Request as ExpRequest, Response } from 'express';
+import { OichaiBot } from './telegram/telegram.bot';
+import { telegram_bot } from './constants';
 
 @Controller()
 export class PublicController {
@@ -27,6 +31,8 @@ export class PublicController {
         private readonly categoryService: CategoryService,
         private readonly refreshService: RefreshService,
         private readonly SABYService: SABYService,
+        @Inject(telegram_bot)
+        private readonly telegramBot: OichaiBot,
     ) {}
 
     @Get()
@@ -36,14 +42,21 @@ export class PublicController {
         return 'aboba';
     }
 
+    // @Get(':date')
+    // refreshOrderByDate(@Param('date') date: string) {
+    //     return this.refreshService.RefreshDay(date);
+    // }
+
     @Get('image/:id')
-    getImage(@Param('id') id: number): StreamableFile {
+    getImage(@Param('id') id: number, @Res() res: Response) {
         const file = createReadStream(
             join(process.cwd(), `./dl_image/${id}.jpeg`),
         );
-        return new StreamableFile(file, {
-            type: 'image/jpeg',
-        });
+        res.setHeader('Cache-Control', 'max-age=600');
+        file.pipe(res);
+        // return new StreamableFile(file, {
+        //     type: 'image/jpeg',
+        // });
     }
 
     @Get('product')
@@ -94,10 +107,14 @@ export class PublicController {
                 }
                 return;
             }
-            this.orderInProgressService.insertOrderFromSABYOrder(
+            const orders =
+                await this.orderInProgressService.getAllByKey(orderKey);
+            if (orders.find((val) => val.state == orderState.state)) return;
+            await this.orderInProgressService.insertOrderFromSABYOrder(
                 orderInfo,
                 orderState.state,
             );
+            this.telegramBot.SendMessageToUser(orders[0]);
         }
     }
 }

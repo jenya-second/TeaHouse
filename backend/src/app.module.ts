@@ -7,7 +7,6 @@ import {
 import { PublicController } from './public.controller';
 import { SABYModule } from './SABY/saby.module';
 import { ConfigModule } from '@nestjs/config';
-import { ScrapeModule } from './web_scraping/scrape.module';
 import { DatabaseModule } from './database/db.module';
 import { RefreshModule } from './refresh/refresh.module';
 import { TelegramBotModule } from './telegram/telegram.module';

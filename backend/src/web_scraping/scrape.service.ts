@@ -73,46 +73,55 @@ export class ScrapeService {
 
     async GetUsers(): Promise<Client[]> {
         const page: Page = await this.browser.newPage();
-        await page.goto('https://ret.sbis.ru/page/crm-simple-clients');
-        await this.delay(1000);
-        await page.click('span[title="В конец"]');
-        let res;
         const clients: Client[] = [];
-        do {
-            const response = await page.waitForResponse((response) => {
-                if (!response.request().hasPostData()) return false;
-                const postData = JSON.parse(response.request().postData());
-                return postData.method == 'CRMClients.ListClientsOnline';
-            });
-            res = await response.json();
-            const types: { n: string; t: string }[] = res.result.s;
-            const deleted = types.findIndex((val) => val.n == 'НеОтображается');
-            const name = types.findIndex((val) => val.n == 'Name');
-            const num = types.findIndex((val) => val.n == 'Entrepreneur');
-            const uuid = types.findIndex((val) => val.n == 'UUID');
-            const contact = types.findIndex((val) => val.n == 'ContactData');
-            // const folders = types.findIndex((val) => val.n == 'Folders');
-            res.result.d.forEach((client) => {
-                if (client[deleted] == true) return;
-                const newClient = new Client();
-                newClient.name = client[name];
-                newClient.num = client[num];
-                if (client[contact].d.length != 0)
-                    newClient.phone = client[contact].d[0][2];
-                newClient.uuid = client[uuid];
-                // const SABYprom = (client[folders].d as []).find(
-                //     (val) => val[3] != 'Клиенты',
-                // );
-                // if (SABYprom) {
-                //     const prom = new Promotion();
-                //     prom.name = SABYprom[3];
-                //     newClient.promotion = prom;
-                // }
-                clients.push(newClient);
-            });
-            await page.click('span[title="Назад"]');
-        } while (res.result.n);
-        page.close();
+        try {
+            await page.goto('https://ret.sbis.ru/page/crm-simple-clients');
+            await this.delay(1000);
+            await page.click('span[title="В конец"]');
+            let res;
+            do {
+                const response = await page.waitForResponse((response) => {
+                    if (!response.request().hasPostData()) return false;
+                    const postData = JSON.parse(response.request().postData());
+                    return postData.method == 'CRMClients.ListClientsOnline';
+                });
+                res = await response.json();
+                const types: { n: string; t: string }[] = res.result.s;
+                const deleted = types.findIndex(
+                    (val) => val.n == 'НеОтображается',
+                );
+                const name = types.findIndex((val) => val.n == 'Name');
+                const num = types.findIndex((val) => val.n == 'Entrepreneur');
+                const uuid = types.findIndex((val) => val.n == 'UUID');
+                const contact = types.findIndex(
+                    (val) => val.n == 'ContactData',
+                );
+                // const folders = types.findIndex((val) => val.n == 'Folders');
+                res.result.d.forEach((client) => {
+                    if (client[deleted] == true) return;
+                    const newClient = new Client();
+                    newClient.name = client[name];
+                    newClient.num = client[num];
+                    if (client[contact].d.length != 0)
+                        newClient.phone = client[contact].d[0][2];
+                    newClient.uuid = client[uuid];
+                    // const SABYprom = (client[folders].d as []).find(
+                    //     (val) => val[3] != 'Клиенты',
+                    // );
+                    // if (SABYprom) {
+                    //     const prom = new Promotion();
+                    //     prom.name = SABYprom[3];
+                    //     newClient.promotion = prom;
+                    // }
+                    clients.push(newClient);
+                });
+                await page.click('span[title="Назад"]');
+            } while (res.result.n);
+            await page.close();
+        } catch (e) {
+            console.log(e);
+            await page.close();
+        }
         return clients;
     }
 }

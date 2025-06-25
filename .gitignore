@@ -6,6 +6,7 @@ dl_image
 cert
 .parcel-cache
 nginx.conf
+nginx_copy.conf
 docker-compose.yaml
 
 # React Router
@@ -46,6 +47,7 @@ lerna-debug.log*
 
 # dotenv environment variable files
 .env
+prod.env
 .env.development.local
 .env.test.local
 .env.production.local

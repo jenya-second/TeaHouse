@@ -1,0 +1,67 @@
+@use '/src/global';
+
+.backGroundImage {
+    position: fixed;
+    width: 100%;
+    height: calc(20vh + 10vw);
+    background-blend-mode: color;
+    background-color: #0707071a;
+    background-image: url('/1.jpg');
+    background-size: 100% ;
+    background-position: 0px -65px;
+}
+
+.mainWrapper {
+    background: global.$globalGradient;
+    position: fixed;
+    top: 20vh;
+    width: 100%;
+    min-height: 25vh;
+    height: 10vh;
+    max-height: 10vh;
+    border-top-left-radius: 10vw;
+    border-top-right-radius: 10vw;
+}
+
+.mainBlock {
+    background-color: global.$primaryBackground;
+    margin: 6vw;
+    padding: 5vw;
+    border-radius: 5vw;
+
+    span {
+        display: block;
+        font-size: 4vw;
+        padding: 2vw;
+    }
+
+    span:first-child {
+        text-align: center;
+        font-size: 4.5vw;
+        font-weight: 600;
+    }
+
+    span:nth-child(2) {
+        text-align: center;
+        font-weight: 300;
+        padding-bottom: 2vw;
+    }
+
+    li {
+        padding: 1vw 0 0 4vw;
+    }
+
+    div {
+        font-size: 5vw;
+        text-align: center;
+        color: black;
+        padding: 4vw;
+        margin: 2vw;
+        border-radius: 3vw;
+        background-color: global.$buttonColor;
+
+        &:active {
+            background-color: #c78800;
+        }
+    }
+}

@@ -1,12 +1,11 @@
-$x: 35px;
-$r: 16px;
+$x: 10vw;
 
 .circle {
     background-image: url('/Logo.png');
     background-size: 100%;
     position: fixed;
-    right: $r;
-    top: $r;
+    right: 23vw;
+    top: 8vw;
     width: $x;
     height: $x;
     z-index: 10;

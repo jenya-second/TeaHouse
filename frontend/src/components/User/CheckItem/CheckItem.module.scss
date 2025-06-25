@@ -1,0 +1,39 @@
+@use '/src/global';
+
+.wrapper {
+    padding: 5vw;
+    padding-right: 20vw;
+    width: 75vw;
+
+    div:first-child {
+        font-size: 4vw;
+        padding: 1vw;
+    }
+
+    div:last-child {
+        display: flex;
+        background-color: #55585D;
+        height: 16vw;
+        border-radius: 4vw;
+        align-items: center;
+
+        .image {
+            flex: 0.7;
+            height: 14vw;
+            background-image: url(/check.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 65%;
+        }
+
+        span {
+            flex: 1;
+            font-size: 3.5vw;
+        }
+
+        span:last-child {
+            flex: 1;
+            font-weight: 700;
+        }
+    }
+}

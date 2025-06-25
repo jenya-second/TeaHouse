@@ -85,6 +85,9 @@ export class OrderService {
                 },
                 totalPrice: true,
                 dateWTZ: true,
+                closedWTZ: true,
+                fiscalSign: true,
+                KKTNumber: true,
             },
             where: {
                 client: {

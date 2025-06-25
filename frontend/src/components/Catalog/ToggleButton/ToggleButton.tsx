@@ -13,13 +13,6 @@ export const ToggleButton = memo(function ToggleButton({
     return (
         <div className={styles.toggleButtonWrapper}>
             <div
-                onClick={() => {
-                    if (state) {
-                        navigate('/o/all');
-                    } else {
-                        navigate('/t/t');
-                    }
-                }}
                 className={combineStyles(
                     styles.toggleButton,
                     state ? styles.active : '',
@@ -28,6 +21,7 @@ export const ToggleButton = memo(function ToggleButton({
             >
                 <div className={styles.slider}></div>
                 <div
+                    onClick={() => navigate('/o/all', { replace: true })}
                     className={combineStyles(
                         styles.text,
                         !state ? styles.textActive : '',
@@ -36,6 +30,7 @@ export const ToggleButton = memo(function ToggleButton({
                     {'В чайной'}
                 </div>
                 <div
+                    onClick={() => navigate('/t/all', { replace: true })}
                     className={combineStyles(
                         styles.text,
                         state ? styles.textActive : '',

@@ -21,6 +21,7 @@ export function Shedule() {
     const [patronymic, setPatronymic] = useState(order.patronymic);
     const [PopUp, showPopUp] = usePopUp();
     const [sending, setSending] = useState(false);
+    const [check, setCheck] = useState(true);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -91,7 +92,21 @@ export function Shedule() {
             'orderInfo',
             localStorage.getItem('orderInfo') ?? '{}',
         );
-        navigate('/user/history');
+        if (check) {
+            const o = localStorage.getItem('orderInfoGlobal');
+            if (!o) return;
+            const order: OrderInfo = JSON.parse(o);
+            order.firstname = firstName;
+            order.lastname = lastName;
+            order.patronymic = patronymic;
+            localStorage.setItem('orderInfoGlobal', JSON.stringify(order));
+        } else {
+            localStorage.setItem(
+                'orderInfo',
+                localStorage.getItem('orderInfoGlobal') ?? '{}',
+            );
+        }
+        navigate('/user/history', { replace: true });
     };
 
     useEffect(() => saveLocal());
@@ -117,6 +132,17 @@ export function Shedule() {
                 onChange={(e) => handleSetValue(e, setPatronymic)}
                 value={patronymic}
             />
+            <div className={styles.checkWrapper}>
+                <input
+                    id="check"
+                    type="checkbox"
+                    checked={check}
+                    onChange={() => setCheck(!check)}
+                />
+                <label htmlFor="check">
+                    {'Обновить мой адрес доставки в профиле'}
+                </label>
+            </div>
             <div className={styles.textWrap}>
                 <p>Дубна, ул. Молодёжная 10</p>
                 <p>Понедельник 11:00 - 22:00</p>

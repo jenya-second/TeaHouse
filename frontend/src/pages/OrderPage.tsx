@@ -14,7 +14,11 @@ import {
     getOrdersInProgress,
     getOrderStateByKey,
 } from '#utils/requests.js';
-import { OrderEntity, OrderInProgressEntity } from '@tea-house/types';
+import {
+    OrderEntity,
+    OrderInProgressEntity,
+    SABYOrderState,
+} from '@tea-house/types';
 import { initData, useSignal } from '@telegram-apps/sdk-react';
 import { JSX, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -39,7 +43,7 @@ export function OrderPage() {
     //never ask developer what's going on here
     //i know how to do it right, but for now, this is how it's gonna be
     const notifyOrderInProgress = async (order: OP) => {
-        const state = await getOrderStateByKey(order.key);
+        const state = (await getOrderStateByKey(order.key)) as SABYOrderState;
         let newT: 1 | 2 | 3;
         if (state.payments.length == undefined) {
             newT = 1;

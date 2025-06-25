@@ -6,12 +6,14 @@ import {
 } from './database/services';
 import { SABYService } from './SABY/saby.service';
 import {
+    Comment,
     Delivery,
     SABYDelivery,
     SABYOrderInProgress,
     SABYOrderState,
 } from '@tea-house/types';
 import { Request as ExpRequest } from 'express';
+import { frontend_main_page } from './constants';
 
 @Controller('auth')
 export class AuthController {
@@ -31,6 +33,13 @@ export class AuthController {
         const phone = (await this.telegramUserService.findOneByTgId(userId))
             .phone;
         actual.setFullYear(actual.getFullYear() + 1);
+        const comment: Comment = {
+            Имя: deliveryData.client.name,
+            Фамилия: deliveryData.client.lastname,
+            Отчество: deliveryData.client.surname,
+            Коментарий: '',
+            Телефон: phone,
+        };
         const delivery: SABYDelivery = {
             customer: {
                 name: deliveryData.client.name,
@@ -42,9 +51,9 @@ export class AuthController {
             delivery: {
                 isPickup: deliveryData.isPickup,
                 paymentType: 'online',
-                successURL: 'https://oichaitemp.maslo-spb.ru/',
-                errorURL: 'https://oichaitemp.maslo-spb.ru/',
-                shopURL: 'https://oichaitemp.maslo-spb.ru/',
+                successURL: frontend_main_page,
+                errorURL: frontend_main_page,
+                shopURL: frontend_main_page,
             },
             nomenclatures: deliveryData.nomenclatures.map((val) => {
                 return {
@@ -68,10 +77,10 @@ export class AuthController {
                 : addreses[0].addressJSON;
             delivery.delivery.addressFull = addressFull;
             delivery.delivery.addressJSON = addressJSON;
+            comment.Телефон = deliveryData.client.phone;
+            comment.Коментарий = deliveryData.delivery.comment;
         }
-        if (deliveryData.delivery.comment) {
-            delivery.comment = deliveryData.delivery.comment;
-        }
+        delivery.comment = JSON.stringify(comment);
         const orderInProgress: SABYOrderInProgress =
             await this.SABYService.CreateOrder(delivery);
         return this.orderInProgressService.insertOrderFromSABYOrder(

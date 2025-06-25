@@ -4,16 +4,12 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     cacheDir: '../node_modules/.vite',
     server: {
-        port: 443,
-        allowedHosts: ['oichai.maslo-spb.ru'],
+        port: 1235,
+        allowedHosts: ['.maslo-spb.ru'],
     },
     preview: {
-        port: 443,
-        allowedHosts: ['oichai.maslo-spb.ru'],
-        // https: {
-        //     cert: '/letsencrypt/live/oichai.maslo-spb.ru/fullchain.pem',
-        //     key: '/letsencrypt/live/oichai.maslo-spb.ru/privkey.pem',
-        // },
+        port: 1235,
+        allowedHosts: ['.maslo-spb.ru'],
     },
     plugins: [react()],
 });

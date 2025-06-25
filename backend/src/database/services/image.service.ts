@@ -70,6 +70,7 @@ export class ImageService {
     async updateImagesInFolder() {
         const images = await this.findAll();
         const dir = './dl_image';
+        mkdirSync(dir, { recursive: true });
         for (const file of readdirSync(dir)) {
             const index = images.findIndex(
                 (val) => val.id == +file.split('.')[0],
@@ -99,6 +100,7 @@ export class ImageService {
 
     delImagesInFolder(ids: number[] = []) {
         const dir = './dl_image';
+        mkdirSync(dir, { recursive: true });
         for (const file of readdirSync(dir)) {
             if (ids.length == 0 || ids.includes(+file.split('.')[0])) {
                 unlinkSync(dir + '/' + file);

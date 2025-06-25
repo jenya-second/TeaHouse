@@ -1,7 +1,7 @@
 @use '/src/global';
 
 .textWrap {
-    margin: 7vw;
+    margin: 0vw 7vw 7vw 7vw;
 }
 
 p {
@@ -15,5 +15,22 @@ p {
     & span {
         color: red;
         font-weight: 700;
+    }
+}
+
+.checkWrapper {
+    display: flex;
+    align-items: center;
+    padding: 2vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    padding-bottom: 5vw;
+    font-size: 4vw;
+
+    input {
+        height: 5vw;
+        width: 5vw;
+        margin-right: 2vw;
+        accent-color: #FFAD01;
     }
 }

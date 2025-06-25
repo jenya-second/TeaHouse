@@ -90,7 +90,9 @@ export async function getOrderInProgressByKey(
     return extractAuthFetch(CreateApiLink(`${ORDERS_IN_PROGRESS}/${key}`));
 }
 
-export async function getOrderStateByKey(key: string): Promise<SABYOrderState> {
+export async function getOrderStateByKey(
+    key: string,
+): Promise<SABYOrderState | false> {
     return extractAuthFetch(CreateApiLink(ORDER_STATE + key));
 }
 

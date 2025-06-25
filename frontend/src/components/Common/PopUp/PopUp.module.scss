@@ -24,7 +24,7 @@
     text-align: center;
 
     &.active {
-        top: 10vw;
+        top: 20vw;
         animation: popUpAnim 1s;
     }
 }
@@ -35,6 +35,6 @@
     }
 
     to {
-        top: 10vw;
+        top: 20vw;
     }
 }

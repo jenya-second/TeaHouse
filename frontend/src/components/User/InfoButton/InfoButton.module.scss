@@ -1,0 +1,46 @@
+@use '/src/global';
+
+.infoButton {
+    position: absolute;
+    top: 5vw;
+    right: 8vw;
+    height: 9vw;
+    width: 9vw;
+    border-radius: 3vw;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    background-image: url(/info.svg);
+}
+
+.infoModal {
+    position: absolute;
+    width: 76vw;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    white-space: pre-line;
+    display: flex;
+    flex-direction: column;
+    background-color: #1D2025;
+    border-radius: 5vw;
+    padding: 7vw;
+
+    span {
+        font-size: 4vw;
+        font-weight: 360;
+    }
+
+    span:first-child {
+        font-weight: 700;
+        margin-bottom: 4vw;
+        font-size: 4.5vw;
+    }
+
+    span:last-child {
+        text-align: right;
+        font-weight: 400;
+        font-size: 5vw;
+        color: #FFDD28;
+    }
+}

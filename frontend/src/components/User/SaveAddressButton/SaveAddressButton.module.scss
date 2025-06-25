@@ -1,0 +1,19 @@
+@use '/src/global';
+
+
+.main {
+    background-color: #FFAD01;
+    color: #131313;
+    padding: 5vw;
+    margin: 8vw;
+    border-radius: 5vw;
+    text-align: center;
+
+    span {
+        font-size: 7vw;
+    }
+
+    &.inactive {
+        background-color: #808080;
+    }
+}

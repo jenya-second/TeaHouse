@@ -37,6 +37,10 @@ export function FullOrder() {
             return;
         }
         const state = await getOrderStateByKey(orderKey);
+        if (state == false) {
+            setPayState('fulfilled');
+            return;
+        }
         let newT: 'not' | 'processing' | 'fulfilled';
         if (state.payments.length == undefined) {
             newT = 'not';
@@ -44,7 +48,6 @@ export function FullOrder() {
             newT = state.payments[0].isClosed ? 'fulfilled' : 'processing';
         }
         setPayState((val) => {
-            console.log(val, newT);
             if (!val || newT == 'not') {
                 timer.current = setTimeout(notifyPayState, 5000);
             }

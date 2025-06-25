@@ -7,6 +7,7 @@ import { ProductModal } from '#components/Catalog/ProductModal/ProductModal.js';
 import {
     backButton,
     closeMiniApp,
+    initData,
     useSignal,
     viewport,
 } from '@telegram-apps/sdk-react';
@@ -23,10 +24,15 @@ export function Navigation() {
         return state.basket.value.length;
     });
     const isFullscreen = useSignal(viewport.isFullscreen);
+    const init = useSignal(initData.raw);
 
     useEffect(() => {
+        if (!init) return;
         GetUser().then((res) => {
-            if (!res) return;
+            if (!res) {
+                navigation('/share');
+                return;
+            }
             localStorage.setItem('user', JSON.stringify(res));
         });
         if (backButton.onClick.isAvailable()) {
@@ -34,7 +40,7 @@ export function Navigation() {
             const off = backButton.onClick(() => navigation(-1));
             return off;
         }
-    }, []);
+    }, [init]);
 
     return (
         <>

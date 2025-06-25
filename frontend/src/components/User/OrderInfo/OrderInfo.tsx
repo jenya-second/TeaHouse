@@ -1,4 +1,4 @@
-import { OrderInProgressEntity } from '@tea-house/types';
+import { Comment, OrderInProgressEntity } from '@tea-house/types';
 import styles from './OrderInfo.module.scss';
 
 export function OrderInfo({ order }: { order: OrderInProgressEntity }) {
@@ -6,11 +6,24 @@ export function OrderInfo({ order }: { order: OrderInProgressEntity }) {
     const lastName = order.client.name.split(' ')[0];
     const patronymic = order.client.name.split(' ')[2];
 
+    let comment: Comment;
+    try {
+        comment = JSON.parse(order.comment);
+    } catch (_) {
+        comment = {
+            Фамилия: lastName,
+            Имя: firstName,
+            Отчество: patronymic,
+            Коментарий: order.comment,
+            Телефон: '',
+        };
+    }
+
     const ifDelivery = (
         <>
             <div>
                 <span>Телефон:</span>
-                <span>{order.comment}</span>
+                <span>{comment.Телефон}</span>
             </div>
             <div>
                 <span>Адрес доставки:</span>
@@ -18,7 +31,7 @@ export function OrderInfo({ order }: { order: OrderInProgressEntity }) {
             </div>
             <div>
                 <span>Комментарий:</span>
-                <span>{order.comment}</span>
+                <span>{comment.Коментарий}</span>
             </div>
         </>
     );
@@ -45,16 +58,16 @@ export function OrderInfo({ order }: { order: OrderInProgressEntity }) {
             </div>
             <div>
                 <span>Фамилия:</span>
-                <span>{lastName}</span>
+                <span>{comment.Фамилия}</span>
             </div>
             <div>
                 <span>Имя:</span>
-                <span>{firstName}</span>
+                <span>{comment.Имя}</span>
             </div>
-            {patronymic && (
+            {comment.Отчество.length != 0 && (
                 <div>
                     <span>Отчество:</span>
-                    <span>{patronymic}</span>
+                    <span>{comment.Отчество}</span>
                 </div>
             )}
             {order.isPickup ? ifPickup : ifDelivery}

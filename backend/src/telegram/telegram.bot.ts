@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TelegramUser } from 'src/database/entities';
+import { OrderInProgress, TelegramUser } from 'src/database/entities';
 import { TelegramUserService } from 'src/database/services';
 import {
     Message,
@@ -87,7 +87,7 @@ export class OichaiBot extends TelegramBot {
             } else {
                 this.sendMessage({
                     chat_id: message.chat.id,
-                    text: 'Вы уже зарегестированы в системе чайной!',
+                    text: 'Вы уже зарегистрированы в системе чайной!',
                     reply_markup: { remove_keyboard: true },
                 });
             }
@@ -99,6 +99,15 @@ export class OichaiBot extends TelegramBot {
                     web_app: { url: 'https://oichai.maslo-spb.ru/' },
                 },
             });
+        });
+    }
+
+    SendMessageToUser(order: OrderInProgress) {
+        const d = order.datetime.split(' ')[0].split('-');
+        const date = `${d[2]}.${d[1]}.${+d[0] - 1}`;
+        this.sendMessage({
+            chat_id: order.client.tgUser.chatId,
+            text: `Ваш заказ от ${date} проверен и доступен для оплаты.`,
         });
     }
 }

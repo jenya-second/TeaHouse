@@ -5,18 +5,22 @@ import styles from './CategoryWrapper.module.scss';
 import { SubCategory } from '../Subcategory/Subcategory';
 
 export const CategoryWrapper = memo(function CategoryWrapper({
-    categoryId,
     allCat,
+    order,
+    delivery,
     curCategory,
 }: {
-    categoryId: string | undefined;
     allCat: CategoryEntity[];
+    order: string | undefined;
+    delivery: CategoryEntity[];
     curCategory: CategoryEntity | undefined;
 }) {
+    const cat = order == 'o' ? allCat : delivery;
+
     return (
         <div id={'scroll'} className={styles.scrollWraper}>
-            {categoryId == 'all' ? (
-                allCat.map((category) => (
+            {!curCategory ? (
+                cat.map((category) => (
                     <Category key={category.id} category={category} />
                 ))
             ) : (

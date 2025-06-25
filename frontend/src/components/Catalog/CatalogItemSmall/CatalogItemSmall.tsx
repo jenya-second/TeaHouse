@@ -14,6 +14,7 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
     product: ProductEntity;
     showCounter: boolean;
 }) {
+    // const img = useRef<HTMLDivElement>(null);
     const countProduct = useAppSelector((state) => {
         if (!product.id) return 0;
         const ind = state.basket.value.findIndex((val) => {
@@ -38,10 +39,18 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
     return (
         <div className={combineStyles(styles.item, styles.outShadow)}>
             <div
+                // ref={img}
                 className={styles.image}
                 style={{
                     backgroundImage: `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
                 }}
+                // onScroll={() => {
+                //     isVisible(img.current);
+                //     img.current?.style.setProperty(
+                //         'backgroundImage',
+                //         `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
+                //     );
+                // }}
             />
             <div className={styles.infoWrapper}>
                 <div>{product.name}</div>
@@ -53,3 +62,12 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
         </div>
     );
 });
+
+// function isVisible(elem: HTMLDivElement | null) {
+//     if (!elem) return;
+//     const coords = elem.getBoundingClientRect();
+//     const windowHeight = document.documentElement.clientHeight;
+//     const topVisible = coords.top > 0 && coords.top < windowHeight;
+//     const bottomVisible = coords.bottom < windowHeight && coords.bottom > 0;
+//     return topVisible || bottomVisible;
+// }

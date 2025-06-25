@@ -5,8 +5,6 @@ export interface BasketState {
     value: { product: ProductEntity; count: number }[];
 }
 
-// const i:  = JSON.parse(localStorage.getItem('basket') ?? '[]');
-
 const init: BasketState = {
     value: [],
 };

@@ -19,6 +19,10 @@ import { UserPage } from '#pages/UserPage.js';
 import { OrderPage } from '#pages/OrderPage.js';
 import { FullOrder } from '#pages/FullOrder.js';
 import { OrderInfo, UserInfo } from '#utils/utils.js';
+import { CheckPage } from '#pages/CheckPage.js';
+import { AddressPage } from '#pages/AddressPage.js';
+import { SharePhonePage } from '#components/Common/SharePhone/SharePhonePage.js';
+import { TeaPal } from '#pages/TeaPal.js';
 
 function App() {
     useEffect(() => {
@@ -89,6 +93,7 @@ function App() {
         <Provider store={store}>
             <Routes>
                 <Route index element={<WelcomePage />} />
+                <Route path="share" element={<SharePhonePage />} />
                 <Route element={<Navigation />}>
                     <Route
                         path=":order/:categoryId/:productId?"
@@ -96,7 +101,7 @@ function App() {
                     />
                     <Route path="basket/:productId?" element={<BasketPage />} />
                     <Route path="processing" element={<ProcessingPage />} />
-                    <Route path={'user'}>
+                    <Route path="user">
                         <Route index element={<UserPage />} />
                         <Route path="history">
                             <Route index element={<OrderPage />} />
@@ -105,9 +110,9 @@ function App() {
                                 element={<FullOrder />}
                             />
                         </Route>
-                        <Route path="tea" element={<UserPage />} />
-                        <Route path="personal" element={<UserPage />} />
-                        <Route path="check" element={<UserPage />} />
+                        <Route path="tea" element={<TeaPal />} />
+                        <Route path="personal" element={<AddressPage />} />
+                        <Route path="check" element={<CheckPage />} />
                     </Route>
                 </Route>
             </Routes>
