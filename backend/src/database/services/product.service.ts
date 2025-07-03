@@ -41,6 +41,10 @@ export class ProductService {
         });
     }
 
+    async getAll() {
+        return this.productRepository.find();
+    }
+
     async findByNomNumber(nomNumber: string) {
         return this.productRepository.findOne({
             where: {

@@ -1,6 +1,7 @@
 import ImageEntity from './ImageEntity';
 import CategoryEntity from './CategoryEntity';
 import SaleNomenclatureEntity from './SaleNomenclatureEntity';
+import TeaDiaryEntity from './TeaDiaryEntity';
 
 export interface ProductEntity {
     id: number;
@@ -19,6 +20,7 @@ export interface ProductEntity {
     images: ImageEntity[];
     category: CategoryEntity;
     saleNomenclatures: SaleNomenclatureEntity[];
+    teaDiary: TeaDiaryEntity[];
 }
 
 export default ProductEntity;

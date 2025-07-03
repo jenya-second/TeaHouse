@@ -15,6 +15,7 @@ export function ScrollWrapper({
                 maxHeight: `calc(100% - ${topHeight}vw)`,
                 height: `calc(100% - ${topHeight}vw)`,
             }}
+            id="scroll"
         >
             {children}
         </div>

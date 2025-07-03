@@ -7,6 +7,43 @@ $elemHeigh: 26vw;
     margin: 5vw;
     height: $elemHeigh;
     display: flex;
+
+    &:has( + .rank) {
+        margin-bottom: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+
+.rank {
+    background: global.$primaryBackground;
+    margin: 5vw;
+    margin-top: 0;
+    border-radius: 0 0 5vw 5vw;
+    height: 15vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4.5vw;
+    color: #FFFFD9;
+
+    & .starFilled {
+        width: 15%;
+        height: 100%;
+        background-image: url(/filled_star.svg);
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    & .starHollow {
+        width: 15%;
+        height: 100%;
+        background-image: url(/hollow_star.svg);
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 }
 
 .image {

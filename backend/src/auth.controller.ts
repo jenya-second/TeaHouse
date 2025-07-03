@@ -1,7 +1,10 @@
 import { Controller, Get, Param, Post, Request, Delete } from '@nestjs/common';
 import {
+    ClientService,
     OrderInProgressService,
     OrderService,
+    ProductService,
+    TeaDiaryService,
     TelegramUserService,
 } from './database/services';
 import { SABYService } from './SABY/saby.service';
@@ -11,6 +14,7 @@ import {
     SABYDelivery,
     SABYOrderInProgress,
     SABYOrderState,
+    TeaDiaryRequest,
 } from '@tea-house/types';
 import { Request as ExpRequest } from 'express';
 import { frontend_main_page } from './constants';
@@ -22,6 +26,9 @@ export class AuthController {
         private readonly orderInProgressService: OrderInProgressService,
         private readonly orderService: OrderService,
         private readonly SABYService: SABYService,
+        private readonly teaDiaryService: TeaDiaryService,
+        private readonly clientService: ClientService,
+        private readonly productService: ProductService,
     ) {}
 
     @Post('newOrder')
@@ -162,6 +169,48 @@ export class AuthController {
         const initData = new URLSearchParams(req.headers.authorization);
         const userId = JSON.parse(initData.get('user')).id;
         return this.telegramUserService.findOneByTgId(userId);
+    }
+
+    @Get('teaDiary')
+    async getTeaDiary(@Request() req: ExpRequest) {
+        const initData = new URLSearchParams(req.headers.authorization);
+        const userId = JSON.parse(initData.get('user')).id;
+        return this.teaDiaryService.getByClientId(userId);
+    }
+
+    @Get('teaDiary/:productId')
+    async getTeaDiaryByProduct(
+        @Request() req: ExpRequest,
+        @Param('productId') id: number,
+    ) {
+        const initData = new URLSearchParams(req.headers.authorization);
+        const userId = JSON.parse(initData.get('user')).id;
+        const teaDiaryForProduct =
+            await this.teaDiaryService.findByClientAndProduct(id, userId);
+        if (!teaDiaryForProduct) return false;
+        return teaDiaryForProduct;
+    }
+
+    @Post('teaDiary')
+    async saveTeaDiary(@Request() req: ExpRequest) {
+        const teaDiaryInfo: TeaDiaryRequest = req.body.teaDiary;
+        const id = teaDiaryInfo.productId;
+        const initData = new URLSearchParams(req.headers.authorization);
+        const userId = JSON.parse(initData.get('user')).id;
+        const dbTeaDiary = await this.teaDiaryService.findByClientAndProduct(
+            id,
+            userId,
+        );
+        if (!dbTeaDiary) return false;
+        dbTeaDiary.rank = Math.min(Math.max(teaDiaryInfo.rank, 0), 5);
+        dbTeaDiary.impression = teaDiaryInfo.impression;
+        dbTeaDiary.taste = teaDiaryInfo.taste;
+        dbTeaDiary.smell = teaDiaryInfo.smell;
+        dbTeaDiary.afterstate = teaDiaryInfo.afterstate;
+        // teaDiaryInfo.client = await this.clientService.findByTgId(userId);
+        // teaDiaryInfo.product = await this.productService.findById(id);
+        await this.teaDiaryService.saveOne(dbTeaDiary);
+        return true;
     }
 
     @Delete(':orderId')

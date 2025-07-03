@@ -1,7 +1,7 @@
 import { category_rpository_name } from 'src/constants';
-import { Category } from '../entities';
+import { Category, Product } from '../entities';
 import { Inject, Injectable } from '@nestjs/common';
-import { InsertResult, Repository } from 'typeorm';
+import { InsertResult, IsNull, Like, Or, Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
@@ -52,6 +52,30 @@ export class CategoryService {
                 parentCategory: true,
             },
         });
+    }
+
+    async findProductsByCategoryName(name: string): Promise<Product[]> {
+        const cat = await this.categoryRepository.find({
+            where: {
+                parentCategory: IsNull(),
+                name: Like(name),
+            },
+            select: {
+                subcategories: {
+                    id: true,
+                    products: true,
+                },
+                id: true,
+            },
+            relations: {
+                subcategories: {
+                    products: true,
+                },
+            },
+        });
+        const ans = [];
+        cat[0].subcategories.forEach((val) => ans.push(...val.products));
+        return ans;
     }
 
     async updateCategoties(categories: Category[]) {

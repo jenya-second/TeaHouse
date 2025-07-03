@@ -4,100 +4,94 @@ import {
 } from '#components/Catalog/CatalogMain/CategoryWrapper.js';
 import { ToggleButton } from '#components/Catalog/ToggleButton/ToggleButton.js';
 import { initBasket } from '#redux/basket.js';
-import { useAppDispatch } from '#redux/index.js';
-import { GetProductsRequest } from '#utils/requests.js';
-import { CategoryEntity, ProductEntity } from '@tea-house/types';
+import { fetchCatalogs } from '#redux/catalog.js';
+import { useAppDispatch, useAppSelector } from '#redux/index.js';
+import { fetchTeaDiary } from '#redux/tea.js';
+import { ProductEntity } from '@tea-house/types';
+import { initData, useSignal } from '@telegram-apps/sdk-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
+import { joke } from './TeaPal';
 
 export function CatalogPage() {
-    const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
-    const [ids, setIds] = useState<number[]>([]);
+    const allCategories = useAppSelector(
+        (state) => state.catalog.value.allCategories,
+    );
+    const deliveryCategories = useAppSelector(
+        (state) => state.catalog.value.deliveryCategories,
+    );
+    const teaDiary = useAppSelector((state) => state.tea.value);
     const dispatch = useAppDispatch();
+    const init = useSignal(initData.raw);
+    const [ids, setIds] = useState<number[]>([]);
 
     useEffect(() => {
-        GetProductsRequest().then(setCategories);
+        dispatch(fetchCatalogs());
     }, []);
 
-    const [deliveryCat, allCat] = useMemo((): [
-        CategoryEntity[],
-        CategoryEntity[],
-    ] => {
-        if (!categories) return [[], []];
-        const newCategories: CategoryEntity[] = [];
-        const deliveryCat: CategoryEntity[] = [];
-        const d: CategoryEntity[] = [];
-        for (const category of categories ?? []) {
-            if (!category.parentCategory) {
-                newCategories.push(category);
-                if (category.name.includes('*')) deliveryCat.push(category);
-            }
-        }
-        for (const category of newCategories) {
-            const subcategories: CategoryEntity[] = [];
-            for (const sub of category.subcategories) {
-                const subcat = categories?.find((c) => c.id == sub.id);
-                if (!subcat) continue;
-                subcategories.push(subcat);
-            }
-            category.subcategories = subcategories;
-        }
-        for (let i = 0; i < deliveryCat.length; i++) {
-            d.push({ ...deliveryCat[i] });
-            const subcategories: CategoryEntity[] = [];
-            deliveryCat[i].subcategories.forEach((val) => {
-                const sub = { ...val };
-                sub.products = val.products.filter((val) => {
-                    const countInGr = val.press
-                        ? val.pressAmount / (val.pressAmount >= 200 ? 2 : 1)
-                        : 25;
-                    const max = Math.floor(val.balance / countInGr);
-                    return max > 0;
-                });
-                subcategories.push(sub);
-            });
-            d[i].subcategories = subcategories;
-        }
-        for (let i = 0; i < d.length; i++) {
-            d[i].subcategories = d[i].subcategories.filter(
-                (val) => val.products.length != 0,
-            );
-        }
-        console.log(d);
-        const b = localStorage.getItem('basket');
-        if (!b) return [d, newCategories];
-        const state: { product: ProductEntity; count: number }[] = [];
-        const basket: { index: string; count: number }[] = JSON.parse(b);
-        for (let i = 0; i < d.length; i++) {
-            d[i].subcategories.forEach((cat) => {
-                basket.forEach((val) => {
-                    const product = cat.products.find(
-                        (z) => z.nomNumber == val.index,
-                    );
-                    if (!product) return;
-                    const countInGr = product.press
-                        ? product.pressAmount /
-                          (product.pressAmount >= 200 ? 2 : 1)
-                        : 25;
-                    const max = Math.floor(product.balance / countInGr);
-                    state.push({
-                        count: Math.min(max, val.count),
-                        product: product,
-                    });
-                });
-            });
-        }
-        setTimeout(() => dispatch(initBasket({ value: state })), 100);
-
-        return [d, newCategories];
-    }, [categories]);
+    useEffect(() => {
+        if (!init) return;
+        dispatch(fetchTeaDiary());
+    }, [init]);
 
     const { order, categoryId } = useParams();
-    const curCategory: CategoryEntity | undefined = (
-        order == 'o' ? allCat : deliveryCat
-    ).find((val) => val.id.toString() == categoryId);
 
     const observer = useRef<IntersectionObserver>(null);
+
+    //i can avoid it all only if i get ready data from backend but i wont
+    const [myDelCat, myAllCat] = useMemo(() => {
+        const out: joke[] = [];
+        const out2: joke[] = [];
+        for (let i = 0; i < deliveryCategories.length; i++) {
+            const t = deliveryCategories[i];
+            if (t.name != 'Чай*') {
+                out.push(t);
+                continue;
+            }
+            const z = { ...t };
+            z.mySubcat = [];
+            t.mySubcat.forEach((element) => {
+                const p: (ProductEntity & {
+                    rank?: number;
+                })[] = [];
+                element.myProducts.forEach((val) => {
+                    const q = teaDiary.find((z) => z.productId == val.id);
+                    p.push({ ...val, rank: q?.rank });
+                });
+                z.mySubcat.push({ ...element, myProducts: p });
+            });
+            out.push(z);
+        }
+        for (let i = 0; i < allCategories.length; i++) {
+            const t = allCategories[i];
+            if (t.name != 'Чай*') {
+                out2.push(t);
+                continue;
+            }
+            const z = { ...t };
+            z.mySubcat = [];
+            t.mySubcat.forEach((element) => {
+                const p: (ProductEntity & {
+                    rank?: number;
+                })[] = [];
+                element.myProducts.forEach((val) => {
+                    const q = teaDiary.find((z) => z.productId == val.id);
+                    p.push({ ...val, rank: q?.rank });
+                });
+                z.mySubcat.push({ ...element, myProducts: p });
+            });
+            out2.push(z);
+        }
+        return [out, out2];
+    }, [teaDiary]);
+
+    const curCategory: joke | undefined = (
+        order == 'o' ? myAllCat : myDelCat
+    ).find((val) => val.id.toString() == categoryId);
+
+    useEffect(() => {
+        dispatch(initBasket(deliveryCategories));
+    }, [deliveryCategories]);
 
     useEffect(() => {
         const scroll = document.getElementById('scroll');
@@ -139,7 +133,7 @@ export function CatalogPage() {
         return () => {
             observer.current?.disconnect();
         };
-    }, [allCat, categoryId]);
+    }, [allCategories, categoryId]);
 
     return (
         <>
@@ -148,8 +142,8 @@ export function CatalogPage() {
                 <TopMenu category={curCategory} id={ids[0]} />
             )}
             <CategoryWrapper
-                allCat={allCat}
-                delivery={deliveryCat}
+                allCat={myAllCat}
+                delivery={myDelCat}
                 order={order}
                 curCategory={curCategory}
             />

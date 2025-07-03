@@ -28,6 +28,16 @@ export class ClientService {
         });
     }
 
+    async findByTgId(tgId: number) {
+        return this.clientRepository.findOne({
+            where: {
+                tgUser: {
+                    tgId: tgId,
+                },
+            },
+        });
+    }
+
     async saveOne(client: Client): Promise<InsertResult> {
         return this.clientRepository.insert(client);
     }

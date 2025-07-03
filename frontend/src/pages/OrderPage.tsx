@@ -11,8 +11,8 @@ import { useAppDispatch, useAppSelector } from '#redux/index.js';
 import { setOrderSelectState } from '#redux/orders.js';
 import {
     GetCompletedOrders,
-    getOrdersInProgress,
-    getOrderStateByKey,
+    GetOrdersInProgress,
+    GetOrderStateByKey,
 } from '#utils/requests.js';
 import {
     OrderEntity,
@@ -43,7 +43,7 @@ export function OrderPage() {
     //never ask developer what's going on here
     //i know how to do it right, but for now, this is how it's gonna be
     const notifyOrderInProgress = async (order: OP) => {
-        const state = (await getOrderStateByKey(order.key)) as SABYOrderState;
+        const state = (await GetOrderStateByKey(order.key)) as SABYOrderState;
         let newT: 1 | 2 | 3;
         if (state.payments.length == undefined) {
             newT = 1;
@@ -129,12 +129,12 @@ export function OrderPage() {
             const prev = z[z.length - 1].nomenclatures.filter(
                 (val) =>
                     val.product.name != 'Доставка' &&
-                    val.product.name != 'Услуга доставки товаров',
+                    val.product.name != 'Не трогать, сбисовское',
             );
             const cur = z[0].nomenclatures.filter(
                 (val) =>
                     val.product.name != 'Доставка' &&
-                    val.product.name != 'Услуга доставки товаров',
+                    val.product.name != 'Не трогать, сбисовское',
             );
             if (prev.length != cur.length) {
                 _ordersInProgress.push({ order: z[0], mod: 'cor' });
@@ -175,7 +175,7 @@ export function OrderPage() {
     useEffect(() => {
         if (!init) return;
         GetCompletedOrders().then(resolveCompleted);
-        getOrdersInProgress().then(resolveInProgress);
+        GetOrdersInProgress().then(resolveInProgress);
     }, [init]);
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { Category } from '../Category/Category';
 import styles from './CategoryWrapper.module.scss';
 import { SubCategory } from '../Subcategory/Subcategory';
+import { joke } from '#pages/TeaPal.js';
 
 export const CategoryWrapper = memo(function CategoryWrapper({
     allCat,
@@ -10,10 +11,10 @@ export const CategoryWrapper = memo(function CategoryWrapper({
     delivery,
     curCategory,
 }: {
-    allCat: CategoryEntity[];
+    allCat: joke[];
     order: string | undefined;
-    delivery: CategoryEntity[];
-    curCategory: CategoryEntity | undefined;
+    delivery: joke[];
+    curCategory: joke | undefined;
 }) {
     const cat = order == 'o' ? allCat : delivery;
 

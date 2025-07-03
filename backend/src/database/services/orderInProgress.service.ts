@@ -8,7 +8,7 @@ import {
     TelegramUser,
 } from '../entities';
 import { SaleNomenclatureService } from './saleNomenclature.service';
-import { ClientEntity, SABYOrderInProgress } from '@tea-house/types';
+import { SABYOrderInProgress } from '@tea-house/types';
 import { ClientService } from './client.service';
 import { ProductService } from './product.service';
 import { TelegramUserService } from './telegramUser.service';

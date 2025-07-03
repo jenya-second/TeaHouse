@@ -14,3 +14,4 @@ export const DELETE_ORDER = '/auth/';
 export const BASKET_PATH = '/basket';
 export const ORDER_STATE = '/auth/orderState/';
 export const USER = '/auth/whoami';
+export const TEA_DIARY = '/auth/teaDiary';

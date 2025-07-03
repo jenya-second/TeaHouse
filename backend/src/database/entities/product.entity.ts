@@ -6,7 +6,7 @@ import {
     ManyToOne,
 } from 'typeorm';
 import { ProductEntity, SABYProduct } from '@tea-house/types';
-import { Category, SaleNomenclature, Image } from '.';
+import { Category, SaleNomenclature, Image, TeaDiary } from '.';
 
 @Entity()
 export class Product implements ProductEntity {
@@ -76,4 +76,7 @@ export class Product implements ProductEntity {
         (saleNomenclature) => saleNomenclature.order,
     )
     saleNomenclatures: SaleNomenclature[];
+
+    @OneToMany(() => TeaDiary, (teaDiary) => teaDiary.product)
+    teaDiary: TeaDiary[];
 }

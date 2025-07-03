@@ -13,7 +13,7 @@ export function OrderInfo({ order }: { order: OrderInProgressEntity }) {
         comment = {
             Фамилия: lastName,
             Имя: firstName,
-            Отчество: patronymic,
+            Отчество: patronymic || '',
             Коментарий: order.comment,
             Телефон: '',
         };
@@ -64,7 +64,7 @@ export function OrderInfo({ order }: { order: OrderInProgressEntity }) {
                 <span>Имя:</span>
                 <span>{comment.Имя}</span>
             </div>
-            {comment.Отчество.length != 0 && (
+            {comment.Отчество && comment.Отчество.length != 0 && (
                 <div>
                     <span>Отчество:</span>
                     <span>{comment.Отчество}</span>

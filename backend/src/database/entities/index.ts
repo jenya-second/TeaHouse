@@ -7,3 +7,4 @@ export * from './product.entity';
 export * from './promotion.entity';
 export * from './saleNomenclature.entity';
 export * from './telegramUser.entity';
+export * from './teaDiary.entity';

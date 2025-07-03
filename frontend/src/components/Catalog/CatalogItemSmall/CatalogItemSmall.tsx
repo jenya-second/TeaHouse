@@ -10,11 +10,12 @@ import { useAppSelector } from '#redux/index.js';
 export const CatalogItemSmall = memo(function CatalogItemSmall({
     product,
     showCounter,
+    rank,
 }: {
     product: ProductEntity;
     showCounter: boolean;
+    rank?: number;
 }) {
-    // const img = useRef<HTMLDivElement>(null);
     const countProduct = useAppSelector((state) => {
         if (!product.id) return 0;
         const ind = state.basket.value.findIndex((val) => {
@@ -37,29 +38,42 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
                     (product.pressAmount >= 200 ? 2 : 1)
                   : countProduct * product.cost * 25) + ' ₽';
     return (
-        <div className={combineStyles(styles.item, styles.outShadow)}>
-            <div
-                // ref={img}
-                className={styles.image}
-                style={{
-                    backgroundImage: `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
-                }}
-                // onScroll={() => {
-                //     isVisible(img.current);
-                //     img.current?.style.setProperty(
-                //         'backgroundImage',
-                //         `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
-                //     );
-                // }}
-            />
-            <div className={styles.infoWrapper}>
-                <div>{product.name}</div>
-                <div className={styles.bottomWrapper}>
-                    <div>{cost}</div>
-                    {showCounter && counter}
+        <>
+            <div className={combineStyles(styles.item, styles.outShadow)}>
+                <div
+                    className={styles.image}
+                    style={{
+                        backgroundImage: `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
+                    }}
+                />
+                <div className={styles.infoWrapper}>
+                    <div>{product.name}</div>
+                    <div className={styles.bottomWrapper}>
+                        <div>{cost}</div>
+                        {showCounter && counter}
+                    </div>
                 </div>
             </div>
-        </div>
+            {rank != undefined && (
+                <div className={styles.rank}>
+                    {rank ? (
+                        <>
+                            {new Array(rank).fill(0).map((_, i) => (
+                                <div key={i} className={styles.starFilled} />
+                            ))}
+                            {new Array(5 - rank).fill(0).map((_, i) => (
+                                <div
+                                    key={i + rank}
+                                    className={styles.starHollow}
+                                />
+                            ))}
+                        </>
+                    ) : (
+                        'Опишите и оцените чай'
+                    )}
+                </div>
+            )}
+        </>
     );
 });
 
@@ -71,3 +85,11 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
 //     const bottomVisible = coords.bottom < windowHeight && coords.bottom > 0;
 //     return topVisible || bottomVisible;
 // }
+
+// onScroll={() => {
+//     isVisible(img.current);
+//     img.current?.style.setProperty(
+//         'backgroundImage',
+//         `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
+//     );
+// }}

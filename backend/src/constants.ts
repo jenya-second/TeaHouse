@@ -9,6 +9,7 @@ export const sale_nomenclatures_rpository_name =
 export const promotion_rpository_name = 'PROMOTION_REPOSITORY';
 export const order_in_progress_rpository_name = 'ORDER_IN_PROGRESS_REPOSITORY';
 export const telegram_user_repository_name = 'TELEGRAM_USER_REPOSITORY';
+export const tea_diary_repository_name = 'TEA_DIARY_REPOSITORY';
 export const scrape_provider_name = 'SCRAPE';
 
 export const saby_auth_url = 'https://online.sbis.ru/oauth/service/';

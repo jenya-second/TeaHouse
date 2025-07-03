@@ -13,6 +13,7 @@ import { join } from 'path';
 import {
     CategoryService,
     OrderInProgressService,
+    OrderService,
     ProductService,
 } from './database/services';
 import { Category, OrderInProgress, Product } from './database/entities';
@@ -31,6 +32,7 @@ export class PublicController {
         private readonly categoryService: CategoryService,
         private readonly refreshService: RefreshService,
         private readonly SABYService: SABYService,
+        private readonly orderService: OrderService,
         @Inject(telegram_bot)
         private readonly telegramBot: OichaiBot,
     ) {}
@@ -39,13 +41,15 @@ export class PublicController {
     doSmt() {
         // return this.refreshService.RefreshDataBase();
         // return this.orderInProgressService.getAllByKey('bbd645ae-401f-4a20-8dba-f7995f6af4fe');
+        // return this.orderService.getByDay(`2025-06-25%`);
+        return this.categoryService.findProductsByCategoryName(`Чай_`);
         return 'aboba';
     }
 
-    // @Get(':date')
-    // refreshOrderByDate(@Param('date') date: string) {
-    //     return this.refreshService.RefreshDay(date);
-    // }
+    @Get('date/:date')
+    refreshOrderByDate(@Param('date') date: string) {
+        return this.refreshService.RefreshDay(date);
+    }
 
     @Get('image/:id')
     getImage(@Param('id') id: number, @Res() res: Response) {
@@ -79,6 +83,7 @@ export class PublicController {
         )
             return;
         const orderKey: string = JSON.parse(req.body.data).Sales[0].id;
+        console.log(orderKey);
         let orderInfo: SABYOrderInProgress = undefined;
         try {
             orderInfo = await this.SABYService.GetOrderInfo(orderKey);

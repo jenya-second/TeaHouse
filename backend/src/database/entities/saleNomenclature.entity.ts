@@ -1,7 +1,6 @@
 import { SABYSaleNomenclature, SaleNomenclatureEntity } from '@tea-house/types';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Order, Product } from '.';
-import { OrderInProgress } from './orderInProgress.entity';
+import { Order, Product, OrderInProgress } from '.';
 
 @Entity()
 export class SaleNomenclature implements SaleNomenclatureEntity {

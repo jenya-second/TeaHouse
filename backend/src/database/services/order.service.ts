@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { order_rpository_name } from 'src/constants';
-import { In, InsertResult, Repository } from 'typeorm';
+import { In, InsertResult, Like, Repository } from 'typeorm';
 import { Order } from '../entities';
 import { SaleNomenclatureService } from './saleNomenclature.service';
 
@@ -33,21 +33,29 @@ export class OrderService {
      * Require valid clients in objects
      */
     async updateOrders(orders: Order[]) {
+        const toSave = [];
+        const dbOrders = await this.findByKeys(orders.map((val) => val.key));
         for (let i = 0; i < orders.length; i++) {
-            const order = await this.orderRepository.findOne({
-                where: {
-                    key: orders[i].key,
-                },
-            });
-            if (order) orders[i].id = order.id;
-            const del = await this.saleNomenclatureService.findByOrderKey(
-                orders[i].key,
-            );
-            await this.saleNomenclatureService.deleteByIds(
-                del.map((val) => val.id),
-            );
+            const order = dbOrders.find((val) => val.key == orders[i].key);
+            if (!order) toSave.push(orders[i]);
         }
-        return this.orderRepository.save(orders);
+        return this.orderRepository.save(toSave);
+    }
+
+    async findByKeys(keys: string[]) {
+        return this.orderRepository.find({
+            where: {
+                key: In(keys),
+            },
+        });
+    }
+
+    async getByDay(date: string) {
+        return this.orderRepository.find({
+            where: {
+                closedWTZ: Like(date),
+            },
+        });
     }
 
     async getOneByKey(key: string) {

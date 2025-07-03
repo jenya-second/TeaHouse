@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import styles from './ProductModal.module.scss';
 import { useEffect, useState } from 'react';
 import { ProductEntity } from '@tea-house/types';
@@ -9,11 +9,14 @@ import { CounterCommon } from '../Counter/CounterCommon';
 import { useAppSelector } from '#redux/index.js';
 import { BASKET_PATH } from '#utils/constants.js';
 import { CounterPress } from '../Counter/CounterPress';
+import { TeaDiaryWidget } from '../TeaDiaryWidget/TeadDiaryWidget';
 
 export function ProductModal() {
-    const { productId, order } = useParams();
+    const { productId } = useParams();
     const [product, setProduct] = useState<ProductEntity>();
     const navigate = useNavigate();
+    const location = useLocation().pathname.split('/');
+    // console.log(location);
     const countItemsInBasket = useAppSelector((state) => {
         return state.basket.value.length;
     });
@@ -69,21 +72,28 @@ export function ProductModal() {
                     ) : (
                         <>
                             <ModalImage product={product} />
-                            {order != 'o' && product.press && (
-                                <PressViewItem
-                                    count={countProduct}
-                                    product={product}
-                                />
-                            )}
-                            {(order != 'o' ||
-                                product.category?.parentCategory?.name ==
-                                    'Чай') && (
-                                <RecomendationsItem product={product} />
+                            {(location.includes('basket') ||
+                                location.includes('t')) &&
+                                product.press && (
+                                    <PressViewItem
+                                        count={countProduct}
+                                        product={product}
+                                    />
+                                )}
+                            {product.category?.parentCategory?.name ==
+                                'Чай*' && (
+                                <>
+                                    <TeaDiaryWidget
+                                        editable={location.includes('tea')}
+                                        productId={+(productId || -1)}
+                                    />
+                                    <RecomendationsItem product={product} />
+                                </>
                             )}
                         </>
                     )}
                 </div>
-                {order != 'o' && (
+                {(location.includes('basket') || location.includes('t')) && (
                     <div className={styles.footer}>
                         <div style={{ flex: 1.5 }}>{cost}</div>
                         <div style={{ flex: 0.7 }}>
@@ -183,7 +193,9 @@ function PressViewItem({
     const count2 = count % 2;
     return (
         <div className={styles.item}>
-            Добавляйте половинку или собирайте целые куски
+            {splittable
+                ? 'Добавляйте половинку или собирайте целые куски'
+                : 'Добавляйте по целым кускам'}
             <div className={styles.pressCards}>
                 <div className={combineStyles(styles.card, styles.inShadow)}>
                     <span>{'Целый'}</span>

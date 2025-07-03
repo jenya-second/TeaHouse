@@ -8,7 +8,7 @@ import {
     OneToOne,
     JoinColumn,
 } from 'typeorm';
-import { Order, OrderInProgress, Promotion } from '.';
+import { Order, OrderInProgress, Promotion, TeaDiary } from '.';
 import { TelegramUser } from './telegramUser.entity';
 
 @Entity()
@@ -40,6 +40,9 @@ export class Client implements ClientEntity {
     @OneToOne(() => TelegramUser, (telegramUser) => telegramUser.SABYUser)
     @JoinColumn()
     tgUser: TelegramUser;
+
+    @OneToMany(() => TeaDiary, (teaDiary) => teaDiary.client)
+    teaDiary: TeaDiary[];
 
     // @ManyToOne(() => Promotion, (promotion) => promotion.clients)
     // promotion: Promotion;

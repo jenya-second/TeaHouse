@@ -6,6 +6,7 @@ export function Footer() {
         <>
             <div className={styles.phrase1}>{EndPhrases.end1}</div>
             <div className={styles.phrase2}>{EndPhrases.end2}</div>
+            <div className={styles.phrase2}>ТГ: @zaraza_mo</div>
             <div className={styles.footerWrap}>
                 <div>
                     <img src="/dragon.svg" />

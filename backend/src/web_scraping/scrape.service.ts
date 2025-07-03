@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Browser, launch, Page } from 'puppeteer';
-import { Client, Promotion } from 'src/database/entities';
+import { Client } from 'src/database/entities';
 
 @Injectable()
 export class ScrapeService {

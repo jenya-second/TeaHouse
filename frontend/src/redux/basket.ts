@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProductEntity } from '@tea-house/types';
+import { CategoryEntity, ProductEntity } from '@tea-house/types';
 
 export interface BasketState {
     value: { product: ProductEntity; count: number }[];
@@ -60,12 +60,45 @@ export const basketClice = createSlice({
             localStorage.setItem('basket', '[]');
             return { value: [] };
         },
-        initBasket: (_: BasketState, action: PayloadAction<BasketState>) => {
-            const s = action.payload.value.map((val) => {
+        initBasket: (
+            state: BasketState,
+            action: PayloadAction<CategoryEntity[]>,
+        ) => {
+            const b = localStorage.getItem('basket');
+            if (state.value.length != 0 || action.payload.length == 0)
+                return state;
+            if (!b) {
+                localStorage.setItem('basket', '[]');
+                return state;
+            }
+            const deliveryCategories = action.payload;
+            const basketState: { product: ProductEntity; count: number }[] = [];
+            const basket: { index: string; count: number }[] = JSON.parse(b);
+            for (let i = 0; i < deliveryCategories.length; i++) {
+                deliveryCategories[i].subcategories.forEach((cat) => {
+                    basket.forEach((val) => {
+                        const product = cat.products.find(
+                            (z) => z.nomNumber == val.index,
+                        );
+                        if (!product) return;
+                        const countInGr = product.press
+                            ? product.pressAmount /
+                              (product.pressAmount >= 200 ? 2 : 1)
+                            : 25;
+                        const max = Math.floor(product.balance / countInGr);
+                        basketState.push({
+                            count: Math.min(max, val.count),
+                            product: product,
+                        });
+                    });
+                });
+            }
+            const newState = { value: basketState };
+            const s = newState.value.map((val) => {
                 return { index: val.product.nomNumber, count: val.count };
             });
             localStorage.setItem('basket', JSON.stringify(s));
-            return action.payload;
+            return newState;
         },
     },
 });

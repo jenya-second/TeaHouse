@@ -11,8 +11,8 @@ import {
 } from '#components/User/ProductItem/ProductItem.js';
 import {
     GetCompleteOrderByKey,
-    getOrderInProgressByKey,
-    getOrderStateByKey,
+    GetOrderInProgressByKey,
+    GetOrderStateByKey,
 } from '#utils/requests.js';
 import { CircularProgress } from '@mui/material';
 import { OrderEntity, OrderInProgressEntity } from '@tea-house/types';
@@ -36,7 +36,7 @@ export function FullOrder() {
             timer.current = setTimeout(notifyPayState, 5000);
             return;
         }
-        const state = await getOrderStateByKey(orderKey);
+        const state = await GetOrderStateByKey(orderKey);
         if (state == false) {
             setPayState('fulfilled');
             return;
@@ -58,7 +58,7 @@ export function FullOrder() {
     useEffect(() => {
         if (!orderKey || !init) return;
         if (orderType == 'p') {
-            getOrderInProgressByKey(orderKey).then(setOrder);
+            GetOrderInProgressByKey(orderKey).then(setOrder);
         }
         if (orderType == 'c') {
             GetCompleteOrderByKey(orderKey).then((res) => setOrder([res]));
@@ -140,7 +140,12 @@ export function FullOrder() {
                 )}
             </>
         );
-        return [jsxItems, viewType, date, deliveryItem?.totalPrice];
+        return [
+            jsxItems,
+            viewType,
+            date,
+            ord[0]?.isPickup ? 0 : deliveryItem?.totalPrice,
+        ];
     }, [order, payState]);
 
     return (

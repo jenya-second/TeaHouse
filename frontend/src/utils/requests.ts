@@ -5,6 +5,8 @@ import {
     OrderInProgressEntity,
     ProductEntity,
     SABYOrderState,
+    TeaDiaryEntity,
+    TeaDiaryRequest,
     TelegramUserEntity,
 } from '@tea-house/types';
 import {
@@ -18,6 +20,7 @@ import {
     PRODUCT_ONE_URL,
     PRODUCTS_URL,
     SERVER_URL,
+    TEA_DIARY,
     USER,
 } from './constants';
 import { initData } from '@telegram-apps/sdk-react';
@@ -49,7 +52,7 @@ async function extractAuthFetch(url: string, request?: RequestInit) {
     return response.json();
 }
 
-export async function GetProductsRequest(): Promise<CategoryEntity[]> {
+export async function GetProducts(): Promise<CategoryEntity[]> {
     return fetch(CreateApiLink(PRODUCTS_URL)).then((res) => res.json());
 }
 
@@ -80,17 +83,17 @@ export async function GetCompleteOrderByKey(key: string): Promise<OrderEntity> {
     return extractAuthFetch(CreateApiLink(`${COMPLETED_ORDERS}/${key}`));
 }
 
-export async function getOrdersInProgress(): Promise<OrderInProgressEntity[]> {
+export async function GetOrdersInProgress(): Promise<OrderInProgressEntity[]> {
     return extractAuthFetch(CreateApiLink(ORDERS_IN_PROGRESS));
 }
 
-export async function getOrderInProgressByKey(
+export async function GetOrderInProgressByKey(
     key: string,
 ): Promise<OrderInProgressEntity[]> {
     return extractAuthFetch(CreateApiLink(`${ORDERS_IN_PROGRESS}/${key}`));
 }
 
-export async function getOrderStateByKey(
+export async function GetOrderStateByKey(
     key: string,
 ): Promise<SABYOrderState | false> {
     return extractAuthFetch(CreateApiLink(ORDER_STATE + key));
@@ -111,4 +114,25 @@ export async function DeleteOrder(orderId: number): Promise<boolean> {
 
 export async function GetUser(): Promise<TelegramUserEntity> {
     return extractAuthFetch(CreateApiLink(USER));
+}
+
+export async function GetAllTeaDiary(): Promise<TeaDiaryEntity[]> {
+    return extractAuthFetch(CreateApiLink(TEA_DIARY));
+}
+
+export async function GetOneTeaDiary(
+    productId: number,
+): Promise<TeaDiaryEntity> {
+    return extractAuthFetch(CreateApiLink(`${TEA_DIARY}/${productId}`));
+}
+
+export async function PostTeaDiary(teaDiary: TeaDiaryRequest) {
+    const content = {
+        teaDiary: teaDiary,
+    };
+    const request: RequestInit = {
+        method: 'POST',
+        body: JSON.stringify(content),
+    };
+    return authFetch(CreateApiLink(TEA_DIARY), request);
 }

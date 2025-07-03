@@ -88,10 +88,6 @@ export function Shedule() {
             return;
         }
         dispatch(deleteAll());
-        localStorage.setItem(
-            'orderInfo',
-            localStorage.getItem('orderInfo') ?? '{}',
-        );
         if (check) {
             const o = localStorage.getItem('orderInfoGlobal');
             if (!o) return;

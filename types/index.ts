@@ -18,6 +18,8 @@ export * from './src/Entities/OrderInProgressEntity';
 export * from './src/Entities/ProductEntity';
 export * from './src/Entities/PromotionEntity';
 export * from './src/Entities/SaleNomenclatureEntity';
+export * from './src/Entities/TeaDiaryEntity';
 export * from './src/Entities/TelegramUserEntity';
 export * from './src/Requests/Delivery';
 export * from './src/Requests/Comment';
+export * from './src/Requests/TeaDiary';

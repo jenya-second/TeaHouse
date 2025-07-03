@@ -60,7 +60,7 @@ function App() {
             );
         }
         if (!v) {
-            localStorage.setItem('orderInfo', '[]');
+            localStorage.setItem('basket', '[]');
         }
         try {
             init();
@@ -110,7 +110,7 @@ function App() {
                                 element={<FullOrder />}
                             />
                         </Route>
-                        <Route path="tea" element={<TeaPal />} />
+                        <Route path="tea/:productId?" element={<TeaPal />} />
                         <Route path="personal" element={<AddressPage />} />
                         <Route path="check" element={<CheckPage />} />
                     </Route>

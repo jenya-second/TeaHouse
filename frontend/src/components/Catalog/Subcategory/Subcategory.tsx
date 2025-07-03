@@ -1,18 +1,14 @@
-import { CategoryEntity } from '@tea-house/types';
 import { CatalogItemSmall } from '../CatalogItemSmall/CatalogItemSmall';
 // import styles from './Subcategory.module.scss';
 import { useNavigate, useParams } from 'react-router';
+import { joke } from '#pages/TeaPal.js';
 
-export function SubCategory({
-    category,
-}: {
-    category: CategoryEntity | undefined;
-}) {
+export function SubCategory({ category }: { category: joke | undefined }) {
     const { order, categoryId } = useParams();
     const navigate = useNavigate();
     return (
         <>
-            {category?.subcategories.map((val, ind) => (
+            {category?.mySubcat.map((val, ind) => (
                 <div id={ind.toString()} key={ind}>
                     <span
                         style={{
@@ -23,7 +19,7 @@ export function SubCategory({
                     >
                         {val.name}
                     </span>
-                    {val.products.map((product) => (
+                    {val.myProducts.map((product) => (
                         <div
                             key={product.nomNumber}
                             onClick={() =>
@@ -35,6 +31,7 @@ export function SubCategory({
                             <CatalogItemSmall
                                 product={product}
                                 showCounter={order == 't'}
+                                rank={product.rank}
                             />
                         </div>
                     ))}

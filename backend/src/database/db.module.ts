@@ -9,6 +9,7 @@ import {
     order_rpository_name,
     product_rpository_name,
     sale_nomenclatures_rpository_name,
+    tea_diary_repository_name,
     telegram_user_repository_name,
 } from 'src/constants';
 import { DataSource } from 'typeorm';
@@ -22,6 +23,7 @@ import {
     Image,
     OrderInProgress,
     TelegramUser,
+    TeaDiary,
 } from './entities';
 import {
     CategoryService,
@@ -32,6 +34,7 @@ import {
     SaleNomenclatureService,
     OrderInProgressService,
     TelegramUserService,
+    TeaDiaryService,
 } from './services';
 
 const services = [
@@ -43,6 +46,7 @@ const services = [
     ClientService,
     OrderService,
     OrderInProgressService,
+    TeaDiaryService,
     TelegramUserService,
 ];
 
@@ -55,6 +59,7 @@ const providers = [
     { p: client_rpository_name, c: Client },
     { p: order_rpository_name, c: Order },
     { p: order_in_progress_rpository_name, c: OrderInProgress },
+    { p: tea_diary_repository_name, c: TeaDiary },
     { p: telegram_user_repository_name, c: TelegramUser },
 ];
 
