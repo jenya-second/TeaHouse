@@ -25,13 +25,18 @@ export class TeaDiaryService {
         );
         const toSave = [];
         for (let i = 0; i < teaDiary.length; i++) {
-            if (
-                !dbTeaDiary.find(
-                    (val) =>
-                        val.product.id == teaDiary[i].product.id &&
-                        val.client.id == teaDiary[i].client.id,
-                )
-            ) {
+            if (!teaDiary[i].client || !teaDiary[i].product) continue;
+            const notInDb = dbTeaDiary.find(
+                (val) =>
+                    val.product.id == teaDiary[i].product.id &&
+                    val.client.id == teaDiary[i].client.id,
+            );
+            const notInLocalTeaDiary = toSave.find(
+                (val) =>
+                    val.product.id == teaDiary[i].product.id &&
+                    val.client.id == teaDiary[i].client.id,
+            );
+            if (!notInDb && !notInLocalTeaDiary) {
                 toSave.push(teaDiary[i]);
             }
         }
@@ -45,6 +50,10 @@ export class TeaDiaryService {
                 product: {
                     id: In(productIds),
                 },
+            },
+            relations: {
+                client: true,
+                product: true,
             },
         });
     }

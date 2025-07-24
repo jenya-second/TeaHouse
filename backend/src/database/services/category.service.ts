@@ -34,6 +34,7 @@ export class CategoryService {
                     press: true,
                     pressAmount: true,
                     nomNumber: true,
+                    published: true,
                 },
                 subcategories: {
                     id: true,

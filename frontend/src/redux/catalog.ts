@@ -37,7 +37,7 @@ export const catalogsSlice = createSlice({
                 }
             }
             for (const category of newCategories) {
-                const subcategories: jokeSubcategory[] = [];
+                let subcategories: jokeSubcategory[] = [];
                 for (const sub of category.subcategories) {
                     const subcat = categories?.find((c) => c.id == sub.id);
                     if (!subcat) continue;
@@ -46,12 +46,15 @@ export const catalogsSlice = createSlice({
                         myProducts: subcat.products,
                     });
                 }
+                subcategories = subcategories.filter(
+                    (val) => val.products.length != 0,
+                );
                 category.subcategories = subcategories;
                 category.mySubcat = subcategories;
             }
             for (let i = 0; i < deliveryCat.length; i++) {
                 d.push({ ...deliveryCat[i] });
-                const subcategories: jokeSubcategory[] = [];
+                let subcategories: jokeSubcategory[] = [];
                 deliveryCat[i].subcategories.forEach((val) => {
                     const a: (ProductEntity & { rank?: number })[] = [];
                     const sub = { ...val, myProducts: a };
@@ -62,22 +65,31 @@ export const catalogsSlice = createSlice({
                         const max = Math.floor(val.balance / countInGr);
                         return max > 0;
                     });
+                    sub.products.sort((a, b) => {
+                        const acost = +a.name.split('№')[1];
+                        const bcost = +b.name.split('№')[1];
+                        if (!bcost) return -1;
+                        if (!acost) return 1;
+                        return acost - bcost;
+                    });
                     sub.myProducts = sub.products;
                     subcategories.push(sub);
                 });
+                subcategories = subcategories.filter(
+                    (val) => val.products.length != 0,
+                );
                 d[i].subcategories = subcategories;
                 d[i].mySubcat = subcategories;
             }
-            for (let i = 0; i < d.length; i++) {
-                d[i].subcategories = d[i].subcategories.filter(
-                    (val) => val.products.length != 0,
-                );
-                d[i].mySubcat = d[i].mySubcat.filter(
-                    (val) => val.products.length != 0,
-                );
-            }
             return {
-                value: { allCategories: newCategories, deliveryCategories: d },
+                value: {
+                    allCategories: newCategories.filter(
+                        (val) => val.subcategories.length != 0,
+                    ),
+                    deliveryCategories: d.filter(
+                        (val) => val.subcategories.length != 0,
+                    ),
+                },
             };
         });
     },

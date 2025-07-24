@@ -1,7 +1,6 @@
 @use '/src/global';
 
 .item {
-    background-image: url('/2.jpg');
     display: block;
     background-color: rgba(13, 0, 135, 0.5);
     background-blend-mode: overlay;
@@ -20,5 +19,6 @@
         display: inline-block;
         vertical-align: middle;
         line-height: 10vw;
+        font-family: "Papyrus";
     }
 }

@@ -16,6 +16,7 @@ export function ProductModal() {
     const [product, setProduct] = useState<ProductEntity>();
     const navigate = useNavigate();
     const location = useLocation().pathname.split('/');
+    const canAdd = location.includes('basket') || location.includes('t');
     // console.log(location);
     const countItemsInBasket = useAppSelector((state) => {
         return state.basket.value.length;
@@ -71,15 +72,13 @@ export function ProductModal() {
                         <CircularProgress />
                     ) : (
                         <>
-                            <ModalImage product={product} />
-                            {(location.includes('basket') ||
-                                location.includes('t')) &&
-                                product.press && (
-                                    <PressViewItem
-                                        count={countProduct}
-                                        product={product}
-                                    />
-                                )}
+                            <ModalImage product={product} withCount={canAdd} />
+                            {canAdd && product.press && (
+                                <PressViewItem
+                                    count={countProduct}
+                                    product={product}
+                                />
+                            )}
                             {product.category?.parentCategory?.name ==
                                 'Чай*' && (
                                 <>
@@ -93,7 +92,7 @@ export function ProductModal() {
                         </>
                     )}
                 </div>
-                {(location.includes('basket') || location.includes('t')) && (
+                {canAdd && (
                     <div className={styles.footer}>
                         <div style={{ flex: 1.5 }}>{cost}</div>
                         <div style={{ flex: 0.7 }}>
@@ -124,7 +123,13 @@ export function ProductModal() {
     );
 }
 
-function ModalImage({ product }: { product: ProductEntity }) {
+function ModalImage({
+    product,
+    withCount,
+}: {
+    product: ProductEntity;
+    withCount: boolean;
+}) {
     const imageSrc = GetImagePath(product.images[0]?.id);
     return (
         <div className={styles.imageWrapper}>
@@ -138,12 +143,14 @@ function ModalImage({ product }: { product: ProductEntity }) {
                     }}
                 >
                     <div>{product?.cost + ' ₽ / ' + product?.unit}</div>
-                    <div
-                        style={{
-                            flex: 1,
-                            textAlign: 'center',
-                        }}
-                    >{`Остаток: ${product.balance} ${product.unit}`}</div>
+                    {withCount && (
+                        <div
+                            style={{
+                                flex: 1,
+                                textAlign: 'center',
+                            }}
+                        >{`Остаток: ${product.balance} ${product.unit}`}</div>
+                    )}
                 </div>
             </span>
         </div>

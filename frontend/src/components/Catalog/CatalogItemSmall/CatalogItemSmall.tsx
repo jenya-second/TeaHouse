@@ -31,7 +31,7 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
         <CounterCommon product={product} modal={false} />
     );
     const cost =
-        countProduct == 0
+        countProduct == 0 || !showCounter
             ? `${product.cost} ₽ / ${product.unit}`
             : (product.press
                   ? (countProduct * product.cost * product.pressAmount) /
@@ -40,11 +40,10 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
     return (
         <>
             <div className={combineStyles(styles.item, styles.outShadow)}>
-                <div
+                <img
                     className={styles.image}
-                    style={{
-                        backgroundImage: `url(${imgPath != '' ? imgPath : '/Logo.png'})`,
-                    }}
+                    src={`${imgPath != '' ? imgPath : '/Logo.png'}`}
+                    loading="lazy"
                 />
                 <div className={styles.infoWrapper}>
                     <div>{product.name}</div>

@@ -108,12 +108,12 @@ export function FullOrder() {
         const prev = ord[ord.length - 1].nomenclatures.filter(
             (val) =>
                 val.product.name != 'Доставка' &&
-                val.product.name != 'Услуга доставки товаров',
+                val.product.name != 'Не трогать, сбисовское',
         );
         const cur = ord[0].nomenclatures.filter(
             (val) =>
                 val.product.name != 'Доставка' &&
-                val.product.name != 'Услуга доставки товаров',
+                val.product.name != 'Не трогать, сбисовское',
         );
         const ans = prev.map((val, i) => {
             const a = cur.find(

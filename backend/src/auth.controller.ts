@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Request, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Param,
+    Post,
+    Request,
+    Delete,
+    Inject,
+} from '@nestjs/common';
 import {
     ClientService,
     OrderInProgressService,
@@ -17,7 +25,8 @@ import {
     TeaDiaryRequest,
 } from '@tea-house/types';
 import { Request as ExpRequest } from 'express';
-import { frontend_main_page } from './constants';
+import { frontend_main_page, telegram_bot } from './constants';
+import { OichaiBot } from './telegram/telegram.bot';
 
 @Controller('auth')
 export class AuthController {
@@ -27,8 +36,8 @@ export class AuthController {
         private readonly orderService: OrderService,
         private readonly SABYService: SABYService,
         private readonly teaDiaryService: TeaDiaryService,
-        private readonly clientService: ClientService,
-        private readonly productService: ProductService,
+        @Inject(telegram_bot)
+        private readonly telegramBot: OichaiBot,
     ) {}
 
     @Post('newOrder')
@@ -37,8 +46,9 @@ export class AuthController {
         const actual = new Date();
         const initData = new URLSearchParams(req.headers.authorization);
         const userId = JSON.parse(initData.get('user')).id;
-        const phone = (await this.telegramUserService.findOneByTgId(userId))
-            .phone;
+        const telegramUser =
+            await this.telegramUserService.findOneByTgId(userId);
+        const phone = telegramUser.phone;
         actual.setFullYear(actual.getFullYear() + 1);
         const comment: Comment = {
             Имя: deliveryData.client.name,
@@ -90,6 +100,9 @@ export class AuthController {
         delivery.comment = JSON.stringify(comment);
         const orderInProgress: SABYOrderInProgress =
             await this.SABYService.CreateOrder(delivery);
+        const text = `Новый заказ от клиента ${orderInProgress.customer.name} @${telegramUser.username ?? ''} на сумму ${orderInProgress.totalPrice} р.`;
+        this.telegramBot.SendMessageToUser(text, process.env.JENYA_CHAT_ID);
+        this.telegramBot.SendMessageToUser(text, process.env.DIMA_CHAT_ID);
         return this.orderInProgressService.insertOrderFromSABYOrder(
             orderInProgress,
             10,
@@ -167,8 +180,25 @@ export class AuthController {
     @Get('whoami')
     async getUser(@Request() req: ExpRequest) {
         const initData = new URLSearchParams(req.headers.authorization);
-        const userId = JSON.parse(initData.get('user')).id;
-        return this.telegramUserService.findOneByTgId(userId);
+        const user: {
+            id: number;
+            fisrt_name: string;
+            last_name: string;
+            username: string;
+        } = JSON.parse(initData.get('user'));
+        const client = await this.telegramUserService.findOneByTgId(user.id);
+        if (!client) return false;
+        if (
+            client.firstName != user.fisrt_name ||
+            client.lastName != user.last_name ||
+            client.username != user.username
+        ) {
+            client.firstName = user.fisrt_name;
+            client.lastName = user.last_name;
+            client.username = user.username;
+            await this.telegramUserService.updateUser(client);
+        }
+        return client;
     }
 
     @Get('teaDiary')
@@ -207,8 +237,6 @@ export class AuthController {
         dbTeaDiary.taste = teaDiaryInfo.taste;
         dbTeaDiary.smell = teaDiaryInfo.smell;
         dbTeaDiary.afterstate = teaDiaryInfo.afterstate;
-        // teaDiaryInfo.client = await this.clientService.findByTgId(userId);
-        // teaDiaryInfo.product = await this.productService.findById(id);
         await this.teaDiaryService.saveOne(dbTeaDiary);
         return true;
     }

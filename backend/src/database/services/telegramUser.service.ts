@@ -33,6 +33,10 @@ export class TelegramUserService {
         );
     }
 
+    async updateUser(tgUser: TelegramUser) {
+        this.telegramUserRepository.update(tgUser.id, tgUser);
+    }
+
     async saveOne(tgUser: TelegramUser) {
         return this.telegramUserRepository.insert(tgUser);
     }

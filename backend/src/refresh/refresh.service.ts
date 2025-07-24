@@ -57,7 +57,6 @@ export class RefreshService {
             saleNomenclatures,
         );
         await this.teaDiaryService.updateTeaDiary(teaDiary);
-        console.log('Refreshed ' + new Date());
     }
 
     async GetRefreshedOrders(
@@ -85,6 +84,7 @@ export class RefreshService {
             const val = sabyorders[i];
             const newOrder = new Order(val);
             newOrder.client = clients.find((c) => c.num == val.Customer);
+            if (!newOrder.client) continue;
             for (let j = 0; j < val.SaleNomenclatures.length; j++) {
                 const nom = val.SaleNomenclatures[j];
                 const salenom = new SaleNomenclature(nom);

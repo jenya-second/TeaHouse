@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { OrderInProgress, TelegramUser } from 'src/database/entities';
 import { TelegramUserService } from 'src/database/services';
 import {
+    ForceReply,
+    InlineKeyboardMarkup,
     Message,
     ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
     TelegramBot,
 } from 'typescript-telegram-bot-api';
 
@@ -33,15 +36,11 @@ export class OichaiBot extends TelegramBot {
                 react(message, '🤔');
                 return;
             }
-            try {
-                this.sendMessage({
-                    chat_id: message.chat.id,
-                    text: 'Перед использованием разрешите доступ к номеру телефона по кнопке ниже.',
-                    reply_markup: sendContactReply,
-                });
-            } catch (e) {
-                console.log(e);
-            }
+            this.SendMessageToUser(
+                'Перед использованием разрешите доступ к номеру телефона по кнопке ниже.',
+                message.chat.id,
+                sendContactReply,
+            );
         });
 
         this.on('message', async (message) => {
@@ -58,11 +57,11 @@ export class OichaiBot extends TelegramBot {
 
         this.on('message:contact', async (message) => {
             if (message.contact.user_id != message.from.id) {
-                this.sendMessage({
-                    chat_id: message.chat.id,
-                    text: 'Сосал?',
-                    reply_markup: sendContactReply,
-                });
+                this.SendMessageToUser(
+                    'Сосал?',
+                    message.chat.id,
+                    sendContactReply,
+                );
                 return;
             }
             const tgUser = await this.telegramUserService.findOneByTgId(
@@ -79,17 +78,17 @@ export class OichaiBot extends TelegramBot {
                     chatId: '' + message.chat.id,
                 } as TelegramUser;
                 await this.telegramUserService.saveOne(contact);
-                this.sendMessage({
-                    chat_id: message.chat.id,
-                    text: 'Вы зарегистрировались в системе чайной!',
-                    reply_markup: { remove_keyboard: true },
-                });
+                this.SendMessageToUser(
+                    'Вы зарегистрировались в системе чайной!',
+                    message.chat.id,
+                    { remove_keyboard: true },
+                );
             } else {
-                this.sendMessage({
-                    chat_id: message.chat.id,
-                    text: 'Вы уже зарегистрированы в системе чайной!',
-                    reply_markup: { remove_keyboard: true },
-                });
+                this.SendMessageToUser(
+                    'Вы уже зарегистрированы в системе чайной!',
+                    message.chat.id,
+                    { remove_keyboard: true },
+                );
             }
             this.setChatMenuButton({
                 chat_id: message.chat.id,
@@ -102,12 +101,30 @@ export class OichaiBot extends TelegramBot {
         });
     }
 
-    SendMessageToUser(order: OrderInProgress) {
+    SendMessageAboutOrder(order: OrderInProgress) {
         const d = order.datetime.split(' ')[0].split('-');
         const date = `${d[2]}.${d[1]}.${+d[0] - 1}`;
-        this.sendMessage({
-            chat_id: order.client.tgUser.chatId,
-            text: `Ваш заказ от ${date} проверен и доступен для оплаты.`,
-        });
+        this.SendMessageToUser(
+            `Ваш заказ от ${date} проверен и доступен для оплаты.`,
+            order.client.tgUser.chatId,
+        );
+    }
+
+    async SendMessageToUser(
+        text: string,
+        clientChatId: number | string,
+        reply_markup?:
+            | InlineKeyboardMarkup
+            | ReplyKeyboardMarkup
+            | ReplyKeyboardRemove
+            | ForceReply,
+    ) {
+        try {
+            await this.sendMessage({
+                chat_id: clientChatId,
+                text: text,
+                reply_markup: reply_markup,
+            });
+        } catch (e) {}
     }
 }

@@ -119,7 +119,6 @@ export class ScrapeService {
             } while (res.result.n);
             await page.close();
         } catch (e) {
-            console.log(e);
             await page.close();
         }
         return clients;

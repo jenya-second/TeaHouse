@@ -5,18 +5,15 @@ import styles from './MainNav.module.scss';
 export function MainNav() {
     return (
         <>
-            <div
-                className={combineStyles(
-                    styles.circle,
-                    styles.circleShift,
-                    styles.outShadow,
-                )}
-            />
+            <div className={combineStyles(styles.circle, styles.circleShift)} />
             <img
                 className={combineStyles(styles.logo, styles.circleShift)}
                 src="/Logo.png"
             />
-            <div className={combineStyles(styles.navBar, styles.inShadow)}>
+            <div
+                className={combineStyles(styles.navBar, styles.inShadow)}
+            ></div>
+            <div className={styles.kostil}>
                 <ButtonNav
                     to={'/o/all'}
                     signature="Каталог"

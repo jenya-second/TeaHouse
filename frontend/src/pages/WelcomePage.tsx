@@ -33,6 +33,7 @@ export function WelcomePage() {
                 src="/bigLogo.svg"
                 style={{
                     height: '80vw',
+                    transform: 'translateY(-80px)',
                 }}
             />
             <ImageDisplay

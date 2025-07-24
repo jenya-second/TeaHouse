@@ -47,8 +47,8 @@ async function authFetch(url: string, request?: RequestInit) {
 
 async function extractAuthFetch(url: string, request?: RequestInit) {
     const response = await authFetch(url, request);
-    if (response == false) return;
-    if (!response.ok) return;
+    if (response == false) return false;
+    if (!response.ok) return false;
     return response.json();
 }
 

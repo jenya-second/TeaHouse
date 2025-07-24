@@ -35,8 +35,8 @@ export function TeaPal() {
 
     useEffect(() => {
         if (!init) return;
-        dispatch(fetchTeaDiary());
         dispatch(fetchCatalogs());
+        dispatch(fetchTeaDiary());
     }, [init]);
 
     const cat = useMemo(() => {
@@ -102,7 +102,7 @@ export function TeaPal() {
         return () => {
             observer.current?.disconnect();
         };
-    }, [allCategories]);
+    }, [teaDiary, allCategories]);
 
     return (
         <>

@@ -3,18 +3,18 @@ import {
     Get,
     Param,
     Post,
-    StreamableFile,
     Request,
     Inject,
     Res,
 } from '@nestjs/common';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import {
     CategoryService,
     OrderInProgressService,
     OrderService,
     ProductService,
+    TelegramUserService,
 } from './database/services';
 import { Category, OrderInProgress, Product } from './database/entities';
 import { RefreshService } from './refresh/refresh.service';
@@ -33,6 +33,7 @@ export class PublicController {
         private readonly refreshService: RefreshService,
         private readonly SABYService: SABYService,
         private readonly orderService: OrderService,
+        private readonly telegramUserService: TelegramUserService,
         @Inject(telegram_bot)
         private readonly telegramBot: OichaiBot,
     ) {}
@@ -41,31 +42,34 @@ export class PublicController {
     doSmt() {
         // return this.refreshService.RefreshDataBase();
         // return this.orderInProgressService.getAllByKey('bbd645ae-401f-4a20-8dba-f7995f6af4fe');
-        // return this.orderService.getByDay(`2025-06-25%`);
-        return this.categoryService.findProductsByCategoryName(`Чай_`);
+        // return this.orderService.getByDay(`2025-07-05%`);
+        // return this.categoryService.findProductsByCategoryName(`Чай_`);
         return 'aboba';
     }
 
-    @Get('date/:date')
-    refreshOrderByDate(@Param('date') date: string) {
-        return this.refreshService.RefreshDay(date);
-    }
+    // @Get('date/:date')
+    // refreshOrderByDate(@Param('date') date: string) {
+    //     return this.refreshService.RefreshDay(date);
+    // }
 
     @Get('image/:id')
     getImage(@Param('id') id: number, @Res() res: Response) {
-        const file = createReadStream(
-            join(process.cwd(), `./dl_image/${id}.jpeg`),
-        );
+        const path = join(process.cwd(), `./dl_image/${id}.jpeg`);
+        if (!existsSync(path)) return res.end();
+        const file = createReadStream(path);
         res.setHeader('Cache-Control', 'max-age=600');
         file.pipe(res);
-        // return new StreamableFile(file, {
-        //     type: 'image/jpeg',
-        // });
     }
 
     @Get('product')
     async getProducts(): Promise<Category[]> {
-        return this.categoryService.findAll();
+        const categories = await this.categoryService.findAll();
+        for (let i = 0; i < categories.length; i++) {
+            categories[i].products = categories[i].products.filter(
+                (val) => val.published,
+            );
+        }
+        return categories;
     }
 
     @Get('product/:id')
@@ -83,7 +87,6 @@ export class PublicController {
         )
             return;
         const orderKey: string = JSON.parse(req.body.data).Sales[0].id;
-        console.log(orderKey);
         let orderInfo: SABYOrderInProgress = undefined;
         try {
             orderInfo = await this.SABYService.GetOrderInfo(orderKey);
@@ -96,13 +99,24 @@ export class PublicController {
             return;
         }
         if (orderState.state >= 21 && orderState.state <= 91) {
-            console.log(orderInfo);
-            console.log(orderState);
             if (orderState.payments[0]?.id) {
                 if (orderState.payments[0].isClosed) {
                     this.orderInProgressService.setPayStateByKey(
                         orderInfo.key,
                         'fulfilled',
+                    );
+                    const date = orderInfo.datetime.split(' ')[0];
+                    const tgUser = await this.telegramUserService.findByPhone(
+                        orderInfo.customer.phone,
+                    );
+                    const text = `Оплачен заказ от ${date[2]}-${date[1]}-${+date[0] - 1} от клиента ${orderInfo.customer.name} @${tgUser?.username ?? ''}`;
+                    this.telegramBot.SendMessageToUser(
+                        text,
+                        process.env.JENYA_CHAT_id,
+                    );
+                    this.telegramBot.SendMessageToUser(
+                        text,
+                        process.env.DIMA_CHAT_id,
                     );
                 } else {
                     this.orderInProgressService.setPayStateByKey(
@@ -119,7 +133,7 @@ export class PublicController {
                 orderInfo,
                 orderState.state,
             );
-            this.telegramBot.SendMessageToUser(orders[0]);
+            this.telegramBot.SendMessageAboutOrder(orders[0]);
         }
     }
 }
