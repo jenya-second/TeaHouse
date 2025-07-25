@@ -1,7 +1,7 @@
 import { SaleNomenclatureEntity } from '@tea-house/types';
 import styles from './ProductItem.module.scss';
 import { combineStyles } from '#utils/styles.js';
-import { GetImagePath } from '#utils/requests.js';
+import { GetImagePathLowRes } from '#utils/requests.js';
 import { memo } from 'react';
 import { CounterSolid } from '#components/Catalog/Counter/CounterSolid.js';
 
@@ -15,7 +15,7 @@ export const ProductItem = memo(function ProductItem({
     delivery?: boolean;
 }) {
     const faceImage = nom.product?.images[0];
-    const imgPath = GetImagePath(faceImage?.id);
+    const imgPath = GetImagePathLowRes(faceImage?.id);
     return (
         <div className={combineStyles(styles.item, styles.outShadow)}>
             <div
@@ -50,7 +50,7 @@ export const ProductChangedItem = memo(function ProductChangedItem({
     nulled: boolean;
 }) {
     const faceImage = prevNom.product?.images[0];
-    const imgPath = GetImagePath(faceImage?.id);
+    const imgPath = GetImagePathLowRes(faceImage?.id);
     return (
         <>
             <div

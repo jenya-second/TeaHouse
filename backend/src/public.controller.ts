@@ -7,7 +7,7 @@ import {
     Inject,
     Res,
 } from '@nestjs/common';
-import { createReadStream, existsSync } from 'fs';
+import { existsSync } from 'fs';
 import { join } from 'path';
 import {
     CategoryService,
@@ -16,13 +16,14 @@ import {
     ProductService,
     TelegramUserService,
 } from './database/services';
-import { Category, OrderInProgress, Product } from './database/entities';
+import { Category, Product } from './database/entities';
 import { RefreshService } from './refresh/refresh.service';
 import { SABYService } from './SABY/saby.service';
 import { SABYOrderInProgress } from '@tea-house/types';
 import { Request as ExpRequest, Response } from 'express';
 import { OichaiBot } from './telegram/telegram.bot';
 import { telegram_bot } from './constants';
+import Sharp from 'sharp';
 
 @Controller()
 export class PublicController {
@@ -30,9 +31,7 @@ export class PublicController {
         private readonly productService: ProductService,
         private readonly orderInProgressService: OrderInProgressService,
         private readonly categoryService: CategoryService,
-        private readonly refreshService: RefreshService,
         private readonly SABYService: SABYService,
-        private readonly orderService: OrderService,
         private readonly telegramUserService: TelegramUserService,
         @Inject(telegram_bot)
         private readonly telegramBot: OichaiBot,
@@ -40,10 +39,6 @@ export class PublicController {
 
     @Get()
     doSmt() {
-        // return this.refreshService.RefreshDataBase();
-        // return this.orderInProgressService.getAllByKey('bbd645ae-401f-4a20-8dba-f7995f6af4fe');
-        // return this.orderService.getByDay(`2025-07-05%`);
-        // return this.categoryService.findProductsByCategoryName(`Чай_`);
         return 'aboba';
     }
 
@@ -52,11 +47,17 @@ export class PublicController {
     //     return this.refreshService.RefreshDay(date);
     // }
 
-    @Get('image/:id')
-    getImage(@Param('id') id: number, @Res() res: Response) {
+    @Get('image/:id/:q?')
+    async getImage(
+        @Param('id') id: number,
+        @Param('q') q: number,
+        @Res() res: Response,
+    ) {
         const path = join(process.cwd(), `./dl_image/${id}.jpeg`);
         if (!existsSync(path)) return res.end();
-        const file = createReadStream(path);
+        const file = Sharp(path)
+            .resize(q ? 250 : 600)
+            .png({ force: true, quality: q ? 70 : 100 });
         res.setHeader('Cache-Control', 'max-age=600');
         file.pipe(res);
     }

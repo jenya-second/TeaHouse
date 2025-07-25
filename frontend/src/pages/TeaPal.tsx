@@ -40,7 +40,9 @@ export function TeaPal() {
     }, [init]);
 
     const cat = useMemo(() => {
-        const topCategory = allCategories.find((val) => val.name == 'Чай*');
+        const topCategory = allCategories.find(
+            (val) => val.name == 'Чай развесной*',
+        );
         if (!topCategory) return;
         const newCat: joke = { ...topCategory };
         newCat.mySubcat = [];

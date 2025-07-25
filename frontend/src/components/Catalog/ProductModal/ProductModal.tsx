@@ -80,7 +80,7 @@ export function ProductModal() {
                                 />
                             )}
                             {product.category?.parentCategory?.name ==
-                                'Чай*' && (
+                                'Чай развесной*' && (
                                 <>
                                     <TeaDiaryWidget
                                         editable={location.includes('tea')}

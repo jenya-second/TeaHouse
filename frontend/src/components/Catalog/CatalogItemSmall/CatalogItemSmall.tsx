@@ -1,7 +1,7 @@
 import { ProductEntity } from '@tea-house/types';
 import styles from './CatalogItemSmall.module.scss';
 import { combineStyles } from '#utils/styles.js';
-import { GetImagePath } from '#utils/requests.js';
+import { GetImagePathLowRes } from '#utils/requests.js';
 import { CounterCommon } from '../Counter/CounterCommon';
 import { memo } from 'react';
 import { CounterPress } from '../Counter/CounterPress';
@@ -24,7 +24,7 @@ export const CatalogItemSmall = memo(function CatalogItemSmall({
         return ind == -1 ? 0 : state.basket.value[ind].count;
     });
     const faceImage = product?.images[0];
-    const imgPath = GetImagePath(faceImage?.id);
+    const imgPath = GetImagePathLowRes(faceImage?.id);
     const counter = product.press ? (
         <CounterPress product={product} modal={false} />
     ) : (

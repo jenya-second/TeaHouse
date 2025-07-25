@@ -64,6 +64,10 @@ export function GetImagePath(imageId: number): string {
     return imageId ? CreateApiLink(IMAGE_URL + imageId) : '';
 }
 
+export function GetImagePathLowRes(imageId: number): string {
+    return imageId ? CreateApiLink(IMAGE_URL + imageId + '/0') : '';
+}
+
 export async function PostNewOrder(delivery: Delivery) {
     const content = {
         deliveryData: delivery,

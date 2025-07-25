@@ -44,7 +44,7 @@ export function CatalogPage() {
         const out2: joke[] = [];
         for (let i = 0; i < deliveryCategories.length; i++) {
             const t = deliveryCategories[i];
-            if (t.name != 'Чай*') {
+            if (t.name != 'Чай развесной*') {
                 out.push(t);
                 continue;
             }
@@ -64,7 +64,7 @@ export function CatalogPage() {
         }
         for (let i = 0; i < allCategories.length; i++) {
             const t = allCategories[i];
-            if (t.name != 'Чай*') {
+            if (t.name != 'Чай развесной*') {
                 out2.push(t);
                 continue;
             }
